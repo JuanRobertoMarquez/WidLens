@@ -1,0 +1,267 @@
+/* Variables de colores basadas en tu imagen */
+:root {
+    --bg-cream: #F9F8F2;
+    --dark-green: #2B7055;
+    --orange-btn: #E58933;
+    --text-dark: #222222;
+    --text-light: #555555;
+    --card-bg: #FFFFFF;
+}
+
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* NAVEGACIÓN */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: auto;
+}
+
+.logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--dark-green);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--dark-green);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.nav-links a.active {
+    color: #4AA586; /* Un verde un poco más claro para el activo */
+}
+
+.btn-nav {
+    background-color: var(--dark-green);
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+/* HERO SECTION */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 60px;
+    gap: 40px;
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.hero-content {
+    flex: 1.5;
+}
+
+.hero-content h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    color: #1A1A1A;
+}
+
+.hero-content p {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-green {
+    background-color: var(--dark-green);
+}
+
+.btn-orange {
+    background-color: var(--orange-btn);
+}
+
+/* SECCIÓN CARRUSEL */
+.carousel-section {
+    margin-top: 80px;
+    padding: 40px 0;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    margin-bottom: 20px;
+}
+
+.carousel-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: var(--text-dark);
+}
+
+.arrow-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-light);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0 10px;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: hidden; /* Oculta la barra de scroll */
+    scroll-behavior: smooth;
+    padding: 10px;
+    width: 100%;
+}
+
+/* TARJETAS */
+.card {
+    min-width: 200px;
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    flex: 0 0 auto;
+}
+
+.card img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.card-info {
+    padding: 10px 5px;
+}
+
+.card-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ai-status {
+    font-size: 11px;
+    color: var(--dark-green);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* FOOTER */
+.partner-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 40px 0;
+    background-color: var(--bg-cream);
+}
+
+.partner-text {
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.bionode-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    color: var(--dark-green);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.flower-icon {
+    color: #88C540; /* Verde claro del icono de BioNode */
+    font-size: 24px;
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WildLens - BioNode</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="navbar">
+            <div class="logo-container">
+                <img src="https://via.placeholder.com/40x40/2D725B/FFFFFF?text=W" alt="WildLens Logo Icon" class="logo-icon">
+                <span class="logo-text">WildLens</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#">Registros</a>
+                <a href="#">Contactos</a>
+                <a href="#" class="btn-nav">Explorar</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero-section">
+                <div class="hero-image">
+                    <img src="https://via.placeholder.com/350x350/2D725B/FFFFFF?text=Buho+Geometrico" alt="Búho WildLens">
+                </div>
+                <div class="hero-content">
+                    <h1>SÉ UN GUARDIÁN DE LA BIODIVERSIDAD LOCAL - EXPLORA, REGISTRA Y PROTEGE</h1>
+                    <p>En un esfuerzo colectivo por la biodiversidad de nuestras áreas urbanas, explora con nosotros protegiendo las comunidades de nuestro entorno.</p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn btn-green">EXPLORAR EL MAPA</a>
+                        <a href="#" class="btn btn-orange">SUBIR OBSERVACIÓN</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="carousel-section">
+                <div class="carousel-header">
+                    <h2>Observaciones recientes de la comunidad</h2>
+                    <div class="carousel-arrows-top">
+                        <button class="arrow-btn" id="prevTop">&lt;</button>
+                        <button class="arrow-btn" id="nextTop">&gt;</button>
+                    </div>
+                </div>
+                
+                <div class="carousel-wrapper">
+                    <button class="arrow-btn side-btn" id="prevBtn">&lt;</button>
+                    
+                    <div class="carousel-track" id="track">
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1552728089-571681646950?w=300&q=80" alt="Ave 1">
+                            <div class="card-info">
+                                <h3>Fauna de la Delegación...</h3>
+                                <p class="ai-status"><span>📍</span> Verificación AI</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1444464666168-49b626f49cb9?w=300&q=80" alt="Ave 2">
+                            <div class="card-info">
+                                <h3>Colibrí CDMX</h3>
+                                <p class="ai-status"><span>📍</span> Verificación AI</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1550853024-fae8cd4be47f?w=300&q=80" alt="Ave 3">
+                            <div class="card-info">
+                                <h3>Gorrión Urbano</h3>
+                                <p class="ai-status"><span>📍</span> Verificación AI</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?w=300&q=80" alt="Ave 4">
+                            <div class="card-info">
+                                <h3>Especie Aves</h3>
+                                <p class="ai-status"><span>📍</span> Verificación AI</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=300&q=80" alt="Mamifero">
+                            <div class="card-info">
+                                <h3>Fauna Terrestre</h3>
+                                <p class="ai-status"><span>📍</span> Verificación AI</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="arrow-btn side-btn" id="nextBtn">&gt;</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="partner-footer">
+            <span class="partner-text">Partner partner:</span>
+            <div class="bionode-logo">
+                <span class="flower-icon">❁</span> BioNode
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
