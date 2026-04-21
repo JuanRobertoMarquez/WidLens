@@ -8,6 +8,20 @@
     --card-bg: #FFFFFF;
 }
 
+.logo-icon{
+    width: 70%;       /* Para que ocupe el ancho de su contenedor */
+    height: 100px;     /* Define una altura fija para todas */
+    object-fit: cover; /* ¡Esta es la clave! Recorta la imagen para que llene el espacio sin deformarse */
+    border-radius: 8px; /* Para mantener los bordes redondeados que ya tienes */
+}
+
+.logo-logo{
+    width: auto;      /* Cambia a auto para que no se estire raro */
+    height: 40px;     /* Ajusta según el tamaño de tu logo real */
+    object-fit: contain;
+}
+
+
 /* Reseteo básico */
 * {
     margin: 0;
@@ -29,21 +43,33 @@ body {
 
 /* NAVEGACIÓN */
 .navbar {
+    width: 100%;
+    background: transparent; /* Aseguramos que el fondo sea transparente */
+    position: sticky;        /* Opcional: para que el menú se quede arriba al bajar */
+    top: 0;
+    z-index: 1000;           /* Para que siempre esté por encima de todo */
+}
+
+.nav-content {
+    max-width: 1100px;      /* Un poco más angosto que el contenedor principal lo hace resaltar más */
+    margin: 20px auto;      /* Despegamos el menú de la parte superior del navegador */
+    padding: 10px 30px;     /* Espaciado interno */
+    
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+
+    /* ESTILOS DE "NUBE" */
+    background-color: #ffffff;    /* Fondo blanco puro para que resalte del crema */
+    border-radius: 50px;          /* Bordes muy redondeados (forma de pastilla/nube) */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra suave para dar profundidad */
+    border: 1px solid rgba(0,0,0,0.05); /* Un borde casi invisible para definir la forma */
 }
 
 .logo-container {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.logo-icon {
-    width: 40px;
-    height: auto;
 }
 
 .logo-text {
