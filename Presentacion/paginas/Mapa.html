@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Ubicación - WildLens</title>
+    <link rel="stylesheet" href="../css/estilo_mapa.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+</head>
+<body>
+
+    <a href="index.html" class="btn-back">← Regresar</a>
+
+    <div id="map"></div>
+
+    <div class="info-card">
+        <h2>Paso 2: Selección de Ubicación</h2>
+        <p id="coords-display">Arrastra el pin al lugar del avistamiento</p>
+        <button class="btn-confirmar" onclick="guardarUbicacion()">Confirmar Ubicación</button>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+<script src="../src/datos/Mapa.js"></script>
+</body>
+</html>
