@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selección de Ubicación - WildLens</title>
+    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/estilo_mapa.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
@@ -12,9 +13,20 @@
 </head>
 <body>
 
-    <a href="index.html" class="btn-back">← Regresar</a>
+    <a href="../index.html" class="btn-back">← Regresar</a>
 
     <div id="map"></div>
+
+    <!-- Nuevo Control de Capas Personalizado -->
+    <div class="map-type-control">
+        <!-- Por defecto este botón tiene la clase 'active' -->
+        <button class="map-btn active" id="btn-basico" onclick="cambiarMapa('basico')">
+            <span>Calles</span>
+        </button>
+        <button class="map-btn" id="btn-satelite" onclick="cambiarMapa('satelite')">
+            <span>Satélite</span>
+        </button>
+    </div>
 
     <div class="info-card">
         <h2>Paso 2: Selección de Ubicación</h2>

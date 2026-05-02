@@ -1,0 +1,366 @@
+:root {
+    --bg-cream: #F9F8F2;
+    --dark-green: #2B7055;
+    --medium-green: #4AA586;
+    --light-green: #E8F5EF;
+    --orange-btn: #E58933;
+    --text-dark: #222222;
+    --text-light: #555555;
+    --card-bg: #FFFFFF;
+    --border-light: #D9D9D9;
+    --step-inactive: #CCCCCC;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ---- NAVBAR (igual al Index) ---- */
+.navbar {
+    width: 100%;
+    background: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.nav-content {
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 10px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.logo-container { display: flex; align-items: center; gap: 10px; }
+.logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--dark-green);
+}
+.logo-icon-nav { height: 36px; width: auto; }
+.nav-links { display: flex; align-items: center; gap: 25px; }
+.nav-links a {
+    text-decoration: none; color: var(--dark-green);
+    font-weight: 600; font-size: 15px;
+}
+.nav-links a.active { color: var(--medium-green); }
+.btn-nav {
+    background-color: var(--dark-green);
+    color: white !important;
+    padding: 8px 20px; border-radius: 20px;
+}
+
+/* ---- STEPPER (barra de pasos) ---- */
+.page-wrapper {
+    padding: 40px 0 60px;
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 40px;
+    max-width: 700px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--step-inactive);
+}
+
+.step-circle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background-color: var(--step-inactive);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.step.active .step-circle,
+.step.completed .step-circle {
+    background-color: var(--dark-green);
+}
+
+.step.active,
+.step.completed {
+    color: var(--dark-green);
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background-color: var(--step-inactive);
+    min-width: 80px;
+    transition: background 0.3s;
+}
+
+.step-line.completed {
+    background-color: var(--dark-green);
+}
+
+/* ---- LAYOUT PRINCIPAL ---- */
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+/* =============================================
+    SECCIÓN 1: SUBIR FOTOS (TU PARTE)
+============================================= */
+.upload-section {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* Grid de previsualizaciones */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.photo-slot {
+    aspect-ratio: 1;
+    border: 2px dashed var(--border-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FAFAFA;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.photo-slot:hover {
+    border-color: var(--medium-green);
+    background-color: var(--light-green);
+}
+
+.photo-slot.has-image {
+    border: 2px solid var(--medium-green);
+    background: #000;
+}
+
+.photo-slot.has-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    border-radius: 8px;
+}
+
+.photo-slot .slot-icon {
+    font-size: 22px;
+    color: var(--border-light);
+    pointer-events: none;
+}
+
+/* Botón eliminar foto */
+.remove-btn {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 20px; height: 20px;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.photo-slot.has-image .remove-btn {
+    display: flex;
+}
+
+/* Input oculto */
+#fileInput { display: none; }
+
+/* Botón "Subir Fotos" */
+.btn-upload {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--medium-green);
+    border-radius: 30px;
+    background: white;
+    color: var(--dark-green);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-upload:hover {
+    background: var(--light-green);
+}
+
+.upload-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Barra de progreso */
+.progress-bar-wrap {
+    display: none;
+    margin-bottom: 16px;
+}
+.progress-bar-wrap.visible { display: block; }
+.progress-label {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+.progress-bar-bg {
+    height: 6px;
+    background: #E0E0E0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--dark-green);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+}
+
+/* Contador de fotos */
+.photo-counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+.photo-counter span { font-weight: 700; color: var(--dark-green); }
+
+/* Botón Continuar */
+.btn-continuar {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--dark-green);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+.btn-continuar:hover:not(:disabled) {
+    background-color: #245e46;
+    transform: translateY(-2px);
+}
+.btn-continuar:disabled {
+    background-color: #BBBBBB;
+    cursor: not-allowed;
+}
+
+/* Zona drag & drop highlight */
+.upload-section.dragover {
+    border: 2px dashed var(--dark-green);
+    background: var(--light-green);
+}
+
+/* ---- SECCIÓN 2: MAPA (referencia visual) ---- */
+.map-section {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.map-placeholder {
+    width: 100%;
+    height: 280px;
+    background: #e8ede8;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-light);
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+.map-hint { font-size: 12px; color: var(--text-light); display: flex; align-items: center; gap: 5px; }
+
+/* ---- SECCIÓN 3: DETALLES (referencia visual) ---- */
+.details-section {
+    background: white;
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.ai-card {
+    border: 2px solid var(--dark-green);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+}
+.ai-card-text strong { display: block; font-size: 14px; font-weight: 700; }
+.ai-card-text span { font-size: 12px; color: var(--text-light); }
+.ai-check { width: 22px; height: 22px; background: var(--dark-green); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.suggestions-label { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.species-card {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid #eee; border-radius: 10px;
+    padding: 10px; margin-bottom: 8px;
+}
+.species-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; background: #ddd; }
+.species-info strong { display: block; font-size: 13px; }
+.species-info span { font-size: 11px; color: var(--text-light); }
+.notes-label { font-size: 16px; font-weight: 700; font-family: 'Montserrat', sans-serif; margin: 18px 0 8px; }
+.notes-area {
+    width: 100%; min-height: 80px;
+    border: 1px solid #ddd; border-radius: 8px;
+    padding: 10px; font-family: 'Open Sans', sans-serif;
+    font-size: 13px; resize: vertical; color: var(--text-dark);
+}

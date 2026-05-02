@@ -35,6 +35,7 @@ body, html {
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     text-align: center;
     min-width: 320px;
+    transition: opacity 0.3s ease, transform 0.3s ease; /* <-- Agrega esta línea */
 }
 
 .info-card h2 {
@@ -85,4 +86,154 @@ body, html {
     text-decoration: none;
     font-weight: bold;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Contenedor del control de mapas */
+.map-type-control {
+    position: absolute;
+    bottom: 40px; /* Misma altura que la info-card */
+    left: 20px;   /* Abajo a la izquierda */
+    z-index: 1000;
+    display: flex;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    backdrop-filter: blur(5px); /* Efecto cristal */
+}
+
+/* Estilo base de los botones de previsualización */
+.map-btn {
+    width: 65px;
+    height: 65px;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease; /* Transición suave */
+    padding: 0;
+}
+
+/* Imágenes de previsualización simuladas */
+#btn-basico {
+    background-image: url('https://a.basemaps.cartocdn.com/rastertiles/voyager/13/1929/3688.png');
+}
+
+#btn-satelite {
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/13/3688/1929');
+}
+
+/* Texto flotante dentro del botoncito */
+.map-btn span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 11px;
+    padding: 3px 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+/* EFECTO DE RESALTADO AL ESTAR ACTIVO O HACER HOVER */
+.map-btn:hover {
+    transform: translateY(-3px);
+}
+
+.map-btn.active {
+    border-color: #2B7055; /* Tu verde oscuro */
+    transform: scale(1.05); /* Se hace un poquito más grande */
+    box-shadow: 0 0 12px rgba(43, 112, 85, 0.5); /* Brillo verde */
+}
+
+/* --- ESTILOS DEL PIN PERSONALIZADO --- */
+
+/* Quitar fondo por defecto de Leaflet para nuestro icono HTML */
+.custom-div-icon {
+    background: transparent;
+    border: none;
+}
+
+/* Contenedor del pin y su animación */
+.custom-pin-container {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+/* El pin visible (Círculo central verde) */
+.wildlens-pin {
+    width: 20px;
+    height: 20px;
+    background-color: #2B7055; /* Tu verde oscuro */
+    border: 3px solid white; /* Borde blanco para que resalte en mapa satélite */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* La onda de "Pulso" o rastreo */
+.wildlens-pulse {
+    width: 30px;
+    height: 30px;
+    background-color: #2B7055;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    /* Aquí llamamos a la animación que creamos abajo */
+    animation: pulse-animation 1.5s infinite ease-out; 
+}
+
+/* La magia de la animación: crecer y desvanecerse */
+@keyframes pulse-animation {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Botón de Mi Ubicación */
+.btn-ubicacion {
+    position: absolute;
+    bottom: 150px; /* Queda flotando arriba de la tarjeta de info */
+    right: 20px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px; 
+    height: 45px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: transform 0.2s ease;
+}
+
+.btn-ubicacion:hover {
+    transform: scale(1.1);
+    background-color: #f0f0f0;
+}
+
+/* Clase que se activará cuando el mapa se mueva */
+.info-card.oculta {
+    opacity: 0;
+    pointer-events: none; /* Evita que la tarjeta "invisible" estorbe los clics */
+    transform: translate(-50%, 20px); /* La baja un poquito al desaparecer */
 }
