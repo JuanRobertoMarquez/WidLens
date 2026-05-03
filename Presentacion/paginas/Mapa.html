@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selección de Ubicación - WildLens</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">    <title>Selección de Ubicación - WildLens</title>
     <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/estilo_mapa.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,27 +14,60 @@
 <body>
 
     <a href="../index.html" class="btn-back">← Regresar</a>
+<!-- 1. Branding: Logo central de WildLens -->
+    <div class="branding-logo">
+        <!-- Puedes cambiar el emoji por una etiqueta <img> con tu logo real después -->
+        🌿 WildLens
+    </div>
 
+    <!-- 2. Coordenadas en tiempo real (Esquina inferior derecha) -->
+    <div id="coordenadas-en-vivo" class="coords-vivo">
+        Lat: 0.00000 | Lng: 0.00000
+    </div>
+    
     <div id="map"></div>
-
-    <!-- Nuevo Control de Capas Personalizado -->
-    <div class="map-type-control">
-        <!-- Por defecto este botón tiene la clase 'active' -->
-        <button class="map-btn active" id="btn-basico" onclick="cambiarMapa('basico')">
-            <span>Calles</span>
+    <!-- Botón de Geolocalización -->
+        <button class="btn-ubicacion" onclick="centrarEnMiUbicacion()" title="Ir a mi ubicación">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="#2B7055" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
         </button>
-        <button class="map-btn" id="btn-satelite" onclick="cambiarMapa('satelite')">
-            <span>Satélite</span>
+    <!-- BUSCADOR PERSONALIZADO WILDLENS -->
+    <div class="buscador-custom">
+        <div class="buscador-input-container">
+            <span class="lupa-icon">🔍</span>
+            <input type="text" id="input-busqueda" placeholder="Buscar lugar " autocomplete="off">
+        </div>
+        <!-- Aquí aparecerá la lista en tiempo real -->
+        <ul id="lista-resultados" class="oculto"></ul>
+    </div>
+
+<!-- Nuevo Menú Desplegable para Mapas -->
+    <div class="map-layer-menu">
+        <!-- Contenedor oculto con las opciones -->
+        <div class="map-options-container" id="menu-mapas">
+            <button class="map-btn active" id="btn-basico" onclick="cambiarMapa('basico')">
+                <span>Calles</span>
+            </button>
+            <button class="map-btn" id="btn-satelite" onclick="cambiarMapa('satelite')">
+                <span>Satélite</span>
+            </button>
+        </div>
+        <!-- Botón principal que abre el menú -->
+        <button class="btn-layer-toggle" onclick="toggleMenuMapas()" title="Estilos de mapa">
+            🗺️
         </button>
     </div>
 
     <div class="info-card">
-        <h2>Paso 2: Selección de Ubicación</h2>
+        <h2>Selección de Ubicación</h2>
         <p id="coords-display">Arrastra el pin al lugar del avistamiento</p>
         <button class="btn-confirmar" onclick="guardarUbicacion()">Confirmar Ubicación</button>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     
 <script src="../src/datos/Mapa.js"></script>
 </body>

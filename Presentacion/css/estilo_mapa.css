@@ -22,20 +22,26 @@ body, html {
 }
 
 /* Tarjeta flotante con la información (estilo WildLens) */
+/* La tarjeta inferior de confirmación */
 .info-card {
     position: absolute;
-    bottom: 40px; /* Separación desde abajo */
+    bottom: 40px;
     left: 50%;
-    transform: translateX(-50%); /* Centrado perfecto */
-    z-index: 1000; /* Por encima del mapa */
-            
-    background-color: white;
-    padding: 20px 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    text-align: center;
-    min-width: 320px;
-    transition: opacity 0.3s ease, transform 0.3s ease; /* <-- Agrega esta línea */
+    transform: translateX(-50%);
+    z-index: 1000;
+    
+    /* Efecto Cristal */
+    background: rgba(255, 255, 255, 0.80); /* Blanco al 80% de opacidad */
+    backdrop-filter: blur(12px); /* Desenfoca lo que hay detrás de la tarjeta */
+    -webkit-backdrop-filter: blur(12px); /* Soporte para Safari/iPhones */
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Borde sutil brillante */
+    
+    padding: 25px 35px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15); /* Sombra más amplia y suave */
+    text-align: center;    
+    /* Esta línea ya la tenías para ocultarla al mover el mapa */
+    transition: opacity 0.3s ease, transform 0.3s ease; 
 }
 
 .info-card h2 {
@@ -45,14 +51,18 @@ body, html {
     margin-bottom: 10px;
 }
 
+/* El cuadro gris donde salen las coordenadas dentro de la tarjeta */
 .info-card p {
-    color: #555555;
+    color: #444;
     font-size: 14px;
     margin-bottom: 20px;
-    background: #F9F8F2; /* Tu crema de fondo */
-    padding: 10px;
-    border-radius: 8px;
-    font-family: monospace; /* Para que los números se vean alineados */
+    
+    /* Lo hacemos un poco más integrado al cristal */
+    background: rgba(249, 248, 242, 0.7); /* Tu color crema pero semi-transparente */
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 12px;
+    border-radius: 12px;
+    font-family: monospace; 
 }
 
 .btn-confirmar {
@@ -73,19 +83,34 @@ body, html {
     background-color: #225a44;
 }
 
-/* Botón de regreso flotante (opcional) */
+/* El botón de regresar (Arriba a la izquierda) */
 .btn-back {
     position: absolute;
     top: 20px;
     left: 20px;
     z-index: 1000;
-    background: white;
+    
+    /* Mismo efecto de cristal para que haga juego con todo */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    
     color: #2B7055;
-    padding: 10px 20px;
+    padding: 10px 22px;
     border-radius: 50px;
     text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    transform: translateX(-5px); /* Se desliza sutilmente hacia la izquierda */
+    background: white; /* Se vuelve sólido al pasar el mouse */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 /* Contenedor del control de mapas */
@@ -210,25 +235,31 @@ body, html {
 }
 
 /* Botón de Mi Ubicación */
+/* --- BOTÓN DE MI UBICACIÓN --- */
 .btn-ubicacion {
     position: absolute;
-    bottom: 150px; /* Queda flotando arriba de la tarjeta de info */
+    bottom: 120px; /* Queda arriba de los botones de tipo de mapa */
     right: 20px;
-    background: white;
-    border: none;
-    border-radius: 50%;
+    z-index: 1000;
+    
     width: 45px; 
     height: 45px;
-    font-size: 22px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    z-index: 1000;
-    transition: transform 0.2s ease;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
 .btn-ubicacion:hover {
     transform: scale(1.1);
-    background-color: #f0f0f0;
+    background-color: white;
 }
 
 /* Clase que se activará cuando el mapa se mueva */
@@ -236,4 +267,206 @@ body, html {
     opacity: 0;
     pointer-events: none; /* Evita que la tarjeta "invisible" estorbe los clics */
     transform: translate(-50%, 20px); /* La baja un poquito al desaparecer */
+}
+
+/* --- ESTILOS DEL BUSCADOR EN TIEMPO REAL --- */
+.buscador-custom {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 280px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.buscador-input-container {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    padding: 5px 15px;
+}
+
+.lupa-icon {
+    font-size: 16px;
+    margin-right: 8px;
+    opacity: 0.6;
+}
+
+#input-busqueda {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px 0;
+    font-size: 14px;
+    width: 100%;
+    color: #333;
+}
+
+/* Lista de resultados desplegable */
+#lista-resultados {
+    list-style: none;
+    background: white;
+    margin-top: 10px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    padding: 0;
+    transition: opacity 0.2s ease;
+}
+
+#lista-resultados.oculto {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+#lista-resultados li {
+    padding: 12px 18px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#lista-resultados li:last-child { border-bottom: none; }
+#lista-resultados li:hover { background-color: #F9F8F2; }
+
+/* Resaltado dinámico en verde */
+#lista-resultados li strong {
+    color: #2B7055;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+/* --- ESTILOS DEL MENÚ DESPLEGABLE DE MAPAS --- */
+.map-layer-menu {
+    position: absolute;
+    bottom: 120px; /* Misma altura base que el botón de ubicación */
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* El botoncito redondo con el emoji */
+.btn-layer-toggle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-layer-toggle:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+/* El contenedor de las opciones (inicia oculto hacia abajo) */
+.map-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none; /* Para que no lo puedas clickear estando invisible */
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+/* Esta clase se la pondremos con JS cuando se abra el menú */
+.map-options-container.mostrar {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+
+/* --- ADAPTACIÓN A PANTALLAS PEQUEÑAS (MÓVILES) --- */
+@media (max-width: 768px) {
+    /* La tarjeta inferior ahora toma un % en lugar de estar rígida */
+    .info-card {
+        width: 90%; 
+        max-width: 400px;
+        padding: 20px; /* Reducimos el colchón interior */
+        bottom: 20px;
+    }
+
+    /* Reducimos un poco los textos para que quepan mejor */
+    .info-card h2 { font-size: 16px; }
+    .info-card p { font-size: 12px; padding: 10px; }
+
+    /* Subimos los botones laterales para que NO choquen con la tarjeta */
+    .btn-ubicacion, .map-layer-menu {
+        bottom: 210px; /* Los subimos casi al centro de la pantalla */
+    }
+
+    /* Ajustamos el buscador para que no se empalme con "Regresar" */
+    .buscador-custom {
+        top: 80px; /* Lo bajamos un poquito */
+        width: calc(100% - 40px); /* Usa todo el ancho disponible menos un margen */
+        right: 20px;
+        left: 20px;
+    }
+}
+
+/* --- BRANDING: LOGO DE WILDLENS --- */
+.branding-logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* Centrado perfecto arriba */
+    z-index: 1000;
+    
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    padding: 8px 24px;
+    border-radius: 30px;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #2B7055; /* Tu verde oscuro */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    
+    pointer-events: none; /* Hace que los clics lo atraviesen y no estorbe al mapa */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- COORDENADAS EN TIEMPO REAL DEL MOUSE --- */
+.coords-vivo {
+    position: absolute;
+    bottom: 15px;
+    right: 15px; /* Esquina inferior derecha */
+    z-index: 1000;
+    
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 4px 8px;
+    border-radius: 6px;
+    
+    font-family: monospace;
+    font-size: 11px;
+    color: #555;
+    pointer-events: none; /* No bloquea el mapa */
+}
+
+/* OJO AQUÍ: Ocultamos las coordenadas en celulares porque ahí no hay ratón (mouse) */
+@media (max-width: 768px) {
+    .coords-vivo {
+        display: none;
+    }
 }
