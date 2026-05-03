@@ -1,5 +1,4 @@
 
-/* Reseteo básico para que no haya márgenes en blanco */
 * {
     margin: 0;
     padding: 0;
@@ -20,9 +19,6 @@ body, html {
     left: 0;
     z-index: 1; /* Nivel base */
 }
-
-/* Tarjeta flotante con la información (estilo WildLens) */
-/* La tarjeta inferior de confirmación */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -176,8 +172,6 @@ body, html {
     transform: scale(1.05); /* Se hace un poquito más grande */
     box-shadow: 0 0 12px rgba(43, 112, 85, 0.5); /* Brillo verde */
 }
-
-/* --- ESTILOS DEL PIN PERSONALIZADO --- */
 
 /* Quitar fondo por defecto de Leaflet para nuestro icono HTML */
 .custom-div-icon {
@@ -384,17 +378,13 @@ body, html {
     transition: all 0.3s ease;
 }
 
-/* Esta clase se la pondremos con JS cuando se abra el menú */
 .map-options-container.mostrar {
     opacity: 1;
     pointer-events: all;
     transform: translateY(0);
 }
 
-
-/* --- ADAPTACIÓN A PANTALLAS PEQUEÑAS (MÓVILES) --- */
 @media (max-width: 768px) {
-    /* La tarjeta inferior ahora toma un % en lugar de estar rígida */
     .info-card {
         width: 90%; 
         max-width: 400px;
@@ -402,16 +392,12 @@ body, html {
         bottom: 20px;
     }
 
-    /* Reducimos un poco los textos para que quepan mejor */
     .info-card h2 { font-size: 16px; }
     .info-card p { font-size: 12px; padding: 10px; }
-
-    /* Subimos los botones laterales para que NO choquen con la tarjeta */
     .btn-ubicacion, .map-layer-menu {
         bottom: 210px; /* Los subimos casi al centro de la pantalla */
     }
 
-    /* Ajustamos el buscador para que no se empalme con "Regresar" */
     .buscador-custom {
         top: 80px; /* Lo bajamos un poquito */
         width: calc(100% - 40px); /* Usa todo el ancho disponible menos un margen */
@@ -464,7 +450,7 @@ body, html {
     pointer-events: none; /* No bloquea el mapa */
 }
 
-/* OJO AQUÍ: Ocultamos las coordenadas en celulares porque ahí no hay ratón (mouse) */
+/* Ocultamos las coordenadas en celulares*/
 @media (max-width: 768px) {
     .coords-vivo {
         display: none;

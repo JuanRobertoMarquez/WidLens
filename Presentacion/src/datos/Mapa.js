@@ -1,6 +1,3 @@
-// --- FUNCIONALIDAD 4: LIMITAR EL ÁREA DEL MAPA ---
-
-// Definimos la esquina Suroeste y Noreste de México aproximadamente
 const limitesMexico = [
     [14.5321, -118.3985], // Suroeste (Pacífico)
     [32.7187, -86.7104]   // Noreste (Caribe/Frontera)
@@ -9,9 +6,9 @@ const limitesMexico = [
 // Inicializamos el mapa con las restricciones
 const map = L.map('map', { 
     doubleClickZoom: false,
-    attributionControl: false, // <-- ESTA LÍNEA OCULTA "Leaflet | Tiles Esri"
-    zoomControl: false,       // <-- ESTA ES LA LÍNEA MÁGICA QUE LOS QUITA
-    maxBounds: limitesMexico, // El "corralito" invisible
+    attributionControl: false, // <-- ESTA LÍNEA OCULTA "Leaflet 
+    zoomControl: false,       // <-- ESTA ES LA LÍNEA 
+    maxBounds: limitesMexico, // El corral invisible
     maxBoundsViscosity: 1.0,  // Hace que el mapa rebote como pared sólida
     minZoom: 5                // Evita que alejen la cámara hasta ver todo el mundo
 }).setView([19.4326, -99.1332], 14);
@@ -42,7 +39,6 @@ if (mapaGuardado === 'satelite') {
     // El botón de básico ya tiene la clase 'active' en el HTML por defecto
 }
 
-// 4. CREAMOS EL CONTROL PARA CAMBIAR DE MAPA (Abajo a la izquierda)
 const capasBase = {
     "🗺️ Mapa Básico": mapaBasico,
     "🌍 Vista Satélite": mapaSatelite
@@ -68,12 +64,11 @@ function cambiarMapa(tipo) {
     document.getElementById('menu-mapas').classList.remove('mostrar');
 }
 
-// --- 1. ICONO PERSONALIZADO (El Pin Principal) ---
 const iconoPersonalizado = L.icon({
-    iconUrl: '../images/sub_icon.png', // <-- PON AQUÍ LA RUTA A TU IMAGEN REAL
+    iconUrl: '../images/sub_icon.png', 
     iconSize: [45, 45], // Tamaño de la imagen (ancho, alto)
     iconAnchor: [22, 45], // El punto exacto que apunta a la coordenada (la mitad inferior)
-    popupAnchor: [0, -45] // Por si luego le quieres poner un mensajito encima
+    popupAnchor: [0, -45] 
 });
 
 // Creamos el marcador usando tu imagen
@@ -84,16 +79,12 @@ const marker = L.marker([19.4326, -99.1332], {
 
 const coordsDisplay = document.getElementById('coords-display');
 
-// REEMPLAZA tu evento 'dragend' actual por este:
 marker.on('dragend', function(event) {
     const position = marker.getLatLng();
     actualizarTarjeta(position.lat, position.lng);
 });
 
-
-// 2. FUNCIÓN DE GUARDADO (LA API)
 async function guardarUbicacion() {
-    // Como 'marker' ya se creó arriba, esta línea ya no dará error
     const finalPosition = marker.getLatLng();
 
     const datosAvistamiento = {
@@ -133,8 +124,6 @@ async function guardarUbicacion() {
     }
 }
 
-// --- 2. LÓGICA DE MI UBICACIÓN (Con efecto pulso) ---
-
 // Guardamos el icono del pulso en una variable
 const iconoUbicacionActual = L.divIcon({
     className: 'custom-div-icon',
@@ -150,13 +139,10 @@ const iconoUbicacionActual = L.divIcon({
 
 let marcadorUbicacion = null; // Variable para guardar el pin del pulso
 
-// Función que se ejecuta al darle clic al botón 📍
 function centrarEnMiUbicacion() {
     // Le pedimos a Leaflet que nos localice y haga zoom (flyTo)
     map.locate({setView: true, maxZoom: 16});
 }
-
-// --- FUNCIONALIDAD 3: CÍRCULO DE PRECISIÓN GPS ---
 
 let circuloPrecision = null; // NUEVA VARIABLE para guardar el círculo
 
@@ -241,7 +227,6 @@ inputBusqueda.addEventListener('input', function() {
                 
                 datos.features.forEach(lugar => {
                     const props = lugar.properties;
-                    // Armamos el texto (Ej: "Bosque de Chapultepec, Ciudad de México")
                     const nombreLugar = props.name || props.street;
                     const ciudad = props.city || props.state || "";
                     const textoCompleto = ciudad ? `${nombreLugar}, ${ciudad}` : nombreLugar;
@@ -254,7 +239,6 @@ inputBusqueda.addEventListener('input', function() {
                     const regex = new RegExp(`(${query})`, "gi");
                     li.innerHTML = textoCompleto.replace(regex, "<strong>$1</strong>");
                     
-                    // Al hacer clic en una de las opciones desplegadas:
                     li.onclick = () => {
                         const lng = lugar.geometry.coordinates[0];
                         const lat = lugar.geometry.coordinates[1];
@@ -285,21 +269,19 @@ inputBusqueda.addEventListener('input', function() {
     }, 300); 
 });
 
-// --- FUNCIONALIDAD: OCULTAR BUSCADOR AL HACER OTRA COSA ---
-
 // Función auxiliar para limpiar y ocultar la lista
 function cerrarBuscador() {
     listaResultados.classList.add('oculto');
     listaResultados.innerHTML = '';
 }
 
-// 1. Si el usuario hace clic en cualquier parte del mapa
+// Si el usuario hace clic en cualquier parte del mapa
 map.on('click', cerrarBuscador);
 
-// 2. Si el usuario empieza a arrastrar el mapa
+// Si el usuario empieza a arrastrar el mapa
 map.on('dragstart', cerrarBuscador);
 
-// 3. Si el usuario hace clic en cualquier lugar de la página que no sea el buscador
+// Si el usuario hace clic en cualquier lugar de la página que no sea el buscador
 document.addEventListener('click', function(event) {
     const contenedorBuscador = document.querySelector('.buscador-custom');
     // Si el clic NO fue dentro del buscador, cerramos la lista
@@ -308,7 +290,7 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// 4. Si el usuario borra todo el texto presionando teclas (Backspace/Delete)
+// Si el usuario borra todo el texto presionando teclas (Backspace/Delete)
 inputBusqueda.addEventListener('keyup', function(event) {
     if (this.value.length === 0) {
         cerrarBuscador();

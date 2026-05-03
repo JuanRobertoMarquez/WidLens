@@ -1,4 +1,3 @@
-/* Variables de colores basadas en tu imagen */
 :root {
     --bg-cream: #F9F8F2;
     --dark-green: #2B7055;
@@ -6,13 +5,6 @@
     --text-dark: #222222;
     --text-light: #555555;
     --card-bg: #FFFFFF;
-}
-
-.logo-icon{
-    width: 70%;       /* Para que ocupe el ancho de su contenedor */
-    height: 100px;     /* Define una altura fija para todas */
-    object-fit: cover; /* ¡Esta es la clave! Recorta la imagen para que llene el espacio sin deformarse */
-    border-radius: 8px; /* Para mantener los bordes redondeados que ya tienes */
 }
 
 .logo-logo{
@@ -34,13 +26,6 @@ body {
     background-color: var(--bg-cream);
     color: var(--text-dark);
 }
-
-.main-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 /* NAVEGACIÓN */
 .navbar {
     width: 100%;
@@ -110,37 +95,6 @@ body {
     justify-content: space-between;
     margin-top: 60px;
     gap: 40px;
-}
-
-.hero-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.hero-image img {
-    max-width: 100%;
-    height: auto;
-}
-
-.hero-content {
-    flex: 1.5;
-}
-
-.hero-content h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 32px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-bottom: 20px;
-    color: #1A1A1A;
-}
-
-.hero-content p {
-    font-size: 16px;
-    color: var(--text-light);
-    margin-bottom: 30px;
-    line-height: 1.6;
 }
 
 .hero-buttons {
@@ -290,4 +244,430 @@ body {
 .flower-icon {
     color: #88C540; /* Verde claro del icono de BioNode */
     font-size: 24px;
+}
+
+/* --- DISEÑO RESPONSIVO --- */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+        margin-top: 30px;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .nav-content {
+        flex-direction: column;
+        gap: 15px;
+        border-radius: 20px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* --- NUEVO HERO INMERSIVO --- */
+.hero-background {
+    /* Aquí pondrás la ruta de tu foto épica de un ajolote */
+    background-image: url('https://cdn.pixabay.com/photo/2025/03/31/06/37/ai-generated-9504113_1280.jpg'); 
+    background-size: cover;
+    background-position: center;
+    min-height: 85vh; /* Ocupa el 85% de la pantalla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -80px; /* Para que la imagen suba y quede detrás del menú */
+    position: relative;
+}
+
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.6); /* Capa oscura para que el texto sea legible */
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.hero-content-center {
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 20px;
+    z-index: 1; /* Se asegura de estar sobre la capa oscura */
+}
+
+.hero-content-center h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 46px; /* Letra más grande y de impacto */
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: white;
+    line-height: 1.2;
+}
+
+.hero-content-center p {
+    font-size: 18px;
+    margin-bottom: 35px;
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+.hero-content-center .hero-buttons {
+    justify-content: center; /* Centra los botones */
+}
+
+/* --- SECCIÓN CÓMO FUNCIONA --- */
+.how-it-works {
+    padding: 80px 20px;
+    text-align: center;
+    background-color: var(--bg-cream);
+}
+
+.how-it-works h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    color: var(--dark-green);
+    margin-bottom: 50px;
+}
+
+.steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap; /* Para móviles */
+}
+
+.step {
+    flex: 1;
+    min-width: 250px;
+    background: white;
+    padding: 40px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: translateY(-10px);
+}
+
+.step-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.step h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+.step p {
+    color: var(--text-light);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* --- SECCIÓN DE ESTADÍSTICAS --- */
+.stats-section {
+    background-color: var(--dark-green);
+    color: white;
+    padding: 60px 20px;
+}
+
+.stats-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-box h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--orange-btn); /* El naranja resalta genial sobre el verde oscuro */
+}
+
+.stat-box p {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- ESPECIE DESTACADA --- */
+.featured-species {
+    padding: 80px 20px;
+    background-color: white;
+}
+
+.featured-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.featured-image {
+    flex: 1;
+    position: relative;
+}
+
+.featured-image img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.species-badge {
+    position: absolute;
+    top: 20px;
+    left: -15px;
+    background-color: var(--orange-btn);
+    color: white;
+    padding: 10px 20px;
+    font-weight: 700;
+    border-radius: 5px;
+    box-shadow: 2px 4px 10px rgba(0,0,0,0.2);
+}
+
+.featured-info {
+    flex: 1;
+}
+
+.featured-info h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.featured-info h2 span {
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-light);
+    font-weight: 400;
+}
+
+.featured-info p {
+    font-size: 16px;
+    color: var(--text-light);
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+/* --- DISEÑO RESPONSIVO --- */
+@media (max-width: 768px) {
+    .nav-content {
+        flex-direction: column;
+        gap: 15px;
+        border-radius: 20px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .hero-content-center h1 {
+        font-size: 32px; /* Letra más pequeña en celular */
+    }
+    
+    .hero-buttons {
+        display: flex;
+        flex-direction: column; /* Botones uno arriba de otro en celular */
+        gap: 15px;
+    }
+}
+
+/* --- TOP GUARDIANES --- */
+.top-contributors {
+    padding: 80px 20px;
+    background-color: var(--bg-cream);
+    text-align: center;
+}
+
+.contributors-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    color: var(--dark-green);
+    margin-bottom: 10px;
+}
+
+.contributors-header p {
+    color: var(--text-light);
+    margin-bottom: 40px;
+}
+
+.contributors-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.user-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.avatar {
+    font-size: 50px;
+    margin-bottom: 15px;
+}
+
+.user-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.user-card p {
+    color: var(--text-light);
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.badge-gold { background-color: #FFD700; color: #856404; }
+.badge-silver { background-color: #C0C0C0; color: #383d41; }
+.badge-bronze { background-color: #CD7F32; }
+
+/* --- CTA FINAL --- */
+.cta-section {
+    background-color: var(--dark-green);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-content h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.cta-content p {
+    font-size: 18px;
+    color: #e0e0e0;
+    line-height: 1.6;
+}
+
+.observation-story {
+    padding: 80px 20px;
+    background-color: #E9F0E6; /* Color cremita verdoso como el de tu imagen */
+    font-family: 'Open Sans', sans-serif;
+}
+
+.story-header h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 40px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.story-label {
+    display: block;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.story-item { margin-bottom: 30px; }
+
+/* Estilo de la observación */
+.main-obs-img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.obs-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.obs-icon { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; }
+
+/* Estilo del mini mapa */
+.mini-map {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.location-text { font-size: 14px; margin-top: 5px; color: #555; }
+
+/* Responsive */
+@media (max-width: 850px) {
+    .story-grid { grid-template-columns: 1fr; }
+}
+
+.hero-video-container {
+    position: relative;
+    height: 85vh;
+    overflow: hidden;
+}
+
+.video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
 }
