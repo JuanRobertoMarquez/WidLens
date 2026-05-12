@@ -1,0 +1,45 @@
+/* Transición de entrada (para toda la página) */
+body {
+    animation: fadeInPage 1.5s ease-in-out;
+}
+
+@keyframes fadeInPage {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Contenedor del patrón de transición (imagen del ajolote) */
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* CAMBIO: Fondo sólido color crema para que el ajolote no compita visualmente con la página de atrás */
+    background-color: #f5f3ec; 
+    
+    /* Configuración de la imagen repartida */
+    background-image: url('Icono.png');
+    background-repeat: repeat; 
+    
+    /* CAMBIO: Ajolotes un poco más grandes (de 60px a 80px) */
+    background-size: 80px;    
+    background-position: center;
+    
+    /* Capas y visibilidad inicial */
+    z-index: 10000; 
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none; 
+    
+    /* CAMBIO: Animación mucho más lenta (1 segundo) */
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+/* Clase para mostrar la transición */
+.transition-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto; 
+}

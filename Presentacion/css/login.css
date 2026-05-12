@@ -1,0 +1,126 @@
+/* Reseteo básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fondo similar al de la página principal */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(
+        to bottom left,
+        #f5f3ec,
+        #e68332
+    );
+    background-color: #F0D5A8;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; 
+}
+
+/* Contenedor principal del Login */
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Estilos para tu isologo */
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 200px; /* Ajusta este tamaño según tu imagen */
+    height: auto;
+}
+
+/* Textos */
+h2 {
+    color: #2c6e5a; /* Verde oscuro del diseño original */
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Formulario */
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Bordes redondeados como en tus botones */
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #2c6e5a;
+}
+
+/* Botón principal */
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: #2c6e5a;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #1f4f41; /* Verde más oscuro al pasar el mouse */
+}
+
+/* Nuevos estilos para los enlaces inferiores */
+.footer-links {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column; /* Apila los enlaces uno sobre otro */
+    gap: 12px; /* Espacio entre los enlaces */
+    font-size: 14px;
+}
+
+.footer-links a {
+    color: #e68332; /* Naranja extraído de tu diseño original */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+    color: #2c6e5a; /* Cambia al verde oscuro del isologo al pasar el ratón */
+}

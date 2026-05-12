@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(
+        to bottom left,
+        #f5f3ec,
+        #e68332
+    );
+    background-color: #F0D5A8;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; 
+}
+.reset-container {
+    width: 100%;
+    max-width: 450px;
+}
+
+.reset-form {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.reset-form h2 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.8em;
+}
+
+.reset-form p {
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* Grupo de entrada (Label + Input) */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95em;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em; /* 16px previene zoom en iOS */
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #FA8E9A; 
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(250, 142, 154, 0.3);
+}
+
+/* ---------------------------------- */
+/* Botones (Nueva estructura) */
+/* ---------------------------------- */
+.button-group {
+    display: flex;
+    gap: 15px; /* Espacio entre botones */
+    margin-top: 25px;
+}
+
+.btn {
+    flex: 1; /* Ambos botones ocupan el mismo ancho */
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* Estilo botón Continuar (Principal) */
+.btn-submit {
+    background-color: #65999A; 
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #528081; 
+}
+
+/* Estilo botón Cancelar (Secundario) */
+.btn-cancel {
+    background-color: #e0e0e0;
+    color: #555;
+}
+
+.btn-cancel:hover {
+    background-color: #d1d1d1;
+}
+
+/* ---------------------------------- */
+/* Responsive (Móviles) */
+/* ---------------------------------- */
+@media (max-width: 480px) {
+    .reset-form {
+        padding: 30px 20px; /* Reducir padding interno */
+    }
+
+    .reset-form h2 {
+        font-size: 1.5em;
+    }
+
+    /* En celulares pequeños, apilamos los botones para que sean más fáciles de tocar */
+    .button-group {
+        flex-direction: column-reverse; /* Cancelar abajo, Continuar arriba */
+        gap: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px; /* Botones un poco más altos para dedos táctiles */
+    }
+}
