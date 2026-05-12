@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña</title>
+    <link rel="stylesheet" href="recuperacion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="transicion.css">
+</head>
+<body>
+    <div class="reset-container">
+        <form class="reset-form">
+            <h2><i class="fas fa-key"></i> Restablecer Contraseña</h2>
+            <p>Ingresa tu correo y define tu nueva contraseña para recuperar el acceso.</p>
+
+            <div class="input-group">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" required placeholder="ejemplo@gmail.com">
+            </div>
+
+            <div class="input-group">
+                <label for="new-password">Nueva Contraseña</label>
+                <input type="password" id="new-password" name="new-password" required placeholder="Mínimo 8 caracteres">
+            </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Confirmar Contraseña</label>
+                <input type="password" id="confirm-password" name="confirm-password" required placeholder="Repite la nueva contraseña">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="window.location.href='login.html'">Cancelar</button>
+                <button type="submit" class="btn btn-submit">Continuar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.querySelector('.reset-form');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita que la página se recargue
+
+            // 1. Obtener valores
+            const email = document.getElementById('email').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // 2. Validar que las contraseñas sean iguales
+            if (newPassword !== confirmPassword) {
+                alert("Las contraseñas no coinciden. Inténtalo de nuevo.");
+                return;
+            }
+
+            // 3. Simular el guardado en localStorage
+            // Esto actualiza la contraseña guardada anteriormente
+            localStorage.setItem('usuario_password', newPassword);
+            
+            // Opcional: También podrías actualizar el correo si el usuario lo cambió aquí
+            // localStorage.setItem('usuario_email', email);
+
+            // 4. Mensaje de éxito y redirección al Login
+            alert("¡Contraseña restablecida con éxito!");
+            window.location.href = 'login.html';
+        });
+    </script>
+
+    <script src="transicion.css"></script>
+
+</body>
+</html>
