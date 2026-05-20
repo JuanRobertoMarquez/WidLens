@@ -66,7 +66,7 @@ function cambiarMapa(tipo) {
 
 const iconoPersonalizado = L.icon({
     iconUrl: '../images/sub_icon.png', 
-    iconSize: [45, 45], // Tamaño de la imagen (ancho, alto)
+    iconSize: [50, 55], // Tamaño de la imagen (ancho, alto)
     iconAnchor: [22, 45], // El punto exacto que apunta a la coordenada (la mitad inferior)
     popupAnchor: [0, -45] 
 });
@@ -297,18 +297,22 @@ inputBusqueda.addEventListener('keyup', function(event) {
     }
 });
 
-// Función que consulta la API de Photon para obtener el nombre del lugar
 async function obtenerDireccion(lat, lng) {
     try {
-        const url = `https://photon.komoot.io/reverse?lon=${lng}&lat=${lat}`;
+        // Usamos la API oficial de OpenStreetMap
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+        
         const respuesta = await fetch(url);
+        if (!respuesta.ok) {
+            throw new Error('Error al conectar con Nominatim');
+        }
+
         const datos = await respuesta.json();
 
-        if (datos.features && datos.features.length > 0) {
-            const props = datos.features[0].properties;
-            // Armamos la dirección con lo que encontremos (calle, nombre, ciudad)
-            const calle = props.street || props.name || "";
-            const ciudad = props.city || props.state || props.county || "";
+        // Nominatim guarda los datos dentro del objeto "address"
+        if (datos && datos.address) {
+            const calle = datos.address.road || datos.address.pedestrian || "";
+            const ciudad = datos.address.city || datos.address.town || datos.address.county || "";
             
             let direccionFinal = "";
             if (calle && ciudad) direccionFinal = `${calle}, ${ciudad}`;
@@ -319,6 +323,7 @@ async function obtenerDireccion(lat, lng) {
             return direccionFinal;
         }
         return "Ubicación sin registrar";
+
     } catch (error) {
         console.error("Error obteniendo la dirección:", error);
         return "Error de red";

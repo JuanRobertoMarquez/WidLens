@@ -1,3 +1,4 @@
+/* Variables de colores basadas en tu imagen */
 :root {
     --bg-cream: #F9F8F2;
     --dark-green: #2B7055;
@@ -22,17 +23,28 @@
 }
 
 body {
+    margin: 0;
+    padding: 0;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--bg-cream);
     color: var(--text-dark);
 }
-/* NAVEGACIÓN */
+
 .navbar {
     width: 100%;
-    background: transparent; /* Aseguramos que el fondo sea transparente */
-    position: sticky;        /* Opcional: para que el menú se quede arriba al bajar */
+    position: fixed; /* <--- ESTE ES EL CAMBIO CLAVE */
     top: 0;
-    z-index: 1000;           /* Para que siempre esté por encima de todo */
+    left: 0;
+    z-index: 1000;
+    background: transparent;
+}
+
+/* Ajustamos el hero para que ocupe todo el alto y no tenga margen arriba */
+.hero-video-container {
+    position: relative;
+    height: 100vh; /* Que ocupe el 100% del alto de la pantalla */
+    margin-top: 0; /* Aseguramos que no haya margen superior */
+    overflow: hidden;
 }
 
 .nav-content {
@@ -58,7 +70,7 @@ body {
 }
 
 .logo-text {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 22px;
     font-weight: 700;
     color: var(--dark-green);
@@ -107,7 +119,7 @@ body {
     padding: 15px 30px;
     border-radius: 30px;
     font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     color: white;
     font-size: 14px;
     transition: transform 0.2s ease;
@@ -129,7 +141,7 @@ body {
 .carousel-section {
     margin-top: 80px;
     padding: 40px 0;
-    background-color: white;
+    background-color: #FFFFFF;
     border-radius: 10px 10px 0 0;
 }
 
@@ -142,7 +154,7 @@ body {
 }
 
 .carousel-header h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 20px;
     color: var(--text-dark);
 }
@@ -233,7 +245,7 @@ body {
 }
 
 .bionode-logo {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 22px;
     color: var(--dark-green);
     display: flex;
@@ -304,7 +316,7 @@ body {
 }
 
 .hero-content-center h1 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 46px; /* Letra más grande y de impacto */
     font-weight: 700;
     margin-bottom: 20px;
@@ -327,11 +339,11 @@ body {
 .how-it-works {
     padding: 80px 20px;
     text-align: center;
-    background-color: var(--bg-cream);
+    background-color: #FFFFFF;
 }
 
 .how-it-works h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 32px;
     color: var(--dark-green);
     margin-bottom: 50px;
@@ -366,7 +378,7 @@ body {
 }
 
 .step h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 20px;
     margin-bottom: 15px;
     color: var(--text-dark);
@@ -396,7 +408,7 @@ body {
 }
 
 .stat-box h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 48px;
     font-weight: 700;
     margin-bottom: 10px;
@@ -413,7 +425,7 @@ body {
 /* --- ESPECIE DESTACADA --- */
 .featured-species {
     padding: 80px 20px;
-    background-color: white;
+    background-color: var(--bg-cream);
 }
 
 .featured-container {
@@ -452,7 +464,7 @@ body {
 }
 
 .featured-info h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 36px;
     color: var(--text-dark);
     margin-bottom: 20px;
@@ -500,12 +512,12 @@ body {
 /* --- TOP GUARDIANES --- */
 .top-contributors {
     padding: 80px 20px;
-    background-color: var(--bg-cream);
+    background-color: #FFFFFF;
     text-align: center;
 }
 
 .contributors-header h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 32px;
     color: var(--dark-green);
     margin-bottom: 10px;
@@ -541,7 +553,7 @@ body {
 }
 
 .user-card h4 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 20px;
     color: var(--text-dark);
     margin-bottom: 5px;
@@ -579,7 +591,7 @@ body {
 }
 
 .cta-content h2 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 36px;
     margin-bottom: 20px;
     line-height: 1.3;
@@ -593,7 +605,7 @@ body {
 
 .observation-story {
     padding: 80px 20px;
-    background-color: #E9F0E6; /* Color cremita verdoso como el de tu imagen */
+    background-color: var(--bg-cream);
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -601,7 +613,7 @@ body {
     text-align: center;
     font-size: 28px;
     margin-bottom: 40px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
 }
 
 .story-grid {

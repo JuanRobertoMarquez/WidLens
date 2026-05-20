@@ -1,4 +1,3 @@
-/* Transición de entrada (para toda la página) */
 body {
     animation: fadeInPage 1.5s ease-in-out;
 }
