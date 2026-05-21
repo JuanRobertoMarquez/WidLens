@@ -51,45 +51,48 @@ CREATE TABLE Interacciones(
     FOREIGN KEY(id_usuario) REFERENCES Usuarios(id_usuario)
     );
     
--- 1. INSERTAR USUARIOS
--- Omitimos id_usuario y fecha_de_registro porque se llenan solos.
--- Las contraseñas están simuladas como hashes para mantener las buenas prácticas.
+-- 1. INSERTAR USUARIOS (Mantenemos tu equipo + 1 bióloga invitada)
 INSERT INTO Usuarios (nombre, apellido, correo, contrasenia) VALUES 
 ('Roberto', 'Marquez', 'roberto.m@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345'),
 ('Darien', 'García', 'darien.g@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345'),
 ('Jesus', 'López', 'jesus.l@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345'),
-('Areli', 'Marquez', 'areli.m@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345');
+('Areli', 'Marquez', 'areli.m@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345'),
+('Carmen', 'Ruiz', 'cruiz.biol@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345');
 
--- 2. INSERTAR ESPECIES
--- Omitimos id_especie
 INSERT INTO Especies (nombre_comun, estado_conservacion, imagen) VALUES 
-('Ajolote Mexicano', 'Peligro Crítico', 'https://images.unsplash.com/photo-1698778486518-202396e9cbbe'),
-('Cacomixtle Norteño', 'Preocupación Menor', 'https://images.unsplash.com/photo-1615826932727-3108c4a17ab5'),
-('Colibrí Berilo','Preocupación Menor', 'https://images.unsplash.com/photo-1444464666168-49b626f49cb9'),
-('Gorrión Doméstico','Preocupación Menor', 'https://images.unsplash.com/photo-1550853024-fae8cd4be47f');
+('Ajolote de Xochimilco (A. mexicanum)', 'Peligro Crítico', '/subidas/ajolote_xochi.jpg'),
+('Achoque de Pátzcuaro (A. dumerilii)', 'Peligro Crítico', '/subidas/achoque_patz.jpg'),
+('Ajolote de Alchichica (A. taylori)', 'Peligro Crítico', '/subidas/ajolote_alchi.jpg'),
+('Achoque de Zacapu (A. andersoni)', 'Peligro Crítico', '/subidas/achoque_zac.jpg');
 
--- 3. INSERTAR OBSERVACIONES
--- Relacionamos a los usuarios (1 a 4) con las especies (1 a 4).
+-- 3. INSERTAR OBSERVACIONES (Con coordenadas reales de sus hábitats)
 INSERT INTO Observaciones (id_usuario, id_especie, foto, latitud, longitud, fecha_avistamiento, estatus_validacion) VALUES 
--- Roberto encuentra un ajolote en Xochimilco
-(1, 1, 'ajolote_obs1.jpg', 19.26250000, -99.10260000, '2026-03-25 10:30:00', 'Validado'),
--- Darien avista un cacomixtle en Nezahualcóyotl
-(2, 2, 'caco_neza.jpg', 19.39580000, -98.99560000, '2026-04-10 21:15:00', 'Pendiente'),
--- Jesus fotografía un colibrí cerca de Zacatenco
-(3, 3, 'colibri_zacatenco.jpg', 19.50440000, -99.14670000, '2026-04-20 08:45:00', 'Validado'),
--- Areli registra un gorrión
-(4, 4, 'gorrion_urbano.jpg', 19.43260000, -99.13320000, '2026-05-01 14:20:00', 'Validado');
+-- Xochimilco, CDMX (Ajolote Mexicano)
+(1, 1, '/subidas/ajolote_rosado_xochi.jpg', 19.26250000, -99.10260000, '2026-05-15 08:30:00', 'Validado'),
+(3, 1, '/subidas/ajolote_pardo_canal.jpg', 19.27130000, -99.09150000, '2026-05-18 11:20:00', 'Pendiente'),
+-- Lago de Pátzcuaro, Michoacán (Achoque de Pátzcuaro)
+(2, 2, '/subidas/achoque_patzcuaro1.jpg', 19.55420000, -101.59330000, '2026-04-22 09:15:00', 'Validado'),
+(4, 2, '/subidas/achoque_mich.jpg', 19.58210000, -101.62140000, '2026-05-02 16:45:00', 'Validado'),
+-- Laguna de Alchichica, Puebla (Ajolote de Alchichica)
+(1, 3, '/subidas/ajolote_alchichica_salino.jpg', 19.41670000, -97.39860000, '2026-05-10 14:00:00', 'Validado'),
+-- Laguna de Zacapu, Michoacán (Achoque de Zacapu)
+(5, 4, '/subidas/achoque_zacapu_fondo.jpg', 19.82470000, -101.79190000, '2026-05-19 10:10:00', 'Validado'),
+-- Otro avistamiento reciente en Cuemanco, CDMX
+(2, 1, '/subidas/ajolote_cuemanco.jpg', 19.28610000, -99.10420000, '2026-05-20 07:30:00', 'Pendiente');
 
--- 4. INSERTAR IDENTIFICACIONES
--- Usuarios validando las fotos de otros
+-- 4. INSERTAR IDENTIFICACIONES (Comunidad validando los ajolotes)
 INSERT INTO Identificaciones (id_observacion, id_usuario, id_especie) VALUES 
-(1, 4, 1), -- Areli confirma que la foto 1 (de Roberto) es un Ajolote (Especie 1)
-(2, 1, 2), -- Roberto sugiere que la foto 2 (de Darien) es un Cacomixtle (Especie 2)
-(3, 2, 3); -- Darien confirma el Colibrí de Jesus
+(1, 5, 1), -- Dra. Carmen valida el ajolote de Roberto en Xochimilco
+(3, 1, 2), -- Roberto valida el achoque de Pátzcuaro de Darien
+(4, 5, 2), -- Dra. Carmen valida el achoque de Areli
+(5, 2, 3), -- Darien confirma la especie de Alchichica
+(6, 3, 4); -- Jesus confirma el hallazgo en Zacapu
 
--- 5. INSERTAR INTERACCIONES (COMENTARIOS)
+-- 5. INSERTAR INTERACCIONES (Comentarios en la plataforma)
 INSERT INTO Interacciones (id_observacion, id_usuario, comentario_texto) VALUES 
-(1, 2, '¡Qué increíble hallazgo! Hay que cuidar mucho esa zona de los canales.'),
-(2, 3, 'Yo también vi uno ayer cruzando los cables por mi calle.'),
-(3, 1, 'Excelente toma, los colores de las plumas se ven geniales.');
-    
+(1, 4, '¡Qué maravilla ver uno en su hábitat natural! Se ve muy sano.'),
+(1, 5, 'Excelente registro, Roberto. La coloración parda es la silvestre natural, los rosados son más de cautiverio.'),
+(3, 1, 'Esos achoques de Michoacán son increíbles, son gigantes comparados con los de CDMX.'),
+(5, 4, '¿El agua de Alchichica no es súper salada? Increíble que sobrevivan ahí.'),
+(5, 5, 'Así es, Areli. El A. taylori evolucionó para soportar la salinidad de ese cráter.'),
+(7, 3, 'Ojalá logren limpiar pronto esa zona de Cuemanco, hay mucha contaminación.');

@@ -683,3 +683,52 @@ body {
     transform: translate(-50%, -50%);
     object-fit: cover;
 }
+
+/* --- ESTILOS PARA LA SECCIÓN DE HISTORIA TIPO iNATURALIST --- */
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.story-item {
+    display: flex; /* Pone el label y el contenido en fila */
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+/* Las etiquetas "Quién, Qué, Dónde, Cuándo" */
+.story-label {
+    width: 80px; /* Ancho fijo para que se alineen perfecto */
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-right: 20px;
+}
+
+/* Imágenes */
+.main-obs-img {
+    width: 100%;
+    max-width: 350px;
+    height: 220px;
+    object-fit: cover; /* Evita que la foto se deforme */
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.obs-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.obs-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    object-fit: cover;
+}
