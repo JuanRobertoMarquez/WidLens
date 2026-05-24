@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/estilo_index.css">
     <link rel="stylesheet" href="../css/estilo_subirfoto.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 </head>
 <body>
 
@@ -57,14 +58,6 @@
                     <span class="slot-icon">📷</span>
                     <button class="remove-btn" onclick="removePhoto(event, 0)">✕</button>
                 </div>
-                <div class="photo-slot" onclick="triggerSlot(1)" id="slot1">
-                    <span class="slot-icon">📷</span>
-                    <button class="remove-btn" onclick="removePhoto(event, 1)">✕</button>
-                </div>
-                <div class="photo-slot" onclick="triggerSlot(2)" id="slot2">
-                    <span class="slot-icon">📷</span>
-                    <button class="remove-btn" onclick="removePhoto(event, 2)">✕</button>
-                </div>
             </div>
 
             <!-- Input oculto -->
@@ -101,7 +94,7 @@
     </div>
 </div>
 
-<script src="../src/presentacion/subir_fotos.js"></script>
+<script src="../src/datos/Subir_foto.js"></script>
 
 </body>
 </html>
