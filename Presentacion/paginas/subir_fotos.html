@@ -6,14 +6,55 @@
     <title>WildLens - Registrar Avistamiento</title>
     
     <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
     <link rel="stylesheet" href="/Presentacion/css/estilo_index.css">
     <link rel="stylesheet" href="/Presentacion/css/estilo_subirfoto.css">
     <link rel="stylesheet" href="/Presentacion/css/estilo_mapa.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+    <style>
+        /* Magia del SPA: Solo el paso activo se muestra */
+        .seccion-paso { display: none; }
+        .seccion-paso.paso-activo { display: block; }
+        
+        /* Ajuste para que el mapa ocupe toda la pantalla */
+        #map {
+            width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1;
+        }
+        
+        /* --- CORRECCIÓN DE LA NUBE BLANCA (BUG VISUAL) --- */
+        /* Eliminamos el fondo gigante y dejamos el contenedor transparente */
+        
+        /* --- ELIMINAR EL STEPPER EN EL MAPA --- */
+        .map-mode-stepper {
+            display: none !important; /* Esto oculta todo el contenedor sin dejar rastro */
+        }
+
+        /* Hacemos las líneas conectoras más cortas para que sea un diseño compacto */
+        .map-mode-stepper .step-line {
+            width: 20px; 
+        }
+        /* ------------------------------------------------ */
+
+        /* Estilo elegante para el Paso 3 */
+        .details-section { background: #faf8f5; min-height: 100vh; padding-top: 120px; padding-bottom: 40px; }
+        .details-container {
+            max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px;
+            border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 600; margin-bottom: 8px; color: #333; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: 14px; }
+        .form-control:focus { border-color: #2B7055; outline: none; }
+        .btn-flex-container { display: flex; gap: 15px; margin-top: 25px; }
+    </style>
 </head>
 <body>
 
@@ -79,7 +120,13 @@
                     <button type="button" class="btn-upload" onclick="document.getElementById('fileInput').click()"><span>+</span> Subir Fotos</button>
                     <p class="upload-hint">Sube imágenes nítidas de tu avistamiento.<br>Formatos: JPG, PNG, WEBP · Máx. 10 MB c/u</p>
 
-                    <div class="progress-bar-wrap" id="progressWrap"><p class="progress-label">Cargando fotos...</p><div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div></div>
+                    <div class="progress-bar-wrap" id="progressWrap">
+                        <p class="progress-label">Cargando fotos...</p>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    
                     <p class="photo-counter"><span id="photoCount">0</span> / 3 fotos</p>
                     <button type="button" class="btn-continuar" id="btnContinuar" disabled onclick="cambiarAlPaso(2)">Continuar</button>
                 </div>
