@@ -6,7 +6,9 @@
     <title>WildLens - BioNode</title>
     <link rel="shortcut icon" href="../Presentacion/images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="css/estilo_index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -28,7 +30,6 @@
 
         <main>
         <section class="hero-section hero-video-container">
-            <!-- Video de fondo -->
             <video autoplay muted loop playsinline id="heroVideo" class="video-bg">
                 <source src="/Presentacion/images/Video_Xolotl.mp4" type="video/mp4">
                 Tu navegador no soporta video.
@@ -77,7 +78,7 @@
                         <h2>Ajolote Mexicano <br><span>(Ambystoma mexicanum)</span></h2>
                         <p>Una especie endémica y un tesoro de nuestra biodiversidad. Actualmente se encuentra en peligro crítico debido a la pérdida de su hábitat natural en los canales urbanos.</p>
                         <p>Ayúdanos a mapear los avistamientos para entender mejor las zonas de refugio de esta increíble especie y proteger su entorno.</p>
-                        <a href="paginas/Mapa.html" class="btn btn-green">Ver mapa de distribución</a>
+                        <a href="paginas/explorador.html" class="btn btn-green">Ver mapa de distribución</a>
                     </div>
                 </div>
             </section>
@@ -88,46 +89,43 @@
                 </div>
                 
                 <div class="story-grid">
-                    <!-- Columna Izquierda: Quién y Qué -->
                     <div class="story-col">
                         <div class="story-item">
                             <span class="story-label">¿Quién?</span>
                             <div class="user-info">
                                 <img src="https://i.pravatar.cc/40?img=11" alt="avatar" class="mini-avatar">
-                                <span>Roberto</span>
+                                <span id="nombre-usuario">Cargando...</span>
                             </div>
                         </div>
                         
                         <div class="story-item">
                             <span class="story-label">¿Qué?</span>
                             <div class="observation-display">
-                                <img src="https://images.unsplash.com/photo-1698778486518-202396e9cbbe?q=80&w=600" alt="Ajolote" class="main-obs-img">
+                                <img id="img-principal-obs" src="" alt="Ajolote" class="main-obs-img" style="display: none;">
                                 <div class="obs-details">
-                                    <img src="https://images.unsplash.com/photo-1698778486518-202396e9cbbe?q=80&w=100" alt="icono" class="obs-icon">
+                                    <img id="icono-obs" src="" alt="icono" class="obs-icon" style="display: none;">
                                     <div>
-                                        <strong>Ajolote Mexicano</strong><br>
-                                        <em>Ambystoma mexicanum</em>
+                                        <strong id="nombre-comun-obs">Buscando registros...</strong><br>
+                                        <em id="nombre-cientifico-obs"></em>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Columna Derecha: Dónde y Cuándo -->
                     <div class="story-col">
                         <div class="story-item">
                             <span class="story-label">Dónde</span>
-                            <div class="mini-map-container">
-                                <!-- Aquí podrías meter un iframe de mapa o una imagen estática -->
-                                <img src="https://www.maproom.net/wp-content/uploads/Map-Grid-1.png" alt="Mapa" class="mini-map">
-                                <p class="location-text">📍 Canales de Xochimilco, CDMX</p>
+                            <div class="mini-map-container" style="flex: 1;">
+                                <div id="mini-mapa" style="height: 200px; width: 100%; border-radius: 8px; margin-bottom: 10px; z-index: 1;"></div>
+                                <p id="texto-ubicacion" class="location-text" style="color: #666; font-size: 14px;">📍 Calculando coordenadas...</p>
                             </div>
                         </div>
                         
                         <div class="story-item">
                             <span class="story-label">Cuándo</span>
-                            <div class="date-info">
-                                <span class="clock-icon">🕒</span> 25 de Marzo, 2026 - 8:38 PM
+                            <div id="fecha-obs" class="date-info" style="flex: 1; color: #444;">
+                                <span class="clock-icon">🕒</span> Sincronizando tiempo...
                             </div>
                         </div>
                     </div>
@@ -142,47 +140,15 @@
                         <button class="arrow-btn" id="nextTop">&gt;</button>
                     </div>
                 </div>
-                
+                                    
                 <div class="carousel-wrapper">
                     <button class="arrow-btn side-btn" id="prevBtn">&lt;</button>
                     
                     <div class="carousel-track" id="track">
-                        <div class="card">
-                            <img src="https://images.unsplash.com/photo-1552728089-571681646950?w=300&q=80" alt="Ave 1">
-                            <div class="card-info">
-                                <h3>Fauna de la Delegación...</h3>
-                                <p class="ai-status"><span>📍</span> Verificación AI</p>
-                            </div>
                         </div>
-                        <div class="card">
-                            <img src="https://images.unsplash.com/photo-1444464666168-49b626f49cb9?w=300&q=80" alt="Ave 2">
-                            <div class="card-info">
-                                <h3>Colibrí CDMX</h3>
-                                <p class="ai-status"><span>📍</span> Verificación AI</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://images.unsplash.com/photo-1550853024-fae8cd4be47f?w=300&q=80" alt="Ave 3">
-                            <div class="card-info">
-                                <h3>Gorrión Urbano</h3>
-                                <p class="ai-status"><span>📍</span> Verificación AI</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://images.unsplash.com/photo-1601506521937-0121a7fc2a6b?w=300&q=80" alt="Ave 4">
-                            <div class="card-info">
-                                <h3>Especie Aves</h3>
-                                <p class="ai-status"><span>📍</span> Verificación AI</p>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img src="https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=300&q=80" alt="Mamifero">
-                            <div class="card-info">
-                                <h3>Fauna Terrestre</h3>
-                                <p class="ai-status"><span>📍</span> Verificación AI</p>
-                            </div>
-                        </div>
-                    </div>
+
+                    <button class="arrow-btn side-btn" id="nextBtn">&gt;</button>
+                </div>
 
                     <button class="arrow-btn side-btn" id="nextBtn">&gt;</button>
                 </div>
@@ -206,7 +172,6 @@
             </section>
         </main>
 
-        <!-- TOP GUARDIANES -->
         <section class="top-contributors">
             <div class="contributors-header">
                 <h2>Top Guardianes del Mes</h2>
@@ -234,13 +199,12 @@
             </div>
         </section>
 
-        <!-- LLAMADO A LA ACCIÓN FINAL -->
         <section class="cta-section">
             <div class="cta-content">
                 <h2>¿Listo para comenzar tu exploración?</h2>
                 <p>No necesitas ser un experto. Tu curiosidad es el primer paso para proteger nuestra biodiversidad urbana.</p>
                 <div class="hero-buttons" style="justify-content: center; margin-top: 20px;">
-                    <a href="#" class="btn btn-orange">CREAR MI CUENTA</a>
+                    <a href="paginas/crear-cuenta.html" class="btn btn-orange">CREAR MI CUENTA</a>
                 </div>
             </div>
         </section>
@@ -252,6 +216,8 @@
             </div>
         </footer>
 
-    <script src="datos/Subir_foto.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script src="../Presentacion/src/presentacion/modulo.js"></script>
 </body>
 </html>
