@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - WildLens</title>
+    <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/Presentacion/css/estilo_editar_perfil.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+
+</head>
+<body>
+    <div class="page-wrapper">
+        
+        <div class="visual-side">
+            <div class="brand-logo-big">WildLens</div>
+            
+            <img src="/Presentacion/images/lluvia1.png" class="ajolote-lluvia a1">
+            <img src="/Presentacion/images/lluvia2.png" class="ajolote-lluvia a2">
+            <img src="/Presentacion/images/lluvia3.png" class="ajolote-lluvia a3">
+            <img src="/Presentacion/images/lluvia4.png" class="ajolote-lluvia a4">
+            <img src="/Presentacion/images/Bubuja1.png" class="ajolote-lluvia a5">
+            <img src="/Presentacion/images/Burbuja2.png" class="ajolote-lluvia a6">
+            <img src="/Presentacion/images/Burbuja3.png" class="ajolote-lluvia a7">
+
+        </div>
+
+        <div class="form-side">
+            <div class="form-container">
+                <form class="registro-form" id="form-editar-perfil">
+                    <h2>Editar información</h2>
+                    <p>Actualiza uno de los siguientes datos</p>
+
+                    <div class="avatar-section">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80" id="preview-img" class="avatar-preview" alt="Tu Avatar">
+                        <br>
+                        <input type="file" id="input-avatar" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-cambiar-foto" onclick="document.getElementById('input-avatar').click()">Cambiar Imagen</button>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="edit-nombre" required>
+                        <label for="edit-nombre">Nombre(s)</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="text" id="edit-apellido" required>
+                        <label for="edit-apellido">Apellidos</label>
+                    </div>
+
+                    <div class="input-group">
+                        <input type="email" id="edit-correo" required>
+                        <label for="edit-correo">Correo Electrónico</label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="button-continuar" id="btn-guardar">Actualizar Perfil</button>
+                        <button type="button" class="button-cancelar" onclick="window.location.href='perfil.html'">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Presentacion/src/presentacion/Editar_perfil.js"></script>
+</body>
+</html>

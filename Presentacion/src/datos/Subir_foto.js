@@ -1,21 +1,127 @@
 // ==========================================
-// 1. ESTADO GLOBAL (Aquí viven las fotos)
+// 1. VARIABLES GLOBALES (Las tuyas y las de Ángel)
 // ==========================================
 const photos = [null, null, null];       
 const fileObjects = [null, null, null]; // Guarda los binarios reales para Multer
-let activeSlot = null;                   
+let activeSlot = null;                  
+const CLASES_ANIMALES = ["Ajolote"];    // El aporte de Ángel
+
+// Al cargar la pantalla, verificamos si el usuario de verdad inició sesión
+const idUsuarioLogeado = localStorage.getItem('usuario_activo');
+
+if (!idUsuarioLogeado) {
+    Swal.fire({
+        title: 'Acceso Denegado',
+        text: 'Para registrar un avistamiento, debes iniciar sesión.',
+        icon: 'warning',
+        confirmButtonColor: '#2B7055'
+    }).then(() => {
+        window.location.href = '../paginas/login.html'; 
+    });
+} else {
+    // Si inició sesión correctamente, inyectamos dinámicamente su ID en el formulario
+    document.getElementById('id-usuario').value = idUsuarioLogeado;
+}
 
 // ==========================================
-// 2. CONTROLADOR DE VISTAS (El SPA)
+// 2. EL CEREBRO DE LA IA (Integración de TensorFlow)
 // ==========================================
-function cambiarAlPaso(pasoDestino) {
+async function analizarFotoIA(base64Image) {
+    try {
+        // Carga del modelo (Asegúrate de que la ruta ../models/model.json exista en tu proyecto)
+        const model = await tf.loadGraphModel('../models/model.json');
+        
+        const imgElement = new Image();
+        imgElement.src = base64Image;
+
+        return new Promise((resolve) => {
+            imgElement.onload = async () => {
+                // Preprocesamiento de la imagen a 224x224 para la Red Neuronal
+                let tensor = tf.browser.fromPixels(imgElement)
+                    .resizeNearestNeighbor([224, 224]) 
+                    .toFloat();
+
+                tensor = tensor.div(tf.scalar(255.0));
+                tensor = tensor.expandDims(0);
+
+                // Predicción
+                const prediction = model.predict(tensor);
+                const resultados = await prediction.data(); 
+                resolve(resultados[0]); // Devuelve el valor numérico bruto
+            };
+        });
+    } catch (error) {
+        console.error("Error al cargar o ejecutar el modelo de IA:", error);
+        return null; // Retorna null si la IA falla (para no bloquear la app)
+    }
+}
+
+// ==========================================
+// 3. CONTROLADOR DE VISTAS (SPA + Intervención de IA)
+// ==========================================
+async function cambiarAlPaso(pasoDestino) {
+    
+    // --- BARRERA DE SEGURIDAD (PASO 1 AL 2) ---
     if (pasoDestino === 2) {
-        if (photos.filter(p => p !== null).length === 0) {
-            alert("Por favor, añade al menos una fotografía de evidencia.");
+        const fotosSubidas = photos.filter(p => p !== null);
+        
+        if (fotosSubidas.length === 0) {
+            Swal.fire('Falta Evidencia', 'Por favor, añade al menos una fotografía de evidencia.', 'warning');
             return;
         }
+
+        // 🧠 Inicia el análisis de la IA con la primera foto subida
+        const btnContinuar = document.getElementById('btnContinuar');
+        const textoOriginal = btnContinuar.innerText;
+        btnContinuar.innerText = "Analizando con IA...";
+        btnContinuar.disabled = true;
+
+        const valorPrediccion = await analizarFotoIA(fotosSubidas[0]);
+
+        if (valorPrediccion !== null) {
+            let animalDetectado = "";
+            let porcentajeConfianza = 0;
+
+            // Función Sigmoide Binaria
+            if (valorPrediccion < 0.5) {
+                animalDetectado = "Ajolote";
+                porcentajeConfianza = ((1 - valorPrediccion) * 100).toFixed(2);
+            } else {
+                animalDetectado = "No es un Ajolote";
+                porcentajeConfianza = (valorPrediccion * 100).toFixed(2);
+            }
+
+            console.log(`📡 BioNode IA Detectó: ${animalDetectado} (${porcentajeConfianza}%)`);
+            sessionStorage.setItem('especieDetectada', animalDetectado);
+            sessionStorage.setItem('confianza', porcentajeConfianza);
+
+            // Si la IA cree que no es un ajolote, lanzamos alerta preventiva
+            if (animalDetectado !== "Ajolote") {
+                const result = await Swal.fire({
+                    title: 'Análisis IA Completado',
+                    text: `Nuestra red neuronal estima con un ${porcentajeConfianza}% de seguridad que la imagen NO contiene un ajolote. ¿Deseas continuar con el registro de todos modos?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#2B7055',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, es un ajolote',
+                    cancelButtonText: 'Revisar foto'
+                });
+
+                if (!result.isConfirmed) {
+                    btnContinuar.innerText = textoOriginal;
+                    btnContinuar.disabled = false;
+                    return; // Abortamos el cambio de página
+                }
+            }
+        }
+        
+        // Restauramos el botón
+        btnContinuar.innerText = textoOriginal;
+        btnContinuar.disabled = false;
     }
     
+    // --- TU LÓGICA ORIGINAL DE CAMBIO DE PANTALLA ---
     document.querySelectorAll('.seccion-paso').forEach(sec => sec.classList.remove('paso-activo'));
     document.getElementById('step1-indicator').classList.remove('active');
     document.getElementById('step2-indicator').classList.remove('active');
@@ -33,9 +139,9 @@ function cambiarAlPaso(pasoDestino) {
         document.getElementById('paso-2').classList.add('paso-activo');
         document.getElementById('step1-indicator').classList.add('active');
         document.getElementById('step2-indicator').classList.add('active');
-        navbar.style.display = "none"; // Ocultamos barra superior para ver el mapa completo
+        navbar.style.display = "none"; 
         stepperWrapper.className = "map-mode-stepper";
-        setTimeout(() => map.invalidateSize(), 100); // Leaflet necesita esto al mostrar un div oculto
+        setTimeout(() => map.invalidateSize(), 100); 
     } else if (pasoDestino === 3) {
         document.getElementById('paso-3').classList.add('paso-activo');
         document.getElementById('step1-indicator').classList.add('active');
@@ -47,7 +153,7 @@ function cambiarAlPaso(pasoDestino) {
 }
 
 // ==========================================
-// 3. LÓGICA DE FOTOS (Tu código intacto)
+// 4. LÓGICA DE FOTOS MULTIPLES
 // ==========================================
 function triggerSlot(index) {
     const slot = document.getElementById('slot' + index);
@@ -61,8 +167,8 @@ function handleFiles(files) {
     let processed = 0;
     const progressWrap = document.getElementById('progressWrap');
     const progressFill = document.getElementById('progressFill');
-    progressWrap.classList.add('visible');
-    progressFill.style.width = '0%';
+    if(progressWrap) progressWrap.classList.add('visible');
+    if(progressFill) progressFill.style.width = '0%';
 
     let slotIndex = activeSlot;
 
@@ -71,25 +177,25 @@ function handleFiles(files) {
         if (slotIndex === null || photos[slotIndex] !== null) {
             slotIndex = photos.indexOf(null);
             if (slotIndex === -1) { 
-                alert('Ya tienes 3 fotos. Elimina una para agregar otra.');
+                Swal.fire('Espacio Lleno', 'Ya tienes 3 fotos. Elimina una para agregar otra.', 'info');
                 return;
             }
         }
         const targetSlot = slotIndex;
         slotIndex = null; 
 
-        fileObjects[targetSlot] = file; // <-- El archivo crudo listo para Node.js
+        fileObjects[targetSlot] = file; 
 
         const reader = new FileReader();
         reader.onload = function(e) {
             photos[targetSlot] = e.target.result;
             renderSlot(targetSlot, e.target.result);
             processed++;
-            progressFill.style.width = (processed / fileArray.length * 100) + '%';
+            if(progressFill) progressFill.style.width = (processed / fileArray.length * 100) + '%';
             if (processed === fileArray.length) {
                 setTimeout(() => {
-                    progressWrap.classList.remove('visible');
-                    progressFill.style.width = '0%';
+                    if(progressWrap) progressWrap.classList.remove('visible');
+                    if(progressFill) progressFill.style.width = '0%';
                 }, 600);
             }
             updateUI();
@@ -124,8 +230,25 @@ function updateUI() {
     document.getElementById('btnContinuar').disabled = (count === 0);
 }
 
+// Drag & Drop (El aporte de Ángel adaptado)
+const uploadSection = document.getElementById('uploadSection');
+if (uploadSection) {
+    uploadSection.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadSection.classList.add('dragover');
+    });
+    uploadSection.addEventListener('dragleave', () => {
+        uploadSection.classList.remove('dragover');
+    });
+    uploadSection.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadSection.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+}
+
 // ==========================================
-// 4. EL MAPA LEAFLET (Tu código intacto)
+// 5. EL MAPA LEAFLET 
 // ==========================================
 const limitesMexico = [[14.5321, -118.3985], [32.7187, -86.7104]];
 
@@ -161,7 +284,6 @@ const iconoPersonalizado = L.icon({
 
 const marker = L.marker([19.4326, -99.1332], { draggable: true, icon: iconoPersonalizado }).addTo(map);
 
-// Insertamos la posición inicial al estado oculto
 document.getElementById('latitud').value = 19.4326;
 document.getElementById('longitud').value = -99.1332;
 
@@ -274,25 +396,22 @@ async function actualizarTarjeta(lat, lng) {
 }
 
 // ==========================================
-// 5. POST FINAL A NODE.JS CON FORMDATA
+// 6. POST FINAL A NODE.JS CON FORMDATA
 // ==========================================
 document.getElementById('formulario-registro-maestro').addEventListener('submit', async function(evento) {
     evento.preventDefault(); 
     const btn = document.getElementById('btnFinalizar');
-    btn.innerText = "Enviando reporte..."; btn.disabled = true;
+    btn.innerText = "Sincronizando con BioNode..."; btn.disabled = true;
 
-    // Buscamos el primer archivo real que se haya cargado
     const fotoParaSubir = fileObjects.find(f => f !== null);
     
     if (!fotoParaSubir) {
-        alert("Ocurrió un error leyendo el archivo. Por favor, regresa al paso 1 y vuelve a seleccionar la foto.");
+        Swal.fire('Error', 'Ocurrió un error leyendo el archivo. Regresa al paso 1.', 'error');
         btn.innerText = "Finalizar y Guardar Registro"; btn.disabled = false; return;
     }
 
     const empaqueDatos = new FormData();
-    empaqueDatos.append('foto', fotoParaSubir); // Multer capturará 'foto'
-    
-    // Adjuntamos el resto del formulario
+    empaqueDatos.append('foto', fotoParaSubir); 
     empaqueDatos.append('id_usuario', document.getElementById('id-usuario').value);
     empaqueDatos.append('id_especie', document.getElementById('id-especie').value);
     empaqueDatos.append('latitud', document.getElementById('latitud').value);
@@ -308,13 +427,19 @@ document.getElementById('formulario-registro-maestro').addEventListener('submit'
 
         const resultado = await respuesta.json();
         if (respuesta.ok) {
-            alert('¡Ajolote registrado con éxito! 🌿');
-            window.location.href = '../Index.html'; // Lo mandamos de regreso al inicio
+            Swal.fire({
+                title: '¡Registro Exitoso!',
+                text: 'Tu avistamiento se ha guardado en la red WildLens. 🌿',
+                icon: 'success',
+                confirmButtonColor: '#2B7055'
+            }).then(() => {
+                window.location.href = '../Index.html'; 
+            });
         } else {
-            alert('Error al guardar: ' + (resultado.error || 'Problema de BD'));
+            Swal.fire('Error al guardar', resultado.error || 'Problema de BD', 'error');
         }
     } catch (error) {
-        alert('No se pudo conectar con Node.js. ¿Está encendido tu servidor?');
+        Swal.fire('Error de Conexión', 'No se pudo conectar con Node.js. ¿Está encendido tu servidor?', 'error');
     } finally {
         btn.innerText = "Finalizar y Guardar Registro"; btn.disabled = false;
     }

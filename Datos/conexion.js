@@ -1,41 +1,52 @@
-// Importamos las librerías
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const multer = require('multer'); // 1. Importamos multer
-const path = require('path');     // 2. Importamos path (ya viene con Node, no hay que instalarlo)
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-// Inicializamos la aplicación
 const app = express();
-app.use(cors()); // Permite conexiones desde tu frontend
-app.use(express.json()); // Permite que el servidor entienda datos en formato JSON
+app.use(cors()); 
+app.use(express.json()); 
 
-// 3. HACER LA CARPETA PÚBLICA 
-// Esto permite que el navegador pueda ver las fotos entrando a http://localhost:3000/uploads/foto.jpg
+// Hacer pública TODA la carpeta 'subidas' para que lea avistamientos y perfiles
 app.use('/subidas', express.static(path.join(__dirname, 'subidas')));
 
-// 4. CONFIGURAR LA BODEGA (MULTER)
-const almacenamiento = multer.diskStorage({
+// ==========================================
+// 2. CONFIGURACIÓN DE LAS BODEGAS (MULTER)
+// ==========================================
+
+// Bodega A: Para las fotos de los Ajolotes
+const storageAvistamientos = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'subidas/'); // Le decimos que guarde todo en la carpeta uploads
+        cb(null, 'subidas/avistamientos/'); 
     },
     filename: function (req, file, cb) {
-        // Le ponemos un nombre único: la fecha en milisegundos + el nombre original
-        // Ejemplo: 1716263445123-ajolote_xochi.jpg
-        const nombreUnico = Date.now() + '-' + file.originalname;
-        cb(null, nombreUnico);
+        cb(null, Date.now() + '-' + file.originalname);
     }
 });
+const uploadAvistamientos = multer({ storage: storageAvistamientos });
 
-// Creamos el "portero" que revisará las subidas
-const upload = multer({ storage: almacenamiento });
+// Bodega B: Para las fotos de Perfil de los Usuarios
+const storagePerfiles = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'subidas/Perfiles/'); 
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+const uploadPerfiles = multer({ storage: storagePerfiles });
 
-// --- CONFIGURACIÓN DE LA BASE DE DATOS ---
+// ==========================================
+// 3. CONEXIÓN A LA BASE DE DATOS
+// ==========================================
 const db = mysql.createConnection({
-    host: 'localhost',      // Usualmente localhost si trabajas en tu compu
-    user: 'root',           // Tu usuario de MySQL (por defecto es root)
-    password: '2023630816',           // Tu contraseña (déjalo vacío si usas XAMPP por defecto)
-    database: 'WildLens' // El nombre de la base de datos que vayas a crear
+    host: 'localhost',      
+    user: 'root',           
+    password: '2023630816',           
+    database: 'WildLens' 
 });
 
 db.connect((error) => {
@@ -46,12 +57,16 @@ db.connect((error) => {
     console.log('✅ Conectado exitosamente a la base de datos MySQL');
 });
 
+// ==========================================
+// 4. RUTAS DE LA APLICACIÓN (ENDPOINTS)
+// ==========================================
+
+// --- RUTA DE PRUEBA ---
 app.get('/api/estado', (req, res) => {
     res.json({ mensaje: '¡El servidor de WildLens está funcionando al 100%!' });
 });
 
-// Ruta para obtener la última observación registrada
-// Ruta para obtener la última observación registrada con su imagen
+// --- RUTA: HISTORIA RECIENTE (Muro principal) ---
 app.get('/api/observacion-reciente', (req, res) => {
     const sql = `
         SELECT 
@@ -67,8 +82,17 @@ app.get('/api/observacion-reciente', (req, res) => {
         ORDER BY o.fecha_avistamiento DESC
         LIMIT 1;
     `;
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: "Error en la base de datos" });
+        if (result.length > 0) {
+            res.json(result[0]); 
+        } else {
+            res.status(404).json({ mensaje: "Aún no hay observaciones" });
+        }
+    });
+});
 
-    // Ruta para obtener las observaciones del carrusel
+// --- RUTA: CARRUSEL DINÁMICO ---
 app.get('/api/carrusel-observaciones', (req, res) => {
     const sql = `
         SELECT 
@@ -78,19 +102,15 @@ app.get('/api/carrusel-observaciones', (req, res) => {
         FROM Observaciones o
         JOIN Especies e ON o.id_especie = e.id_especie
         ORDER BY o.fecha_avistamiento DESC
-        LIMIT 6; -- Traemos los 6 más recientes
+        LIMIT 6;
     `;
-
     db.query(sql, (err, result) => {
-        if (err) {
-            console.error("Error al consultar carrusel:", err);
-            return res.status(500).json({ error: "Error en la base de datos" });
-        }
+        if (err) return res.status(500).json({ error: "Error en la base de datos" });
         res.json(result); 
     });
 });
 
-// Ruta para el Mapa de Exploración (Trae TODOS los registros)
+// --- RUTA: MAPA EXPLORADOR (Todos los avistamientos) ---
 app.get('/api/explorar-avistamientos', (req, res) => {
     const sql = `
         SELECT 
@@ -106,94 +126,131 @@ app.get('/api/explorar-avistamientos', (req, res) => {
         JOIN Usuarios u ON o.id_usuario = u.id_usuario
         ORDER BY o.fecha_avistamiento DESC;
     `;
-
     db.query(sql, (err, result) => {
-        if (err) {
-            console.error("Error al consultar el mapa:", err);
-            return res.status(500).json({ error: "Error en la base de datos" });
-        }
+        if (err) return res.status(500).json({ error: "Error en la base de datos" });
         res.json(result); 
     });
 });
 
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error("Error al consultar:", err);
-            return res.status(500).json({ error: "Error en la base de datos" });
-        }
-        
-        if (result.length > 0) {
-            // Le mandamos el primer resultado (el más reciente)
-            res.json(result[0]); 
-        } else {
-            res.status(404).json({ mensaje: "Aún no hay observaciones" });
-        }
-    });
-});
-
-
-// Ruta POST para recibir una nueva observación
-// El middleware "upload.single('foto')" le dice a multer que atrape el archivo que venga con el nombre 'foto'
-app.post('/api/guardar-observacion', upload.single('foto'), (req, res) => {
-    
-    // 1. Agarramos los textos que manda el formulario
+// --- RUTA: GUARDAR NUEVA OBSERVACIÓN (Usa uploadAvistamientos) ---
+app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, res) => {
     const { id_usuario, id_especie, latitud, longitud, fecha_avistamiento } = req.body;
     
-    // 2. Agarramos el nombre de la foto que Multer acaba de guardar
-    // req.file contiene la info del archivo. Guardamos la ruta que leerá el frontend.
-    const rutaFoto = req.file ? '/uploads/' + req.file.filename : null;
+    // Guardamos la ruta apuntando a la carpeta correcta
+    const rutaFoto = req.file ? '/subidas/avistamientos/' + req.file.filename : null;
 
     if (!rutaFoto) {
         return res.status(400).json({ error: "No se subió ninguna foto" });
     }
 
-    // 3. Preparamos la orden SQL (Fíjate que guardamos 'rutaFoto', no el archivo)
-    const sql = `
-        INSERT INTO Observaciones 
-        (id_usuario, id_especie, foto, latitud, longitud, fecha_avistamiento) 
-        VALUES (?, ?, ?, ?, ?, ?)
-    `;
-
-    // 4. Ejecutamos la inserción en la BD
+    const sql = "INSERT INTO Observaciones (id_usuario, id_especie, foto, latitud, longitud, fecha_avistamiento) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(sql, [id_usuario, id_especie, rutaFoto, latitud, longitud, fecha_avistamiento], (err, result) => {
         if (err) {
             console.error("Error al guardar en la BD:", err);
             return res.status(500).json({ error: "Error interno del servidor" });
         }
-        
         res.status(200).json({ 
             mensaje: "¡Observación y foto guardadas con éxito!",
-            ruta_imagen: rutaFoto // Se la regresamos al frontend por si la quiere mostrar enseguida
+            ruta_imagen: rutaFoto 
         });
     });
 });
 
-// Ruta para el Mapa de Exploración (Trae TODOS los registros)
-app.get('/api/explorar-avistamientos', (req, res) => {
-    const sql = `
-        SELECT 
-            o.id_observacion,
-            o.latitud,
-            o.longitud,
-            o.foto AS observacion_foto,
-            o.fecha_avistamiento,
-            e.nombre_comun AS especie_nombre,
-            u.nombre AS nombre_usuario
-        FROM Observaciones o
-        JOIN Especies e ON o.id_especie = e.id_especie
-        JOIN Usuarios u ON o.id_usuario = u.id_usuario
-        ORDER BY o.fecha_avistamiento DESC;
-    `;
+// --- RUTA: REGISTRO DE USUARIO ---
+app.post('/api/registro', (req, res) => {
+    const { nombre, apellido, correo, contrasenia } = req.body;
 
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error("Error al consultar el mapa:", err);
-            return res.status(500).json({ error: "Error en la base de datos" });
-        }
-        res.json(result); 
+    const verificarSql = "SELECT * FROM Usuarios WHERE correo = ?";
+    db.query(verificarSql, [correo], (err, filas) => {
+        if (err) return res.status(500).json({ error: "Error interno del servidor" });
+        if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya se encuentra registrado." });
+
+        const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia) VALUES (?, ?, ?, ?)";
+        db.query(insertarSql, [nombre, apellido, correo, contrasenia], (err, resultado) => {
+            if (err) return res.status(500).json({ error: "No se pudo crear la cuenta en la base de datos." });
+            res.status(201).json({ mensaje: "¡Cuenta creada exitosamente!" });
+        });
     });
 });
-// --- ARRANCAR EL SERVIDOR ---
+
+// --- RUTA: LOGIN ---
+app.post('/api/login', (req, res) => {
+    const { correo, contrasenia } = req.body;
+
+    const sql = "SELECT id_usuario, nombre, apellido FROM Usuarios WHERE correo = ? AND contrasenia = ?";
+    db.query(sql, [correo, contrasenia], (err, resultados) => {
+        if (err) return res.status(500).json({ error: "Error interno del servidor" });
+
+        if (resultados.length > 0) {
+            res.status(200).json({
+                mensaje: "Autenticación correcta",
+                usuario: resultados[0]
+            });
+        } else {
+            res.status(401).json({ error: "El correo o la contraseña son incorrectos." });
+        }
+    });
+});
+
+// --- RUTA: OBTENER PERFIL DE USUARIO ---
+app.get('/api/perfil/:id', (req, res) => {
+    const idUsuario = req.params.id;
+
+    // Ya incluye el avatar en el SELECT
+    const sqlUsuario = "SELECT nombre, apellido, correo, avatar FROM Usuarios WHERE id_usuario = ?";
+    db.query(sqlUsuario, [idUsuario], (err, resUsuario) => {
+        if (err) return res.status(500).json({ error: "Error al buscar usuario" });
+        if (resUsuario.length === 0) return res.status(404).json({ error: "Usuario no encontrado" });
+
+        const usuario = resUsuario[0];
+
+        const sqlObservaciones = `
+            SELECT o.foto, o.fecha_avistamiento, o.estatus_validacion, e.nombre_comun 
+            FROM Observaciones o
+            JOIN Especies e ON o.id_especie = e.id_especie
+            WHERE o.id_usuario = ?
+            ORDER BY o.fecha_avistamiento DESC
+        `;
+        db.query(sqlObservaciones, [idUsuario], (err, resObservaciones) => {
+            if (err) return res.status(500).json({ error: "Error al buscar observaciones" });
+
+            res.json({
+                datosPersonales: usuario,
+                totalObservaciones: resObservaciones.length,
+                historial: resObservaciones
+            });
+        });
+    });
+});
+
+// --- RUTA: EDITAR PERFIL (Usa uploadPerfiles) ---
+app.put('/api/editar-perfil/:id', uploadPerfiles.single('avatar'), (req, res) => {
+    const idUsuario = req.params.id;
+    const { nombre, apellido, correo } = req.body;
+    
+    // Guardamos la ruta apuntando a la carpeta de Perfiles
+    const rutaAvatar = req.file ? '/subidas/Perfiles/' + req.file.filename : null;
+
+    let sql;
+    let valores;
+
+    if (rutaAvatar) {
+        sql = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ?, avatar = ? WHERE id_usuario = ?";
+        valores = [nombre, apellido, correo, rutaAvatar, idUsuario];
+    } else {
+        sql = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ? WHERE id_usuario = ?";
+        valores = [nombre, apellido, correo, idUsuario];
+    }
+
+    db.query(sql, valores, (err, resultado) => {
+        if (err) return res.status(500).json({ error: "Error en la base de datos" });
+        res.status(200).json({ mensaje: "Perfil actualizado con éxito", nuevoAvatar: rutaAvatar });
+    });
+});
+
+// ==========================================
+// 5. ARRANCAR EL SERVIDOR
+// ==========================================
 const PUERTO = 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor corriendo en el puerto ${PUERTO}`);

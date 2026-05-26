@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - WildLens</title>
+    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/Presentacion/css/estilo_index.css"> 
+    <link rel="stylesheet" href="/Presentacion/css/estilo_perfil.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+
+    <div class="franja-verde"></div>
+
+    <div class="perfil-container">
+        <div class="card-perfil">
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80" alt="Avatar" class="avatar" id="avatar-perfil">
+            <h2 class="nombre-usuario" id="ui-nombre">Cargando...</h2>
+            <p class="correo-usuario" id="ui-correo">Cargando...</p>
+            <div class="footer-links">
+                <a href="Editar_perfil.html">Editar perfil</a>
+            </div>
+        </div>
+
+        <div>
+            <div class="card-stats">
+                <div class="stat-item">
+                    🐾 Especies Observadas: <span id="ui-total">0</span>
+                </div>
+            </div>
+
+            <div class="card-lista">
+                <h3 class="lista-titulo">Observaciones personales recientes:</h3>
+                <div id="lista-observaciones">
+                    <p style="color: #666; font-size: 14px;">Cargando historial...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Presentacion/src/presentacion/perfil.js"></script>
+</body>
+</html>

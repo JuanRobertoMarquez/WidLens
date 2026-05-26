@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/Presentacion/css/recuperacion.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <link rel="stylesheet" href="/Presentacion/css/transicion.css">
 </head>
 <body>
@@ -17,18 +16,18 @@
             <p>Ingresa tu correo y define tu nueva contraseña para recuperar el acceso.</p>
 
             <div class="input-group">
-                <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" name="email" required placeholder="ejemplo@gmail.com">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
             </div>
 
             <div class="input-group">
-                <label for="new-password">Nueva Contraseña</label>
-                <input type="password" id="new-password" name="new-password" required placeholder="Mínimo 8 caracteres">
+                <label for="nueva-contrasenia">Nueva Contraseña</label>
+                <input type="password" id="nueva-contrasenia" name="contrasenia" required placeholder="Mínimo 8 caracteres">
             </div>
 
             <div class="input-group">
-                <label for="confirm-password">Confirmar Contraseña</label>
-                <input type="password" id="confirm-password" name="confirm-password" required placeholder="Repite la nueva contraseña">
+                <label for="confirm-contrasenia">Confirmar Contraseña</label>
+                <input type="password" id="confirm-contrasenia" required placeholder="Repite la nueva contraseña">
             </div>
 
             <div class="button-group">
@@ -42,33 +41,23 @@
         const form = document.querySelector('.reset-form');
 
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que la página se recargue
+            e.preventDefault(); 
 
-            // 1. Obtener valores
-            const email = document.getElementById('email').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+            const correo = document.getElementById('correo').value;
+            const nuevacontrasenia = document.getElementById('nueva-contrasenia').value;
+            const confirmcontrasenia = document.getElementById('confirm-contrasenia').value;
 
-            // 2. Validar que las contraseñas sean iguales
-            if (newPassword !== confirmPassword) {
+            if (nuevacontrasenia !== confirmcontrasenia) {
                 alert("Las contraseñas no coinciden. Inténtalo de nuevo.");
                 return;
             }
 
-            // 3. Simular el guardado en localStorage
-            // Esto actualiza la contraseña guardada anteriormente
-            localStorage.setItem('usuario_password', newPassword);
+            // Simulación temporal actualizada con las nuevas claves de la BD
+            localStorage.setItem('usuario_password', nuevacontrasenia);
             
-            // Opcional: También podrías actualizar el correo si el usuario lo cambió aquí
-            // localStorage.setItem('usuario_email', email);
-
-            // 4. Mensaje de éxito y redirección al Login
             alert("¡Contraseña restablecida con éxito!");
             window.location.href = 'login.html';
         });
     </script>
-
-<link rel="stylesheet" href="/Presentacion/css/transicion.css">
-
 </body>
 </html>
