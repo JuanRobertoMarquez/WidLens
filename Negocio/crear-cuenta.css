@@ -1,0 +1,150 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: linear-gradient(
+        to bottom left,
+        #f5f3ec,
+        #e68332
+    );
+    background-color: #F0D5A8;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; 
+}
+
+
+.registro-container {
+    width: 100%;
+    max-width: 500px; 
+}
+
+.registro-form {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+}
+
+.registro-form h2 {
+    margin-bottom: 10px;
+    color: #000000;
+    font-size: 2em;
+    line-height: 1.2;
+}
+
+.registro-form p {
+    margin-bottom: 25px;
+    color: #6a7c7f;
+    font-size: 0.95em;
+}
+
+/* Grupo de entrada (Label + Input) */
+.input-group {
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em; /* Mantiene buen tamaño en escritorio */
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #FA8E9A; /* Ajustado al color rosado de tu tema */
+    outline: none;
+    box-shadow: 0 0 5px rgba(250, 142, 154, 0.5);
+}
+
+/* ---------------------------------- */
+/* Botones de Acción */
+/* ---------------------------------- */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Espacio entre botones */
+    margin-top: 30px;
+}
+
+.button-group button {
+    flex: 1; /* Ambos botones ocupan el mismo ancho */
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Botón de Continuar (Primario) */
+.button-continuar {
+    background-color: #FA8E9A; 
+    color: white;
+}
+
+.button-continuar:hover {
+    background-color: #e07a85;
+}
+
+/* Botón de Cancelar (Secundario) */
+.button-cancelar {
+    background-color: #e6e6e6; 
+    color: #555;
+}
+
+.button-cancelar:hover {
+    background-color: #d1d1d1;
+}
+
+/* ========================================= */
+/* MEDIA QUERIES (RESPONSIVIDAD) */
+/* ========================================= */
+
+/* Para tabletas y móviles (menos de 600px) */
+@media (max-width: 600px) {
+    .registro-form {
+        padding: 25px 20px; /* Reducimos padding lateral */
+    }
+
+    .registro-form h2 {
+        font-size: 1.6em; /* Texto más pequeño en móvil */
+    }
+
+    /* En móviles, los botones se apilan uno sobre otro */
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .button-group button {
+        width: 100%; /* Botones ancho completo */
+        padding: 14px; /* Un poco más altos para dedos táctiles */
+    }
+
+    /* Evita el zoom automático en inputs en iPhone */
+    .input-group input {
+        font-size: 16px; 
+    }
+}

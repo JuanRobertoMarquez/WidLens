@@ -4,42 +4,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - WildLens</title>
+    
+    <!-- Ícono de la pestaña -->
     <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    
+    <!-- Hojas de estilos -->
     <link rel="stylesheet" href="/Presentacion/css/estilo_index.css"> 
     <link rel="stylesheet" href="/Presentacion/css/estilo_perfil.css"> 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
+    <!-- Fuentes de Google (Lora y Open Sans) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="franja-verde"></div>
+    <header class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <div class="logo-container">
+                    <span class="logo-text">WildLens</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="/Presentacion/Index.html">Home</a>
+                    <a href="#">Comunidad ⌵</a>
+                    <a href="/Presentacion/paginas/explorador.html">Explorar ⌵</a>
+                </nav>
+            </div>
 
-    <div class="perfil-container">
-        <div class="card-perfil">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&q=80" alt="Avatar" class="avatar" id="avatar-perfil">
-            <h2 class="nombre-usuario" id="ui-nombre">Cargando...</h2>
-            <p class="correo-usuario" id="ui-correo">Cargando...</p>
-            <div class="footer-links">
-                <a href="Editar_perfil.html">Editar perfil</a>
+            <div class="nav-right">
+                <!-- Menú para usuarios NO logueados -->
+                <div id="menu-visitante">
+                    <a href="/Presentacion/paginas/login.html">Acceder o Crear una cuenta</a>
+                </div>
+
+                <!-- Menú para usuarios SÍ logueados -->
+                <div id="menu-usuario" style="display: none;" class="user-dropdown">
+                    <a href="/Presentacion/paginas/subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <div class="dropdown-container">
+                        <button class="dropbtn">
+                            <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                            <span id="nav-nombre-usuario">Bienvenido</span> ⌵
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="/Presentacion/paginas/perfil.html">Mi Perfil</a>
+                            <a href="/Presentacion/paginas/mis_observaciones.html">Mis Observaciones</a>
+                            <a href="#">Configuración</a>
+                            <hr>
+                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         CONTENIDO DEL PERFIL LITE (UX para principiantes)
+         ========================================== -->
+    <div class="perfil-wrapper-lite">
+        
+        <!-- Cabecera Amigable -->
+        <div class="perfil-header-lite">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="avatar-lite" id="avatar-perfil">
+            <div class="perfil-info-lite">
+                <h1 id="ui-nombre">Cargando...</h1>
+                <p id="ui-correo" class="correo-lite">Cargando...</p>
+                <a href="Editar_perfil.html" class="btn-editar-lite">Editar mi perfil</a>
             </div>
         </div>
 
-        <div>
-            <div class="card-stats">
-                <div class="stat-item">
-                    🐾 Especies Observadas: <span id="ui-total">0</span>
+        <!-- Logros (Estadísticas fáciles de entender) -->
+        <div class="stats-row-lite">
+            <div class="stat-box-lite">
+                <div class="stat-icon-lite">📷</div>
+                <div class="stat-text-lite">
+                    <span class="stat-num-lite">0</span>
+                    <span class="stat-label-lite">Fotos subidas</span>
                 </div>
             </div>
-
-            <div class="card-lista">
-                <h3 class="lista-titulo">Observaciones personales recientes:</h3>
-                <div id="lista-observaciones">
-                    <p style="color: #666; font-size: 14px;">Cargando historial...</p>
+            <div class="stat-box-lite">
+                <div class="stat-icon-lite">🐾</div>
+                <div class="stat-text-lite">
+                    <span class="stat-num-lite" id="ui-total">0</span> 
+                    <span class="stat-label-lite">Animales distintos</span>
                 </div>
             </div>
         </div>
+
+        <!-- Muro de descubrimientos -->
+        <div class="observaciones-section-lite">
+            <h3 class="seccion-titulo-lite">Mi diario de descubrimientos</h3>
+            
+            <div class="lista-observaciones-lite" id="lista-observaciones">
+                <p style="color: #888; font-size: 15px; text-align: center; padding: 30px 0;">Cargando tus aventuras...</p>
+            </div>
+        </div>
+
     </div>
 
-    <script src="/Presentacion/src/presentacion/perfil.js"></script>
+    <script src="/Negocio/src/presentacion/perfil.js"></script>
+    
+    <!-- (Opcional) Script global para que la barra de navegación lea la sesión aquí también -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuVisitante = document.getElementById('menu-visitante');
+            const menuUsuario = document.getElementById('menu-usuario');
+            const navNombreUsuario = document.getElementById('nav-nombre-usuario');
+            const navAvatar = document.getElementById('nav-avatar');
+            const usuarioString = localStorage.getItem('usuarioWildLens');
+
+            if (usuarioString) {
+                const usuarioLogueado = JSON.parse(usuarioString);
+                if (menuVisitante) menuVisitante.style.display = 'none';
+                if (menuUsuario) menuUsuario.style.display = 'flex';
+                if (navNombreUsuario) navNombreUsuario.innerText = usuarioLogueado.nombre;
+                if (navAvatar && usuarioLogueado.avatar) {
+                    navAvatar.src = 'http://127.0.0.1:3000' + usuarioLogueado.avatar;
+                }
+            }
+
+            const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
+            if(btnCerrarSesion) {
+                btnCerrarSesion.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('usuarioWildLens');
+                    window.location.href = '/Presentacion/Index.html'; 
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -28,10 +28,7 @@
         #map {
             width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1;
         }
-        
-        /* --- CORRECCIÓN DE LA NUBE BLANCA (BUG VISUAL) --- */
-        /* Eliminamos el fondo gigante y dejamos el contenedor transparente */
-        
+                
         /* --- ELIMINAR EL STEPPER EN EL MAPA --- */
         .map-mode-stepper {
             display: none !important; /* Esto oculta todo el contenedor sin dejar rastro */
@@ -105,14 +102,6 @@
                             <span class="slot-icon">📷</span>
                             <button type="button" class="remove-btn" onclick="removePhoto(event, 0)">✕</button>
                         </div>
-                        <div class="photo-slot" onclick="triggerSlot(1)" id="slot1">
-                            <span class="slot-icon">📷</span>
-                            <button type="button" class="remove-btn" onclick="removePhoto(event, 1)">✕</button>
-                        </div>
-                        <div class="photo-slot" onclick="triggerSlot(2)" id="slot2">
-                            <span class="slot-icon">📷</span>
-                            <button type="button" class="remove-btn" onclick="removePhoto(event, 2)">✕</button>
-                        </div>
                     </div>
                     
                     <input type="file" id="fileInput" name="foto" accept="image/*" multiple onchange="handleFiles(this.files)" style="display: none;">
@@ -172,14 +161,9 @@
                 <h2 style="font-family: 'Montserrat'; color: #2B7055;">Detalles del Avistamiento</h2>
                 <p style="color: #666; margin-bottom: 25px;">Completa la información final para enviar tu reporte a la red de BioNode.</p>
                 
-                <div class="form-group">
-                    <label for="id-especie">Especie sugerida preliminarmente:</label>
-                    <select id="id-especie" name="id_especie" class="form-control">
-                        <option value="1">Ajolote de Xochimilco (A. mexicanum)</option>
-                        <option value="2">Achoque de Pátzcuaro (A. dumerilii)</option>
-                        <option value="3">Ajolote de Alchichica (A. taylori)</option>
-                        <option value="4">Achoque de Zacapu (A. andersoni)</option>
-                    </select>
+                <input type="hidden" id="id-especie" name="id_especie" value="1">
+                
+                <div id="inaturalist-widget" style="margin-bottom: 25px; display: none;">
                 </div>
                 
                 <div class="form-group">
@@ -198,7 +182,7 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="/Presentacion/src/datos/Subir_foto.js"></script>
+<script src="/Negocio/src/datos/Subir_foto.js"></script>
 
 </body>
 </html>

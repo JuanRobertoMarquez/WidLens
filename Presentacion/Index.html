@@ -13,20 +13,49 @@
 
 <body>
 
-        <header class="navbar">
-            <div class="nav-content">
-                <div class="logo-container">
-                    <img src="images/Logo.png" alt="WildLens Logo Icon" class="logo-logo">
-                    <span class="logo-text">WildLens</span>
+<header class="navbar">
+<div class="nav-content">
+    
+    <div class="nav-left">
+        <div class="logo-container">
+            <span class="logo-text">WildLens</span>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="/Presentacion/Index.html" class="active">Home</a>
+            <a href="#">Comunidad ⌵</a>
+            <a href="paginas/explorador.html">Explorar ⌵</a>
+        </nav>
+    </div>
+
+    <div class="nav-right">
+        <div id="menu-visitante">
+            <a href="paginas/login.html">Acceder</a>    o 
+            <a href="paginas/crear-cuenta.html">Crear una cuenta</a>       
+        </div>
+
+        <div id="menu-usuario" style="display: none;" class="user-dropdown">
+            <a href="paginas/subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+            
+            <div class="dropdown-container">
+                <button class="dropbtn">
+                    <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                    <span id="nav-nombre-usuario">Bienvenido</span> ⌵
+                </button>
+                
+                <div class="dropdown-content">
+                    <a href="paginas/perfil.html">Mi Perfil</a>
+                    <a href="paginas/mis_observaciones.html">Mis Observaciones</a>
+                    <a href="paginas/configuracion.html">Configuración</a>
+                    <hr>
+                    <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
                 </div>
-                <nav class="nav-links">
-                    <a href="#" class="active">Home</a>
-                    <a href="#">Registros</a>
-                    <a href="#">Contactos</a>
-                    <a href="#" class="btn-nav">Explorar</a>
-                </nav>
             </div>
-        </header>
+        </div>
+    </div>
+    
+</div>
+</header>
 
         <main>
         <section class="hero-section hero-video-container">
@@ -40,136 +69,261 @@
                     <h1>SÉ UN GUARDIÁN DE LA BIODIVERSIDAD LOCAL</h1>
                     <p>Únete a la red comunitaria de monitoreo de ajolotes y fauna urbana.</p>
                     <div class="hero-buttons">
-                        <a href="paginas/subir_fotos.html" class="btn btn-orange">SUBIR OBSERVACIÓN</a>
-                        <a href="paginas/explorador.html" class="btn btn-green">EXPLORAR EL MAPA</a>
-                    </div>
+                        <a href="paginas/crear-cuenta.html" class="btn-blanco-sombra">Únete a la comunidad</a>                    </div>
                 </div>
             </div>
         </section>
 
-            <section class="how-it-works">
-                <h2>¿Cómo funciona WildLens?</h2>
-                <div class="steps-container">
-                    <div class="step">
-                        <div class="step-icon">📸</div>
-                        <h3>1. Registra</h3>
-                        <p>Toma fotos de ajolotes o especies en tu entorno local usando tu cámara o celular.</p>
+            <section class="how-it-works-flat">
+                <h2>Con WildLens, puedes:</h2>
+                
+                <div class="features-container">
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20,40 L20,20 L40,20" fill="none" stroke="#74AC00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M80,40 L80,20 L60,20" fill="none" stroke="#74AC00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20,60 L20,80 L40,80" fill="none" stroke="#74AC00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M80,60 L80,80 L60,80" fill="none" stroke="#74AC00" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M50,80 C50,80 30,60 30,40 C30,25 40,20 50,20 C60,20 70,25 70,40 C70,60 50,80 50,80 Z" fill="#454545"/>
+                                <path d="M50,80 L50,25" fill="none" stroke="#f4f6ea" stroke-width="3"/>
+                            </svg>
+                        </div>
+                        <h3>Identificar</h3>
+                        <p>ajolotes</p>
                     </div>
-                    <div class="step">
-                        <div class="step-icon">🌍</div>
-                        <h3>2. Comparte</h3>
-                        <p>Sube tus hallazgos al mapa para crear un registro geográfico exacto.</p>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40,65 C35,65 30,55 35,45 C40,35 60,35 65,45 C70,55 65,65 60,65 C55,65 55,60 50,60 C45,60 45,65 40,65 Z" fill="#454545"/>
+                                <circle cx="30" cy="30" r="8" fill="#454545"/>
+                                <circle cx="50" cy="20" r="9" fill="#454545"/>
+                                <circle cx="70" cy="30" r="8" fill="#454545"/>
+                                <circle cx="75" cy="70" r="10" fill="#74AC00"/>
+                                <path d="M70,70 L74,74 L80,66" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3>Registrar</h3>
+                        <p>especies locales en tu propio historial</p>
                     </div>
-                    <div class="step">
-                        <div class="step-icon">🔬</div>
-                        <h3>3. Descubre</h3>
-                        <p>La comunidad y nuestra IA te ayudarán a verificar e identificar la especie.</p>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M25,40 L45,45 L45,65 L20,60 Z" fill="#454545"/>
+                                <path d="M75,40 L55,45 L55,65 L80,60 Z" fill="#454545"/>
+                                <path d="M45,45 L55,45 L55,55 L45,55 Z" fill="#454545"/>
+                                <circle cx="25" cy="50" r="18" fill="none" stroke="#74AC00" stroke-width="6"/>
+                                <circle cx="75" cy="50" r="18" fill="none" stroke="#74AC00" stroke-width="6"/>
+                                <circle cx="25" cy="50" r="6" fill="#454545"/>
+                                <circle cx="75" cy="50" r="6" fill="#454545"/>
+                            </svg>
+                        </div>
+                        <h3>Descubre</h3>
+                        <p>la naturaleza oculta a tu alrededor</p>
                     </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="55" r="30" fill="#454545"/>
+                                <path d="M30,45 C35,40 45,45 45,55 C45,65 35,70 25,65" fill="#f4f6ea" opacity="0.3"/>
+                                <path d="M75,55 C70,50 60,50 55,60 C50,70 65,80 70,75" fill="#f4f6ea" opacity="0.3"/>
+                                <path d="M50,15 C40,15 35,25 35,35 C35,50 50,65 50,65 C50,65 65,50 65,35 C65,25 60,15 50,15 Z" fill="#74AC00"/>
+                                <circle cx="50" cy="32" r="8" fill="#f4f6ea"/>
+                            </svg>
+                        </div>
+                        <h3>Contribuir</h3>
+                        <p>a la base de datos de ciencia real</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M35,60 C20,60 10,50 10,35 C10,20 20,10 40,10 C60,10 70,20 70,35 C70,40 68,45 65,48 L65,65 L50,55 C45,58 40,60 35,60 Z" fill="none" stroke="#74AC00" stroke-width="5" stroke-linejoin="round"/>
+                                <path d="M60,90 C45,90 40,85 40,75 M90,65 C90,80 80,90 60,90 L45,100 L45,85" fill="none" stroke="#74AC00" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M90,65 C90,50 85,45 70,45 C55,45 50,50 50,65 C50,75 55,80 60,80" fill="none" stroke="#74AC00" stroke-width="5" stroke-linecap="round"/>
+                                <path d="M35,25 L45,35 L25,35 Z" fill="#454545"/>
+                                <circle cx="70" cy="65" r="5" fill="#454545"/>
+                            </svg>
+                        </div>
+                        <h3>Aprende</h3>
+                        <p>de una comunidad de exploradores</p>
+                    </div>
+
                 </div>
             </section>
 
-            <section class="featured-species">
-                <div class="featured-container">
-                    <div class="featured-image">
-                        <img src="https://images.unsplash.com/photo-1712874364529-2d17f6111bb1?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Ajolote Mexicano">
-                        <div class="species-badge">Especie del Mes</div>
+            <section class="inature-stories-section">
+                <h2>El poder de la comunidad WildLens</h2>
+                
+                <div class="inature-cards-grid">
+                    
+                    <div class="inature-story-card">
+                        <div class="story-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1712874364529-2d17f6111bb1?q=80&w=1074&auto=format&fit=crop" alt="Ajolote Mexicano">
+                            <div class="story-title-overlay">
+                                <h3>Mapeando zonas de refugio urbano</h3>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>Se registró un ajolote en un canal que se creía inactivo. Este hallazgo ayuda a la comunidad a identificar nuevos puntos críticos para la conservación de la especie en la zona metropolitana.</p>
+                            <span class="story-meta">Visto por roberto_m en Ciudad Nezahualcóyotl</span>
+                        </div>
                     </div>
-                    <div class="featured-info">
-                        <h2>Ajolote Mexicano <br><span>(Ambystoma mexicanum)</span></h2>
-                        <p>Una especie endémica y un tesoro de nuestra biodiversidad. Actualmente se encuentra en peligro crítico debido a la pérdida de su hábitat natural en los canales urbanos.</p>
-                        <p>Ayúdanos a mapear los avistamientos para entender mejor las zonas de refugio de esta increíble especie y proteger su entorno.</p>
-                        <a href="paginas/explorador.html" class="btn btn-green">Ver mapa de distribución</a>
+
+                    <div class="inature-story-card">
+                        <div class="story-image-wrapper">
+                            <img src="https://imgs.search.brave.com/Dxm99dLlHl3FPToxiCpLf0cIy-mZhpJInIrjHauNTj4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hcmFu/ZGFuby5sYWpvcm5h/ZGFtYXlhLm14L2lt/Zy9jdWVycG8tMS9h/Y2hvcXVlMi5qcGVn" alt="Achoque de Pátzcuaro">
+                            <div class="story-title-overlay">
+                                <h3>Identificando especies endémicas</h3>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>Nuestra red neuronal confirmó un avistamiento de <em>A. dumerilii</em> (Achoque), permitiendo a los investigadores locales monitorear la salud de las poblaciones fuera de su hábitat habitual.</p>
+                            <span class="story-meta">Visto por elena_bio en Michoacán</span>
+                        </div>
                     </div>
+
+                    <div class="inature-story-card">
+                        <div class="story-image-wrapper">
+                            <img src="https://imgs.search.brave.com/uf5fJBpRnvzjuBxqNSyAUmgH1RkuDOgrzpgcbE_q2S4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS90b21hci1tdWVz/dHJhLWFndWEtZXN0/YW5xdWUtY29tcHJv/YmFyLWNhbGlkYWQt/YWd1YV8zMjg2Nzgt/MjI3LmpwZz9zZW10/PWFpc19oeWJyaWQ" alt="Ajolote en cautiverio">
+                            <div class="story-title-overlay">
+                                <h3>Monitoreo de calidad del agua</h3>
+                            </div>
+                        </div>
+                        <div class="story-content">
+                            <p>Un grupo de voluntarios locales está utilizando la plataforma para correlacionar los avistamientos de crías de ajolote con los niveles de oxigenación y temperatura del agua.</p>
+                            <span class="story-meta">Visto por carlos_eco en Xochimilco</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="stories-btn-container">
+                    <a href="paginas/explorador.html" class="btn-inature-green">Explorar más registros</a>
                 </div>
             </section>
 
-            <section class="observation-story">
+            <section class="observation-story-inat">
                 <div class="story-header">
                     <h2>Cada observación cuenta una historia</h2>
                 </div>
                 
-                <div class="story-grid">
-                    <div class="story-col">
-                        <div class="story-item">
-                            <span class="story-label">¿Quién?</span>
-                            <div class="user-info">
-                                <img src="https://i.pravatar.cc/40?img=11" alt="avatar" class="mini-avatar">
-                                <span id="nombre-usuario">Cargando...</span>
+                <div class="story-grid-inat">
+                    <div class="story-col-inat">
+                        
+                        <div class="story-item-inat border-bottom-inat">
+                            <span class="story-label-inat">¿Quién?</span>
+                            <div class="user-info-inat">
+                                <img id="avatar-usuario" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar" class="mini-avatar-inat">
+                                <span id="nombre-usuario" class="text-dark-inat">Cargando...</span>
                             </div>
                         </div>
                         
-                        <div class="story-item">
-                            <span class="story-label">¿Qué?</span>
-                            <div class="observation-display">
-                                <img id="img-principal-obs" src="" alt="Ajolote" class="main-obs-img" style="display: none;">
-                                <div class="obs-details">
-                                    <img id="icono-obs" src="" alt="icono" class="obs-icon" style="display: none;">
-                                    <div>
-                                        <strong id="nombre-comun-obs">Buscando registros...</strong><br>
-                                        <em id="nombre-cientifico-obs"></em>
+                        <div class="story-item-inat padding-top-inat">
+                            <span class="story-label-inat">Qué</span>
+                            <div class="observation-display-inat">
+                                <img id="img-principal-obs" src="" alt="Ajolote" class="main-obs-img-inat" style="display: none;">
+                                <div class="obs-details-inat">
+                                    <img id="icono-obs" src="" alt="icono" class="obs-icon-inat" style="display: none;">
+                                    <div class="obs-text-inat">
+                                        <strong id="nombre-comun-obs" class="text-dark-inat">Buscando registros...</strong><br>
+                                        <em id="nombre-cientifico-obs" class="text-muted-inat"></em>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
 
-                    <div class="story-col">
-                        <div class="story-item">
-                            <span class="story-label">Dónde</span>
-                            <div class="mini-map-container" style="flex: 1;">
-                                <div id="mini-mapa" style="height: 200px; width: 100%; border-radius: 8px; margin-bottom: 10px; z-index: 1;"></div>
-                                <p id="texto-ubicacion" class="location-text" style="color: #666; font-size: 14px;">📍 Calculando coordenadas...</p>
+                    <div class="story-col-inat">
+                        
+                        <div class="story-item-inat border-bottom-inat">
+                            <span class="story-label-inat">Donde</span>
+                            <div class="mini-map-wrapper-inat">
+                                <div id="mini-mapa" class="mini-map-inat"></div>
+                                <p id="texto-ubicacion" class="location-text-inat">📍 Calculando coordenadas...</p>
                             </div>
                         </div>
                         
-                        <div class="story-item">
-                            <span class="story-label">Cuándo</span>
-                            <div id="fecha-obs" class="date-info" style="flex: 1; color: #444;">
-                                <span class="clock-icon">🕒</span> Sincronizando tiempo...
+                        <div class="story-item-inat padding-top-inat">
+                            <span class="story-label-inat">Cuando</span>
+                            <div id="fecha-obs" class="date-info-inat">
+                                <span class="clock-icon-inat">🕒</span> Sincronizando tiempo...
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </section>
 
-            <section class="carousel-section">
-                <div class="carousel-header">
-                    <h2>Observaciones recientes de la comunidad</h2>
-                    <div class="carousel-arrows-top">
-                        <button class="arrow-btn" id="prevTop">&lt;</button>
-                        <button class="arrow-btn" id="nextTop">&gt;</button>
+            <section class="inat-stats-section">
+                <div class="inat-stats-grid">
+                    <div class="inat-stat-item">
+                        <h3><span class="counter" id="stat-observaciones" data-target="0">0</span><span class="plus-sign">+</span></h3>
+                        <p>observaciones que contribuyen a la ciencia de la biodiversidad local</p>
                     </div>
-                </div>
-                                    
-                <div class="carousel-wrapper">
-                    <button class="arrow-btn side-btn" id="prevBtn">&lt;</button>
-                    
-                    <div class="carousel-track" id="track">
-                        </div>
-
-                    <button class="arrow-btn side-btn" id="nextBtn">&gt;</button>
-                </div>
-
-                    <button class="arrow-btn side-btn" id="nextBtn">&gt;</button>
-                </div>
-            </section>
-
-            <section class="stats-section">
-                <div class="stats-container">
-                    <div class="stat-box">
-                        <h3 class="counter" data-target="1250">0</h3>
-                        <p>Observaciones Registradas</p>
+                    <div class="inat-stat-item">
+                        <h3><span class="counter" id="stat-especies" data-target="0">0</span><span class="plus-sign">+</span></h3>
+                        <p>especies documentadas y protegidas en los canales y cuerpos de agua</p>
                     </div>
-                    <div class="stat-box">
-                        <h3 class="counter" data-target="45">0</h3>
-                        <p>Especies Identificadas</p>
-                    </div>
-                    <div class="stat-box">
-                        <h3 class="counter" data-target="320">0</h3>
-                        <p>Guardianes Activos</p>
+                    <div class="inat-stat-item">
+                        <h3><span class="counter" id="stat-guardianes" data-target="0">0</span><span class="plus-sign">+</span></h3>
+                        <p>guardianes locales que han descubierto o validado especies silvetres</p>
                     </div>
                 </div>
             </section>
+
+        <section class="inat-steps-section">
+            <div class="inat-steps-container">
+                
+                <div class="inat-step">
+                    <div class="inat-step-number">1</div>
+                    <div class="inat-step-text">
+                        <h3>Observa 
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#88C540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        </h3>
+                        <p>Abre la app y fotografía cualquier ajolote, planta u otro organismo silvestre — de tu barrio o canal local.</p>
+                    </div>
+                </div>
+
+                <div class="inat-step">
+                    <div class="inat-step-number">2</div>
+                    <div class="inat-step-text">
+                        <h3>Identificar 
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#88C540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M19 3v4M5 21v-4M19 21v-4M3 5h4M21 5h-4M3 19h4M21 19h-4M12 9v6M9 12h6"></path></svg>
+                        </h3>
+                        <p>La aplicación sugiere una identificación y una comunidad local de biólogos y naturalistas la confirma o refina.</p>
+                    </div>
+                </div>
+
+                <div class="inat-step">
+                    <div class="inat-step-number">3</div>
+                    <div class="inat-step-text">
+                        <h3>Contribuir 
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#88C540" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        </h3>
+                        <p>Tu observación se convierte en datos abiertos — utilizados por científicos e investigadores para proteger el hábitat.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="inat-why-section">
+            <div class="inat-why-container">
+                <div class="why-title">
+                    <h3>¿Por qué?</h3>
+                    <div class="why-underline"></div>
+                </div>
+                <div class="why-text">
+                    <p>La naturaleza de nuestros ecosistemas hídricos está cambiando más rápido que nunca, así que necesitamos <strong>tu</strong> ayuda para registrar qué vive ahí y dónde está.</p>
+                </div>
+            </div>
+        </section>           
         </main>
 
         <section class="top-contributors">
@@ -177,47 +331,86 @@
                 <h2>Top Guardianes del Mes</h2>
                 <p>Conoce a los miembros más activos de nuestra comunidad BioNode.</p>
             </div>
-            <div class="contributors-cards">
-                <div class="user-card">
-                    <div class="avatar">👨‍💻</div>
-                    <h4>Roberto</h4>
-                    <p>145 Observaciones</p>
-                    <span class="badge badge-gold">1º Lugar</span>
-                </div>
-                <div class="user-card">
-                    <div class="avatar">👩‍🔬</div>
-                    <h4>Elena G.</h4>
-                    <p>112 Observaciones</p>
-                    <span class="badge badge-silver">2º Lugar</span>
-                </div>
-                <div class="user-card">
-                    <div class="avatar">🕵️‍♂️</div>
-                    <h4>Carlos M.</h4>
-                    <p>89 Observaciones</p>
-                    <span class="badge badge-bronze">3º Lugar</span>
+            
+            <div class="contributors-cards" id="contenedor-top-guardianes">
+                <p style="color: #666; width: 100%; text-align: center;">Cargando los datos de la red...</p>
+            </div>
+        </section>
+
+        <section class="inat-newsletter-section">
+            <div class="newsletter-overlay">
+                <div class="newsletter-content">
+                    <h2>¡Recibe nuestro boletín mensual!</h2>
+                    <p>Mantente conectado con historias y descubrimientos de la comunidad WildLens.</p>
+                    <a href="/Presentacion/paginas/crear-cuenta.html" class="btn-blanco-sombra">Regístrate</a>
                 </div>
             </div>
         </section>
 
-        <section class="cta-section">
-            <div class="cta-content">
-                <h2>¿Listo para comenzar tu exploración?</h2>
-                <p>No necesitas ser un experto. Tu curiosidad es el primer paso para proteger nuestra biodiversidad urbana.</p>
-                <div class="hero-buttons" style="justify-content: center; margin-top: 20px;">
-                    <a href="paginas/crear-cuenta.html" class="btn btn-orange">CREAR MI CUENTA</a>
+        <section class="inat-mission-section">
+            <div class="mission-content">
+                <h3>WildLens es un proyecto académico sin fines de lucro enfocado en la conservación, investigación y el cuidado de los ajolotes.</h3>
+                <p>Tu participación como estudiante y ciudadano lo hace posible.</p>
+            </div>
+        </section>
+
+        <section class="inat-faq-section">
+            <div class="faq-container">
+                <h3 class="faq-main-title">Preguntas frecuentes</h3>
+                
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            ¿Puedo subir fotos que ya tengo?
+                            <span class="faq-icon">›</span>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>Sí, siempre y cuando conozcas la ubicación y la fecha exacta en la que tomaste la fotografía de la especie.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            ¿Quién puede hacer ciencia con las observaciones de WildLens?
+                            <span class="faq-icon">›</span>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>¡Cualquier persona! Desde estudiantes de ESCOM y aficionados, hasta biólogos e investigadores dedicados a la conservación.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            ¿Qué significa el estatus "Validado"?
+                            <span class="faq-icon">›</span>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>Significa que la comunidad o un experto ha revisado tu observación y confirmado que la especie de ajolote es correcta.</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary class="faq-question">
+                            ¿Necesito saber qué estoy viendo?
+                            <span class="faq-icon">›</span>
+                        </summary>
+                        <div class="faq-answer">
+                            <p>No es necesario. Sube tu mejor fotografía y la comunidad te ayudará a identificar si es un Ajolote Mexicano, un Achoque u otra especie silvestre.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
 
         <footer class="partner-footer">
-            <span class="partner-text">Hecho por:</span>
+            <span class="partner-text">Desarrollado por el equipo de software de WildLens |</span>
             <div class="bionode-logo">
                 <span class="flower-icon">❁</span> BioNode
             </div>
         </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="datos/Subir_foto.js"></script>    
-    <script src="../Presentacion/src/presentacion/modulo.js"></script>
+    <script src="/Negocio/src/presentacion/modulo.js"></script>
+
 </body>
 </html>

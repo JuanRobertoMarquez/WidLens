@@ -39,43 +39,63 @@
         </form>
     </div>
 
-    <script>
-    const loginForm = document.getElementById('loginForm');
+        <script>
+            const loginForm = document.getElementById('loginForm');
 
-    loginForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
 
-        const correo = document.getElementById('correo').value;
-        const contrasenia = document.getElementById('contrasenia').value;
+                const correo = document.getElementById('correo').value;
+                const contrasenia = document.getElementById('contrasenia').value;
 
-        try {
-            const respuesta = await fetch('http://127.0.0.1:3000/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ correo, contrasenia })
+                try {
+                    const respuesta = await fetch('http://127.0.0.1:3000/api/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ correo, contrasenia })
+                    });
+
+                    // AQUÍ guardas la respuesta en 'resultado'
+                    const resultado = await respuesta.json();
+
+                    // AQUÍ usamos 'resultado' en lugar de 'datos'
+                    if (resultado.exito) {
+                        // 1. Guardamos la sesión real en el navegador
+                        localStorage.setItem('usuarioWildLens', JSON.stringify(resultado.usuario));
+                        localStorage.removeItem('usuario_activo'); // Limpiamos la vieja, por si acaso
+                        
+                        // 2. Alerta estilizada con SweetAlert2
+                        Swal.fire({
+                            title: `¡Bienvenido de vuelta, ${resultado.usuario.nombre}!`,
+                            text: '¿Listo para explorar y proteger la biodiversidad?',
+                            icon: 'success',
+                            confirmButtonColor: '#2B7055', // El verde oficial de BioNode/WildLens
+                            confirmButtonText: 'Entrar',
+                            backdrop: `rgba(17, 78, 55, 0.2)` // Un fondo verdoso muy sutil
+                        }).then(() => {
+                            // 3. Redirigimos al Index SOLO hasta que el usuario cierre la alerta
+                            window.location.href = '../Index.html'; 
+                        });
+                    } else {
+                        // También agreguemos SweetAlert aquí para los errores de contraseña
+                        Swal.fire({
+                            title: 'Acceso Denegado',
+                            text: resultado.mensaje,
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error de red:", error);
+                    Swal.fire({
+                        title: 'Error de Red',
+                        text: 'No se pudo establecer comunicación con el servidor central de BioNode.',
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                }
             });
-
-            const resultado = await respuesta.json();
-
-            if (respuesta.ok) {
-                // 🔑 ¡EL TRUCO MAESTRO!
-                // Guardamos de forma persistente el ID real que MySQL le asignó al usuario
-                localStorage.setItem('usuario_activo', resultado.usuario.id_usuario);
-                localStorage.setItem('usuario_nombre', resultado.usuario.nombre + ' ' + resultado.usuario.apellido);
-                
-                alert(`¡Bienvenido de vuelta, ${resultado.usuario.nombre}!`);
-                
-                // Redirigimos al Muro Principal (Index)
-                window.location.href = '/Presentacion/Index.html'; 
-            } else {
-                alert("Error: " + resultado.error);
-            }
-        } catch (error) {
-            console.error("Error de red:", error);
-            alert("No se pudo establecer comunicación con el servidor.");
-        }
-    });
-</script>
+        </script>
 
 </body>
 </html>

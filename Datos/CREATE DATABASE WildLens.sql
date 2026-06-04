@@ -31,28 +31,7 @@ CREATE TABLE Observaciones(
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
 );
 
-CREATE TABLE Identificaciones(
-    id_identificacion INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    id_observacion INT NOT NULL,
-    id_usuario INT NOT NULL,
-    id_especie INT NOT NULL,
-    fecha_sugerencia DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(id_observacion) REFERENCES Observaciones(id_observacion),
-    FOREIGN KEY(id_usuario) REFERENCES Usuarios(id_usuario),
-    FOREIGN KEY(id_especie) REFERENCES Especies(id_especie)
-);
-
-CREATE TABLE Interacciones(
-    id_interaccion INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    id_observacion INT NOT NULL, 
-    id_usuario INT NOT NULL, 
-    comentario_texto TEXT NOT NULL,
-    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(id_observacion) REFERENCES Observaciones(id_observacion),
-    FOREIGN KEY(id_usuario) REFERENCES Usuarios(id_usuario)
-    );
-    
--- 1. INSERTAR USUARIOS (Mantenemos tu equipo + 1 bióloga invitada)
+- 1. INSERTAR USUARIOS (Mantenemos tu equipo + 1 bióloga invitada)
 INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, avatar) VALUES 
 ('Roberto', 'Marquez', 'roberto.m@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345','/subidas/Perfiles/Roberto.jpg'),
 ('Darien', 'García', 'darien.g@ejemplo.com', '$2y$10$simulacionDeHashSeguro12345','/subidas/Perfiles/Loro.jpg'),
@@ -80,20 +59,3 @@ INSERT INTO Observaciones (id_usuario, id_especie, foto, latitud, longitud, fech
 (5, 4, '/subidas/avistamientos/achoque_zacapu_fondo.jpg', 19.82470000, -101.79190000, '2026-05-19 10:10:00', 'Validado'),
 -- Otro avistamiento reciente en Cuemanco, CDMX
 (2, 1, '/subidas/avistamientos/ajolote_cuemanco.jpg', 19.28610000, -99.10420000, '2026-05-20 07:30:00', 'Pendiente');
-
--- 4. INSERTAR IDENTIFICACIONES (Comunidad validando los ajolotes)
-INSERT INTO Identificaciones (id_observacion, id_usuario, id_especie) VALUES 
-(1, 5, 1), -- Dra. Carmen valida el ajolote de Roberto en Xochimilco
-(3, 1, 2), -- Roberto valida el achoque de Pátzcuaro de Darien
-(4, 5, 2), -- Dra. Carmen valida el achoque de Areli
-(5, 2, 3), -- Darien confirma la especie de Alchichica
-(6, 3, 4); -- Jesus confirma el hallazgo en Zacapu
-
--- 5. INSERTAR INTERACCIONES (Comentarios en la plataforma)
-INSERT INTO Interacciones (id_observacion, id_usuario, comentario_texto) VALUES 
-(1, 4, '¡Qué maravilla ver uno en su hábitat natural! Se ve muy sano.'),
-(1, 5, 'Excelente registro, Roberto. La coloración parda es la silvestre natural, los rosados son más de cautiverio.'),
-(3, 1, 'Esos achoques de Michoacán son increíbles, son gigantes comparados con los de CDMX.'),
-(5, 4, '¿El agua de Alchichica no es súper salada? Increíble que sobrevivan ahí.'),
-(5, 5, 'Así es, Areli. El A. taylori evolucionó para soportar la salinidad de ese cráter.'),
-(7, 3, 'Ojalá logren limpiar pronto esa zona de Cuemanco, hay mucha contaminación.');

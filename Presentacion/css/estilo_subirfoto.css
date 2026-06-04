@@ -65,7 +65,32 @@ body {
     padding: 8px 20px; border-radius: 20px;
 }
 
-/* ---- STEPPER (barra de pasos) ---- */
+/* =============================================
+   ANIMACIONES DINÁMICAS (El secreto de la fluidez)
+============================================= */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Magia del SPA: Animación al mostrar el paso activo */
+.seccion-paso { 
+    display: none; 
+}
+.seccion-paso.paso-activo { 
+    display: block; 
+    animation: fadeSlideUp 0.5s ease forwards; /* Animación suave */
+}
+
+/* =============================================
+   ---- STEPPER (Barra de progreso flotante) ---- 
+============================================= */
 .page-wrapper {
     padding: 40px 0 60px;
 }
@@ -73,73 +98,210 @@ body {
 .stepper {
     display: flex;
     align-items: center;
-    gap: 0;
-    margin-bottom: 40px;
-    max-width: 700px;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .step {
     display: flex;
     align-items: center;
     gap: 10px;
+    background: white;
+    padding: 10px 20px 10px 10px;
+    border-radius: 40px;
     font-family: 'Montserrat', sans-serif;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--step-inactive);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    transition: all 0.4s ease;
 }
 
 .step-circle {
-    width: 32px; height: 32px;
+    width: 36px; height: 36px;
     border-radius: 50%;
-    background-color: var(--step-inactive);
-    color: white;
+    background-color: #f0f0f0;
+    color: #888;
     display: flex; align-items: center; justify-content: center;
     font-size: 14px; font-weight: 700;
     flex-shrink: 0;
-    transition: background 0.3s;
+    transition: all 0.4s ease;
 }
 
-.step.active .step-circle,
-.step.completed .step-circle {
-    background-color: var(--dark-green);
-}
-
-.step.active,
-.step.completed {
+/* Estilo cuando el paso está activo o completado */
+.step.active, .step.completed {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(43, 112, 85, 0.15); /* Sombra verde sutil */
     color: var(--dark-green);
+}
+
+.step.active .step-circle, .step.completed .step-circle {
+    background-color: var(--dark-green);
+    color: white;
+    box-shadow: 0 4px 10px rgba(43, 112, 85, 0.3);
 }
 
 .step-line {
     flex: 1;
-    height: 2px;
-    background-color: var(--step-inactive);
-    min-width: 80px;
-    transition: background 0.3s;
+    height: 3px;
+    background-color: #eaeaea;
+    border-radius: 2px;
+    min-width: 40px;
+    max-width: 80px;
+    transition: background 0.4s ease;
 }
 
 .step-line.completed {
     background-color: var(--dark-green);
 }
 
-/* ---- LAYOUT PRINCIPAL ---- */
-.form-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 30px;
-    align-items: start;
-}
-
-.section-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 20px;
-}
 
 /* =============================================
-    SECCIÓN 1: SUBIR FOTOS (TU PARTE)
+    SECCIÓN 1: SUBIR FOTOS (Estilo BioNode)
 ============================================= */
+.upload-section {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Sombra igual al Index */
+    border-top: 6px solid var(--dark-green); /* Detalle de color superior */
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Título con la tipografía elegante del Index */
+.section-title {
+    font-family: 'Lora', serif; 
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark-green);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Grid de previsualizaciones */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.photo-slot {
+    aspect-ratio: 1;
+    border: 2px dashed #C3D59D; /* Verde crema claro estilo iNat */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F4F6EA;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.photo-slot:hover {
+    border-color: var(--dark-green);
+    background-color: #E8F5EF;
+    transform: translateY(-3px);
+}
+
+.photo-slot.has-image {
+    border: 2px solid var(--dark-green);
+    background: transparent;
+}
+
+.photo-slot.has-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 1;
+    border-radius: 12px;
+}
+
+.photo-slot .slot-icon {
+    position: center;
+    font-size: 28px;
+    color: #9ab47a;
+    pointer-events: none;
+    transition: transform 0.3s;
+}
+
+.photo-slot:hover .slot-icon {
+    transform: scale(2.1);
+}
+
+/* Botón "Subir Fotos" */
+.btn-upload {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--orange-btn);
+    border-radius: 30px;
+    background: white;
+    color: var(--orange-btn);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-upload:hover {
+    background: var(--orange-btn);
+    color: white;
+    box-shadow: 0 5px 15px rgba(229, 137, 51, 0.3);
+}
+
+/* Botón Continuar (Naranja para resaltar la acción) */
+.btn-continuar {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--dark-green);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-continuar:hover:not(:disabled) {
+    background-color: #1e523e;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(43, 112, 85, 0.4);
+}
+
+.btn-continuar:disabled {
+    background-color: #d1d8c5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/*DETALLES (Ajuste para que coincida) */
+.details-container {
+    max-width: 800px; 
+    margin: 0 auto; 
+    background: white; 
+    padding: 40px;
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-top: 6px solid var(--orange-btn);
+}
+/*SUBIR FOTOS (TU PARTE)*/
+
 .upload-section {
     background: white;
     border-radius: 16px;
@@ -191,6 +353,7 @@ body {
     font-size: 22px;
     color: var(--border-light);
     pointer-events: none;
+    position: center;
 }
 
 /* Botón eliminar foto */
@@ -435,4 +598,21 @@ width: 20px;
     display: flex; 
     gap: 15px; 
     margin-top: 25px; 
+}
+
+/* =============================================
+   CORRECCIÓN DEL MAPA (Evitar bug de posición)
+============================================= */
+#paso-2 {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#paso-2.paso-activo {
+    /* Apagamos la animación solo en el mapa para no romper las coordenadas */
+    animation: none !important; 
+    transform: none !important; 
 }

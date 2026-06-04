@@ -1,4 +1,3 @@
-/* Variables de colores basadas en tu imagen */
 :root {
     --bg-cream: #F9F8F2;
     --dark-green: #2B7055;
@@ -8,9 +7,9 @@
     --card-bg: #FFFFFF;
 }
 
-.logo-logo{
-    width: auto;      /* Cambia a auto para que no se estire raro */
-    height: 40px;     /* Ajusta según el tamaño de tu logo real */
+.logo-logo {
+    width: auto;      
+    height: 35px; /* Controlamos la altura del icono */
     object-fit: contain;
 }
 
@@ -25,55 +24,62 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     background-color: var(--bg-cream);
     color: var(--text-dark);
 }
 
 .navbar {
     width: 100%;
-    position: fixed; /* <--- ESTE ES EL CAMBIO CLAVE */
+    position: fixed; 
     top: 0;
     left: 0;
     z-index: 1000;
-    background: transparent;
+    background-color: white;
+    border-bottom: 1px solid #eaeaea;
+    /* Aseguramos que la caja no crezca más de su tamaño */
+    box-sizing: border-box; 
 }
+
 
 /* Ajustamos el hero para que ocupe todo el alto y no tenga margen arriba */
 .hero-video-container {
     position: relative;
-    height: 100vh; /* Que ocupe el 100% del alto de la pantalla */
     margin-top: 0; /* Aseguramos que no haya margen superior */
     overflow: hidden;
 }
 
 .nav-content {
-    max-width: 1100px;      /* Un poco más angosto que el contenedor principal lo hace resaltar más */
-    margin: 20px auto;      /* Despegamos el menú de la parte superior del navegador */
-    padding: 10px 30px;     /* Espaciado interno */
-    
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 20px;
     display: flex;
+    flex-direction: row; /* Forzar horizontal */
+    flex-wrap: nowrap; /* PROHIBIR que se bajen a la siguiente línea */
     justify-content: space-between;
     align-items: center;
-
-    /* ESTILOS DE "NUBE" */
-    background-color: #ffffff;    /* Fondo blanco puro para que resalte del crema */
-    border-radius: 50px;          /* Bordes muy redondeados (forma de pastilla/nube) */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Sombra suave para dar profundidad */
-    border: 1px solid rgba(0,0,0,0.05); /* Un borde casi invisible para definir la forma */
 }
 
 .logo-container {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px;            
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .logo-text {
-    font-family: 'Lora', sans-serif;
-    font-size: 22px;
+    font-family: 'Lora', serif;
+    font-size: 21px; /* Más sutil */
     font-weight: 700;
     color: var(--dark-green);
+    white-space: nowrap; 
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 40px; 
 }
 
 .nav-links {
@@ -84,15 +90,36 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--dark-green);
-    font-weight: 600;
-    font-size: 15px;
+    color: var(--text-light);
+    font-weight: 400;
+    font-size: 14px; /* Más minimalista */
+    transition: color 0.3s ease;
+    white-space: nowrap; 
 }
 
+.nav-links a:hover,
 .nav-links a.active {
-    color: #4AA586; /* Un verde un poco más claro para el activo */
+    color: var(--dark-green);
+    font-weight: 600; /* Negrita solo al pasar el mouse o activo */
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 13px; /* Más minimalista */
+    font-weight: 600;
+    transition: color 0.3s ease;
+    white-space: nowrap; /* Evita que este botón largo se rompa */
+}
+
+.nav-right a:hover {
+    color: var(--dark-green);
+}
 .btn-nav {
     background-color: var(--dark-green);
     color: white !important;
@@ -129,12 +156,28 @@ body {
     transform: translateY(-2px);
 }
 
-.btn-green {
-    background-color: var(--dark-green);
+/* --- BOTÓN ESTILO iNATURALIST --- */
+.btn-blanco-sombra {
+    background-color: white; /* Un blanco hueso/gris claro muy sutil */
+    color: #333333; /* Gris casi oscuro (se lee mejor que el negro puro) */
+    font-family: 'Lora', serif; /* La fuente elegante que ya tienes */
+    font-size: 18px; /* Tamaño de letra como en la imagen */
+    font-weight: 600;
+    padding: 12px 28px; /* Menos redondeado, más rectangular */
+    border: none;
+    border-radius: 8px; /* Esquinas ligeramente redondeadas, no circulares */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35); /* El efecto de sombra oscura */
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.btn-orange {
-    background-color: var(--orange-btn);
+/* Efecto interactivo al pasar el mouse */
+.btn-blanco-sombra:hover {
+    background-color: #eae8e1;/* Brilla a blanco puro */
+    transform: translateY(-2px); /* Se levanta sutilmente */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); /* La sombra se hace más grande */
 }
 
 /* SECCIÓN CARRUSEL */
@@ -234,27 +277,27 @@ body {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    padding: 40px 0;
-    background-color: var(--bg-cream);
+    padding: 10px 0;
+    background-color: #6a6e6b;
 }
 
 .partner-text {
     font-size: 14px;
-    color: var(--text-light);
+    color: white;
     font-weight: 600;
 }
 
 .bionode-logo {
     font-family: 'Lora', sans-serif;
     font-size: 22px;
-    color: var(--dark-green);
+    color: white;
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
 .flower-icon {
-    color: #88C540; /* Verde claro del icono de BioNode */
+    color: #979797; /* Verde claro del icono de BioNode */
     font-size: 24px;
 }
 
@@ -545,11 +588,20 @@ body {
     flex: 1;
     min-width: 200px;
     position: relative;
+    text-align: center; /* Asegura que la foto y el texto queden perfectamente centrados */
 }
 
-.avatar {
-    font-size: 50px;
-    margin-bottom: 15px;
+#contenedor-top-guardianes img,
+.user-card img,
+.user-card .avatar {
+    width: 140px !important;       
+    height: 140px !important;      
+    object-fit: cover !important;  
+    border-radius: 50% !important; 
+    margin: 0 auto 15px auto !important; 
+    display: block !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; 
+    border: 4px solid #F4F6EA !important; 
 }
 
 .user-card h4 {
@@ -564,7 +616,6 @@ body {
     font-size: 14px;
     margin-bottom: 15px;
 }
-
 .badge {
     padding: 5px 15px;
     border-radius: 20px;
@@ -603,71 +654,9 @@ body {
     line-height: 1.6;
 }
 
-.observation-story {
-    padding: 80px 20px;
-    background-color: var(--bg-cream);
-    font-family: 'Open Sans', sans-serif;
-}
-
-.story-header h2 {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 40px;
-    font-family: 'Lora', sans-serif;
-}
-
-.story-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.story-label {
-    display: block;
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.story-item { margin-bottom: 30px; }
-
-/* Estilo de la observación */
-.main-obs-img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.obs-details {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.obs-icon { width: 50px; height: 50px; border-radius: 5px; object-fit: cover; }
-
-/* Estilo del mini mapa */
-.mini-map {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.location-text { font-size: 14px; margin-top: 5px; color: #555; }
-
-/* Responsive */
-@media (max-width: 850px) {
-    .story-grid { grid-template-columns: 1fr; }
-}
-
 .hero-video-container {
     position: relative;
-    height: 85vh;
+    height: 70vh;
     overflow: hidden;
 }
 
@@ -684,7 +673,6 @@ body {
     object-fit: cover;
 }
 
-/* --- ESTILOS PARA LA SECCIÓN DE HISTORIA TIPO iNATURALIST --- */
 .story-grid {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
@@ -731,4 +719,830 @@ body {
     height: 45px;
     border-radius: 8px;
     object-fit: cover;
+}
+/* 1. Sección de iconos de características */
+.how-it-works-flat {
+    background-color: #f4f6ea;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.features-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 40px auto 0 auto;
+}
+
+.feature-item {
+    flex: 1;
+    min-width: 150px;
+    max-width: 180px;
+    text-align: center;
+}
+
+/* FORZAMOS EL TAMAÑO DEL ICONO PARA QUE NO CUBRA LA PANTALLA */
+.feature-icon {
+    width: 60px; /* Tamaño reducido */
+    height: 60px;
+    margin: 0 auto 15px auto;
+    display: block;
+}
+
+.feature-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* 2. Sección de historias (Tarjetas iNaturalist) */
+.inature-stories-section {
+    background-color: #ffffff;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.inature-cards-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+.inature-story-card {
+    width: 300px;
+    border: 2px solid #C3D59D;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.story-image-wrapper {
+    position: relative;
+    height: 180px;
+    width: 100%;
+}
+
+.story-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-title-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 40px 15px 15px 15px;
+    box-sizing: border-box;
+}
+
+.story-title-overlay h3 {
+    color: white;
+    font-size: 16px;
+    margin: 0;
+}
+
+.story-content {
+    padding: 15px;
+}
+
+.story-content p {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.story-meta {
+    font-size: 11px;
+    color: #888;
+    font-style: italic;
+}
+
+/* 3. Botón verde */
+.stories-btn-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-inature-green {
+    background-color: #74AC00;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* --- SECCIÓN OBSERVACIONES --- */
+.observations-section {
+    padding: 60px 20px;
+    background-color: #ffffff;
+}
+
+.obs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+.obs-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    transition: transform 0.2s;
+}
+
+.obs-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.obs-info {
+    padding: 15px;
+}
+
+.species-name {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    color: #333;
+}
+
+.user-meta {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* --- EL CAPRICHO: MAPA INTERACTIVO --- */
+.map-container {
+    height: 80px;
+    overflow: hidden; /* Esto oculta el zoom cuando no pasas el ratón */
+    cursor: pointer;
+    position: relative;
+}
+
+.map-zoom-wrapper {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease; /* Suavidad del efecto */
+}
+
+.map-zoom-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* EFECTO HOVER: Cuando pasas el ratón, el mapa "se acerca" */
+.map-container:hover .map-zoom-wrapper {
+    transform: scale(1.2); /* Acercamiento */
+}
+
+/* Overlay opcional para decir "Ver detalles" */
+.map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(116, 172, 0, 0.4); /* Verde iNaturalist semitransparente */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.map-container:hover .map-overlay {
+    opacity: 1; /* Aparece al pasar el ratón */
+}
+.observation-story-inat {
+    background-color: #F4F6EA; /* Fondo crema característico */
+    padding: 80px 20px;
+}
+
+.observation-story-inat .story-header h2 {
+    text-align: center;
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 50px;
+    font-weight: 600;
+}
+
+.story-grid-inat {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 60px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.story-col-inat {
+    display: flex;
+    flex-direction: column;
+}
+
+.story-item-inat {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* La línea separadora sutil estilo iNaturalist */
+.border-bottom-inat {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #C3D59D; 
+}
+
+.padding-top-inat {
+    padding-top: 20px;
+}
+
+/* Etiquetas (Quién, Qué, Donde, Cuando) */
+.story-label-inat {
+    width: 70px;
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    color: #444;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+/* Textos e info de usuario */
+.user-info-inat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mini-avatar-inat {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.text-dark-inat {
+    color: #333;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.text-muted-inat {
+    color: #777;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Imágenes y Mapa */
+.observation-display-inat,
+.mini-map-wrapper-inat {
+    width: 100%;
+}
+
+.main-obs-img-inat,
+.mini-map-inat {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Evita que el mapa de Leaflet se monte sobre el menú superior */
+.mini-map-inat {
+    z-index: 1;
+}
+
+.obs-details-inat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.obs-icon-inat {
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.location-text-inat,
+.date-info-inat {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Adaptación para celulares */
+@media (max-width: 768px) {
+    .story-grid-inat {
+        grid-template-columns: 1fr; /* Pasa a una sola columna */
+        gap: 20px;
+    }
+    .border-bottom-inat {
+        border-bottom: none; /* Quitamos la línea en móviles para no saturar */
+    }
+}
+
+/* ==================================================
+   BLOQUE FINAL TIPO iNATURALIST (ESTADÍSTICAS, PASOS, POR QUÉ)
+   ================================================== */
+
+/* 1. ESTADÍSTICAS BLANCAS */
+.inat-stats-section {
+    background-color: #ffffff;
+    padding: 80px 20px;
+}
+
+.inat-stats-grid {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.inat-stat-item {
+    max-width: 250px;
+}
+
+.inat-stat-item h3 {
+    font-family: 'Lora', serif;
+    font-size: 55px; /* Números enormes */
+    color: #3C5A14; /* Verde oscuro iNat */
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.inat-stat-item .plus-sign {
+    color: #88C540; /* Verde brillante para el "+" */
+    font-weight: 400;
+}
+
+.inat-stat-item p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #444444;
+    line-height: 1.5;
+}
+
+/* 2. PASOS EN FONDO CREMA */
+.inat-steps-section {
+    background-color: #F4F6EA;
+    padding: 70px 20px;
+}
+
+.inat-steps-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.inat-step {
+    display: flex;
+    align-items: flex-start;
+    max-width: 320px;
+    gap: 15px;
+}
+
+.inat-step-number {
+    font-family: 'Lora', serif;
+    font-size: 90px; /* Números gigantes */
+    line-height: 0.8;
+    color: #88C540; /* Verde manzana iNat */
+    font-weight: 400;
+}
+
+.inat-step-text h3 {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    color: #3C5A14;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.inat-step-text p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 3. SECCIÓN ¿POR QUÉ? */
+.inat-why-section {
+    background-color: #ffffff;
+    padding: 60px 20px;
+}
+
+.inat-why-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.why-title {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.why-title h3 {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    color: #3C5A14;
+    margin: 0;
+    font-weight: 600;
+}
+
+.why-underline {
+    height: 3px;
+    width: 100%;
+    background-color: #88C540;
+    margin-top: 5px;
+    border-radius: 2px;
+}
+
+.why-text p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #222222;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* RESPONSIVO MÓVILES */
+@media (max-width: 768px) {
+    .inat-stats-grid { gap: 40px; }
+    .inat-why-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    .why-title { text-align: center; }
+    .why-underline { width: 50%; margin: 5px auto 0 auto; }
+}
+
+/* 1. SECCIÓN BOLETÍN (Con fondo oscuro de naturaleza) */
+.inat-newsletter-section {
+    /* Puedes cambiar esta URL por otra foto de ajolote oscura o agua si gustas */
+    background-image: url('https://imgs.search.brave.com/KX1gh9n_WS4ZIlZsUyX0IKDujBA2JrUa2AQdVjUWAlE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTc1/NjQ4MTA3NC9lcy9m/b3RvL2Nsb3NlLXVw/LW9mLWZpc2gtc3dp/bW1pbmctaW4tc2Vh/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1lMGxWaEZGYUEz/MExyVjRVN01LZEM1/Nl9JZlpfbVJKR0NN/LUNaSnUzZl9FPQ');
+    background-size: cover;
+    background-position: center;
+    position: center;
+    text-align: center;
+    color: white;
+}
+
+.newsletter-overlay {
+    background: rgba(18, 43, 23, 0.75); /* Un tinte verde muy oscuro para leer bien */
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.newsletter-content {
+    max-width: 600px;
+}
+
+.newsletter-content h2 {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.newsletter-content p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* 2. SECCIÓN MISIÓN (En lugar de Donaciones) */
+.inat-mission-section {
+    background-color: #ffffff;
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.mission-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.mission-content h3 {
+    font-family: 'Lora', serif;
+    font-size: 24px;
+    color: #444;
+    line-height: 1.4;
+    margin-bottom: 15px;
+    font-weight: 400; /* Texto normal, elegante */
+}
+
+.mission-content p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: #666;
+}
+
+/* 2. SECCIÓN MISIÓN (Minimalista) */
+.inat-mission-section {
+    background-color: #ffffff;
+    padding: 60px 20px; /* Redujimos el espacio vacío */
+    text-align: center;
+}
+
+.mission-content {
+    max-width: 600px; /* Más angosto para imitar el centro de iNat */
+    margin: 0 auto;
+}
+
+.mission-content h3 {
+    font-family: 'Lora', serif;
+    font-size: 20px; /* Letra más discreta */
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.mission-content p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 3. SECCIÓN PREGUNTAS FRECUENTES (Minimalista) */
+.inat-faq-section {
+    background-color: #F4F6EA; 
+    padding: 60px 20px; /* Redujimos el espacio superior e inferior */
+}
+
+.faq-container {
+    max-width: 650px; /* MUCHO más angosto, esto le da el toque profesional */
+    margin: 0 auto;
+}
+
+.faq-main-title {
+    text-align: center;
+    font-family: 'Lora', serif;
+    font-size: 22px; /* Título más pequeño */
+    color: #444;
+    margin-bottom: 30px;
+}
+
+.faq-list {
+    border-top: 1px solid #d8dec3;
+}
+
+.faq-item {
+    border-bottom: 1px solid #d8dec3;
+}
+
+
+.faq-question {
+    padding: 15px 0; /* Menos alto */
+    font-family: 'Lora', sans-serif;
+    font-size: 18px; /* Letra más elegante */
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    list-style: none; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.faq-question::-webkit-details-marker {
+    display: none; 
+}
+
+.faq-question:hover {
+    color: #74AC00; 
+}
+
+.faq-icon {
+    font-size: 20px; /* Flechita más pequeña */
+    color: #555;
+    font-weight: 400;
+    transition: transform 0.3s ease;
+}
+
+details[open] .faq-icon {
+    transform: rotate(90deg);
+}
+
+.faq-answer {
+    padding: 0 0 15px 0; /* Menos espacio al desplegar */
+}
+
+.faq-answer p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px; /* Texto de respuesta fino */
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.user-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-subir-nav {
+    background-color: #74AC00; /* Verde iNaturalist */
+    color: white !important;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.btn-subir-nav:hover {
+    background-color: #5a8500;
+}
+
+/* El contenedor del perfil */
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.nav-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eaeaea;
+}
+
+/* El cuadro blanco que se despliega */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+    z-index: 1001; /* Asegura que pase por encima del video del ajolote */
+    border-radius: 8px;
+    overflow: hidden;
+    top: 40px;
+}
+
+.dropdown-content a {
+    color: #333 !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+}
+
+.dropdown-content hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 0;
+}
+
+.dropdown-content a:hover {
+    background-color: #f4f6ea;
+    color: #74AC00 !important;
+}
+
+/* Magia: Mostrar el menú al pasar el mouse */
+.dropdown-container:hover .dropdown-content {
+    display: block;
+}
+
+/* ==================================================
+   MENÚ DESPLEGABLE DE USUARIO (100% REAL)
+   ================================================== */
+.user-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-subir-nav {
+    background-color: #74AC00;
+    color: white !important;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background 0.3s;
+}
+
+.btn-subir-nav:hover { background-color: #5a8500; }
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px; /* EL SECRETO: Crea un puente invisible para el ratón */
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.nav-avatar-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eaeaea;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%; /* Asegura que nazca pegado al botón */
+    background-color: #ffffff;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+    z-index: 1001;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #333 !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px !important;
+}
+
+.dropdown-content hr {
+    border: 0; border-top: 1px solid #eee; margin: 0;
+}
+
+.dropdown-content a:hover {
+    background-color: #f4f6ea;
+    color: #74AC00 !important;
+}
+
+/* Mostrar al hacer hover */
+.dropdown-container:hover .dropdown-content {
+    display: block;
 }
