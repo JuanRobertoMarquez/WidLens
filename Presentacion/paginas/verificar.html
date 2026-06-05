@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificando Cuenta - WildLens</title>
+    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/recuperacion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="reset-container" style="text-align: center;">
+        
+        <div id="mensaje-estado">
+            <h2><i class="fas fa-spinner fa-spin"></i> Verificando tu cuenta...</h2>
+            <p>Por favor, espera un momento mientras validamos tu enlace.</p>
+        </div>
+        
+        <div class="button-group" style="margin-top: 20px; display: none;" id="btn-login-container">
+            <button class="btn btn-submit" onclick="window.location.href='login.html'">Ir a Iniciar Sesión</button>
+        </div>
+        
+    </div>
+
+    <script src="../../Negocio/src/presentacion/verificar.js"></script>
+</body>
+</html>

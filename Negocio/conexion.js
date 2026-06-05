@@ -4,6 +4,9 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs'); // Herramienta nativa para borrar archivos físicos
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors()); 
@@ -188,37 +191,92 @@ app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, r
     });
 });
 
-// --- RUTA: REGISTRO DE USUARIO ---
-app.post('/api/registro', (req, res) => {
+// --- RUTA: REGISTRO DE USUARIO (Con envío de correo de verificación) ---
+app.post('/api/registro', async (req, res) => {
     const { nombre, apellido, correo, contrasenia } = req.body;
 
+    // 1. Verificamos si el correo ya existe
     const verificarSql = "SELECT * FROM Usuarios WHERE correo = ?";
-    db.query(verificarSql, [correo], (err, filas) => {
+    db.query(verificarSql, [correo], async (err, filas) => {
         if (err) return res.status(500).json({ error: "Error interno del servidor" });
         if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
 
-        const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia) VALUES (?, ?, ?, ?)";
-        db.query(insertarSql, [nombre, apellido, correo, contrasenia], (err, resultado) => {
-            if (err) return res.status(500).json({ error: "No se pudo crear la cuenta." });
-            res.status(201).json({ mensaje: "¡Cuenta creada exitosamente!" });
-        });
+        try {
+            // 2. Encriptamos la contraseña
+            const saltRounds = 10;
+            const contraseniaEncriptada = await bcrypt.hash(contrasenia, saltRounds);
+            
+            // 3. Generamos el token de verificación
+            const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+
+            // 4. Guardamos en la base de datos (cuenta_verificada es FALSE por defecto)
+            const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion) VALUES (?, ?, ?, ?, ?)";
+            db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], (errInsert, resultado) => {
+                if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
+
+                // 5. Preparamos y enviamos el correo
+                const enlaceVerificacion = `http://127.0.0.1:5500/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
+                
+                const opcionesCorreo = {
+                    from: '"Equipo WildLens" <tu_correo@gmail.com>', // Cambia por el correo que usas en Nodemailer
+                    to: correo,
+                    subject: '🌿 Verifica tu cuenta de WildLens',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
+                            <h2 style="color: #2B7055;">¡Bienvenido a WildLens, ${nombre}!</h2>
+                            <p>Gracias por unirte a nuestra red de guardianes. Para poder iniciar sesión, necesitas verificar tu correo electrónico haciendo clic en el siguiente botón:</p>
+                            <a href="${enlaceVerificacion}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0;">Verificar mi cuenta</a>
+                            <p style="font-size: 12px; color: #999;">Si no creaste esta cuenta, puedes ignorar este mensaje.</p>
+                        </div>
+                    `
+                };
+
+                transporter.sendMail(opcionesCorreo, (errorCorreo) => {
+                    if (errorCorreo) console.error("Error enviando correo de verificación:", errorCorreo);
+                });
+
+                res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
+            });
+        } catch (errorHash) {
+            res.status(500).json({ error: "Error de seguridad al procesar la cuenta." });
+        }
     });
 });
 
-// RUTA DE LOGIN REAL
+// --- RUTA DE LOGIN REAL (Actualizada con Bcrypt) ---
 app.post('/api/login', (req, res) => {
     const { correo, contrasenia } = req.body;
 
-    // Buscamos al usuario en la BD (En un futuro usarás bcrypt para la contraseña)
-    const sql = `SELECT id_usuario, nombre, avatar FROM Usuarios WHERE correo = ? AND contrasenia = ?`;
+    // 1. Buscamos al usuario SOLO por el correo y traemos su contraseña encriptada
+    const sql = `SELECT id_usuario, nombre, avatar, contrasenia AS hashGuardado, cuenta_verificada FROM Usuarios WHERE correo = ?`;
     
-    db.query(sql, [correo, contrasenia], (err, result) => {
+    db.query(sql, [correo], async (err, result) => {
         if (err) return res.status(500).json({ error: "Error en el servidor" });
         
         if (result.length > 0) {
-            // ¡El usuario existe y la contraseña es correcta!
-            res.json({ exito: true, usuario: result[0] });
+            const usuario = result[0];
+
+            if (!usuario.cuenta_verificada) {
+                return res.status(401).json({ exito: false, mensaje: "Debes verificar tu correo antes de iniciar sesión." });
+            }
+            
+            try {
+                // 2. Comparamos la contraseña que escribió con el hash de la BD
+                const coincide = await bcrypt.compare(contrasenia, usuario.hashGuardado);
+
+                if (coincide) {
+                    // 3. ¡Son iguales! Quitamos la contraseña de los datos por seguridad antes de responder
+                    delete usuario.hashGuardado;
+                    res.json({ exito: true, usuario: usuario });
+                } else {
+                    res.status(401).json({ exito: false, mensaje: "Correo o contraseña incorrectos" });
+                }
+            } catch (errorHash) {
+                console.error("Error al comparar contraseñas:", errorHash);
+                res.status(500).json({ error: "Error interno procesando la seguridad" });
+            }
         } else {
+            // El correo no existe
             res.status(401).json({ exito: false, mensaje: "Correo o contraseña incorrectos" });
         }
     });
@@ -331,6 +389,120 @@ app.get('/api/mis-observaciones/:id', (req, res) => {
                 },
                 observaciones: resultObs
             });
+        });
+    });
+});
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'juanrobertomarquez1@gmail.com', // El correo de WildLens
+        pass: 'dhnlfrmxreynktds' 
+    }
+});
+
+// --- RUTA: SOLICITAR RECUPERACIÓN DE CONTRASEÑA ---
+app.post('/api/recuperar-password', (req, res) => {
+    const { correo } = req.body;
+
+    const sqlBuscar = `SELECT id_usuario, nombre FROM Usuarios WHERE correo = ? LIMIT 1`;
+    db.query(sqlBuscar, [correo], (err, result) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        
+        if (result.length > 0) {
+            const usuario = result[0];
+            const tokenReset = crypto.randomBytes(32).toString('hex');
+            
+            // Guardar el token en la tabla Usuarios con expiración de 1 hora
+            const sqlUpdate = `UPDATE Usuarios SET token_recuperacion = ?, expiracion_token = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE correo = ?`;
+            
+            db.query(sqlUpdate, [tokenReset, correo], (errUpdate) => {
+                if (errUpdate) return console.error("Error guardando token:", errUpdate);
+
+                    const enlaceReset = `http://127.0.0.1:5500/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
+
+                const opcionesCorreo = {
+                    from: '"Equipo WildLens" <juanrobertomarquez1@gmail.com>',
+                    to: correo,
+                    subject: '🌿 Recupera tu contraseña de WildLens',
+                    html: `
+                        <h2>¡Hola, ${usuario.nombre}!</h2>
+                        <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
+                        <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Restablecer Contraseña</a>
+                    `
+                };
+
+                transporter.sendMail(opcionesCorreo);
+            });
+        }
+        // Siempre respondemos éxito por seguridad
+        res.json({ exito: true, mensaje: "Si el correo existe, enviamos un enlace de recuperación." });
+    });
+});
+
+// --- RUTA: RESTABLECER LA CONTRASEÑA ---
+app.post('/api/restablecer-password', async (req, res) => {
+    const { token, nuevaContrasenia } = req.body;
+
+    // Buscamos a un usuario que tenga ese token y que no haya expirado
+    const sqlBuscar = `SELECT id_usuario FROM Usuarios WHERE token_recuperacion = ? AND expiracion_token > NOW() LIMIT 1`;
+    
+    db.query(sqlBuscar, [token], async (err, result) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        
+        if (result.length === 0) {
+            return res.status(400).json({ error: "El enlace es inválido o ha expirado." });
+        }
+
+        const idUsuario = result[0].id_usuario;
+        
+        try {
+            const saltRounds = 10;
+            const contraseniaEncriptada = await bcrypt.hash(nuevaContrasenia, saltRounds);
+
+            // Actualizamos la contraseña y limpiamos los tokens de recuperación
+            const sqlUpdate = `UPDATE Usuarios SET contrasenia = ?, token_recuperacion = NULL, expiracion_token = NULL WHERE id_usuario = ?`;
+            
+            db.query(sqlUpdate, [contraseniaEncriptada, idUsuario], (errUpdate) => {
+                if (errUpdate) return res.status(500).json({ error: "No se pudo actualizar la contraseña." });
+                res.status(200).json({ mensaje: "Contraseña actualizada correctamente." });
+            });
+        } catch (errorHash) {
+            res.status(500).json({ error: "Error al procesar la contraseña." });
+        }
+    });
+});
+
+// --- RUTA: VERIFICAR CUENTA ---
+app.get('/api/verificar-cuenta', (req, res) => {
+    const token = req.query.token;
+
+    if (!token) return res.status(400).json({ error: "Token no proporcionado" });
+
+    // Ahora pedimos también el estado de la cuenta
+    const sqlBuscar = `SELECT id_usuario, cuenta_verificada FROM Usuarios WHERE token_verificacion = ? LIMIT 1`;
+    
+    db.query(sqlBuscar, [token], (err, result) => {
+        if (err) return res.status(500).json({ error: "Error en el servidor" });
+        
+        if (result.length === 0) {
+            return res.status(400).json({ error: "El enlace es inválido o no existe." });
+        }
+
+        const usuario = result[0];
+
+        // Si ya estaba verificada, le avisamos al frontend sin marcar error
+        if (usuario.cuenta_verificada) {
+            return res.status(200).json({ mensaje: "Tu cuenta ya estaba verificada previamente.", yaVerificada: true });
+        }
+
+        // Si no estaba verificada, la activamos (Nota: Ya no borramos el token)
+        const sqlUpdate = `UPDATE Usuarios SET cuenta_verificada = TRUE WHERE id_usuario = ?`;
+        
+        db.query(sqlUpdate, [usuario.id_usuario], (errUpdate) => {
+            if (errUpdate) return res.status(500).json({ error: "No se pudo verificar la cuenta." });
+            
+            res.status(200).json({ mensaje: "¡Tu cuenta ha sido verificada con éxito!" });
         });
     });
 });

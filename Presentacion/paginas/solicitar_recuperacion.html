@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - WildLens</title>
+    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/recuperacion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="reset-container">
+        <form class="solicitud-form">
+            <h2><i class="fas fa-envelope"></i> Recuperar Acceso</h2>
+            <p>Ingresa tu correo asociado a WildLens y te enviaremos un enlace para restablecer tu contraseña.</p>
+
+            <div class="input-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="window.location.href='login.html'">Regresar al Login</button>
+                <button type="submit" class="btn btn-submit">Enviar enlace</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="/Negocio/src/presentacion/solicitar_recuperacion.js"></script>
+</body>
+</html>
