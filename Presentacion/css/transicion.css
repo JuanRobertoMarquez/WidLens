@@ -1,44 +1,32 @@
 body {
-    animation: fadeInPage 1.5s ease-in-out;
+    animation: aparecerSuave 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    opacity: 0; /* Inicia invisible */
 }
 
-@keyframes fadeInPage {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes aparecerSuave {
+    0% {
+        opacity: 0;
+        transform: translateY(15px); /* Entra ligeramente desde abajo */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Contenedor del patrón de transición (imagen del ajolote) */
-.transition-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    /* CAMBIO: Fondo sólido color crema para que el ajolote no compita visualmente con la página de atrás */
-    background-color: #f5f3ec; 
-    
-    /* Configuración de la imagen repartida */
-    background-image: url('Icono.png');
-    background-repeat: repeat; 
-    
-    /* CAMBIO: Ajolotes un poco más grandes (de 60px a 80px) */
-    background-size: 80px;    
-    background-position: center;
-    
-    /* Capas y visibilidad inicial */
-    z-index: 10000; 
-    visibility: hidden;
+.animar-oculto {
     opacity: 0;
-    pointer-events: none; 
-    
-    /* CAMBIO: Animación mucho más lenta (1 segundo) */
-    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+    transform: translateY(40px) scale(0.98); /* Ligeramente abajo y más pequeño */
+    transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Clase para mostrar la transición */
-.transition-overlay.is-visible {
-    visibility: visible;
+/* Clase que JS agregará cuando el elemento entre en pantalla */
+.animar-visible {
     opacity: 1;
-    pointer-events: auto; 
+    transform: translateY(0) scale(1);
 }
+
+/* Opcional: Retrasos en cascada para cuando hay varias tarjetas juntas (ej. Top Guardianes) */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }

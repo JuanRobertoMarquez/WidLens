@@ -507,8 +507,38 @@ app.get('/api/verificar-cuenta', (req, res) => {
     });
 });
 
+// --- RUTA: IMAGEN ALEATORIA PARA EL LOGIN ---
+app.get('/api/login-imagen-aleatoria', (req, res) => {
+    // Unimos Observaciones, Usuarios y Especies
+    const sql = `
+        SELECT 
+            o.foto, 
+            e.nombre_comun AS nombre_comun, 
+            u.nombre AS nombre_usuario, 
+            u.avatar 
+        FROM Observaciones o 
+        JOIN Usuarios u ON o.id_usuario = u.id_usuario 
+        LEFT JOIN Especies e ON o.id_especie = e.id_especie
+        ORDER BY RAND() LIMIT 1
+    `;
+    
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("Error buscando imagen aleatoria:", err);
+            return res.status(500).json({ error: "Error en el servidor" });
+        }
+        
+        if (result.length > 0) {
+            res.json(result[0]); // Devolvemos la foto ganadora
+        } else {
+            res.status(404).json({ error: "Aún no hay observaciones en la base de datos" });
+        }
+    });
+});
+
 // ARRANCAR EL SERVIDOR
-const PUERTO = 3000;
+// ARRANCAR EL SERVIDOR
+const PUERTO = process.env.PORT || 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor de WildLens corriendo en el puerto ${PUERTO}`);
 });

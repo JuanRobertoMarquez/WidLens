@@ -1,3 +1,12 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap');
+
+:root {
+    --dark-green: #2B7055;
+    --text-dark: #222222;
+    --text-light: #555555;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,138 +14,190 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-image: linear-gradient(
-        to bottom left,
-        #f5f3ec,
-        #e68332
-    );
-    background-color: #F0D5A8;  
+    font-family: 'Open Sans', sans-serif;
+    /* Fondo Inmersivo */
+    background-image: linear-gradient(rgba(18, 43, 23, 0.75), rgba(18, 43, 23, 0.85)), url('https://cdn.pixabay.com/photo/2025/03/31/06/37/ai-generated-9504113_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 20px; 
+    padding: 20px;
+    position: relative; /* Necesario para que el logo se posicione bien */
 }
+
+/* =========================================
+   LOGO SUPERIOR IZQUIERDO
+========================================= */
+.branding-logo {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #ffffff; 
+    font-family: 'Lora', serif;
+    font-size: 24px;
+    font-weight: 700;
+    z-index: 100;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4); /* Sombrita para que se lea perfecto sobre la foto */
+    transition: transform 0.3s ease;
+}
+
+.branding-logo:hover {
+    transform: scale(1.05); /* Efecto de latido al pasar el mouse */
+}
+
+.branding-logo img {
+    height: 35px; /* Por si decides usar tu logo en PNG */
+    width: auto;
+}
+
+/* =========================================
+   TARJETA CENTRAL (Efecto Vidrio)
+========================================= */
 .reset-container {
+    background-color: rgba(255, 255, 255, 0.92); 
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    
+    padding: 50px 45px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); 
     width: 100%;
-    max-width: 450px;
-}
-
-.reset-form {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-width: 460px;
     text-align: center;
+    
+    /* Animación de entrada suave */
+    animation: flotarArriba 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    transform: translateY(40px);
+    opacity: 0;
 }
 
-.reset-form h2 {
-    margin-bottom: 10px;
-    color: #333;
-    font-size: 1.8em;
+@keyframes flotarArriba {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.reset-form p {
-    margin-bottom: 25px;
-    color: #666;
-    font-size: 0.95em;
-    line-height: 1.5;
+/* Títulos e iconos */
+.reset-container h2 {
+    font-family: 'Lora', serif;
+    color: var(--dark-green);
+    margin-bottom: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 }
 
-/* Grupo de entrada (Label + Input) */
+.reset-container p {
+    color: var(--text-light);
+    font-size: 15px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Cajas de texto */
 .input-group {
-    margin-bottom: 20px;
     text-align: left;
+    margin-bottom: 22px;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 8px;
     font-weight: 600;
-    color: #444;
-    font-size: 0.95em;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-size: 14px;
 }
 
 .input-group input {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 1em; /* 16px previene zoom en iOS */
-    transition: all 0.3s;
+    padding: 14px 16px;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px; 
+    font-size: 15px;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.3s ease;
+    background-color: #fcfcfc;
 }
 
 .input-group input:focus {
-    border-color: #FA8E9A; 
+    border-color: var(--dark-green);
+    background-color: #ffffff;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(250, 142, 154, 0.3);
+    box-shadow: 0 0 0 4px rgba(43, 112, 85, 0.15); 
 }
 
-/* ---------------------------------- */
-/* Botones (Nueva estructura) */
-/* ---------------------------------- */
+/* Botones */
 .button-group {
     display: flex;
-    gap: 15px; /* Espacio entre botones */
-    margin-top: 25px;
+    gap: 15px;
+    margin-top: 35px;
+    justify-content: center;
 }
 
 .btn {
-    flex: 1; /* Ambos botones ocupan el mismo ancho */
-    padding: 12px;
+    padding: 14px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px; 
+    font-size: 15px;
     cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.1s;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    transition: all 0.3s ease;
+    flex: 1; 
 }
 
-.btn:active {
-    transform: scale(0.98);
-}
-
-/* Estilo botón Continuar (Principal) */
 .btn-submit {
-    background-color: #65999A; 
-    color: white;
+    background-color: var(--dark-green);
+    color: #ffffff;
+    box-shadow: 0 6px 15px rgba(43, 112, 85, 0.3);
 }
 
 .btn-submit:hover {
-    background-color: #528081; 
+    background-color: #1e523e;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(43, 112, 85, 0.4);
 }
 
-/* Estilo botón Cancelar (Secundario) */
 .btn-cancel {
-    background-color: #e0e0e0;
-    color: #555;
+    background-color: #f0f0f0;
+    color: #444;
 }
 
 .btn-cancel:hover {
-    background-color: #d1d1d1;
+    background-color: #e0e0e0;
+    transform: translateY(-3px);
 }
 
-/* ---------------------------------- */
-/* Responsive (Móviles) */
-/* ---------------------------------- */
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
 @media (max-width: 480px) {
-    .reset-form {
-        padding: 30px 20px; /* Reducir padding interno */
+    .branding-logo {
+        top: 20px;
+        left: 20px;
+        font-size: 20px;
     }
 
-    .reset-form h2 {
-        font-size: 1.5em;
+    .reset-container {
+        padding: 40px 25px;
+        margin-top: 40px; /* Da espacio para que el logo no choque con la tarjeta en celulares */
     }
 
-    /* En celulares pequeños, apilamos los botones para que sean más fáciles de tocar */
     .button-group {
-        flex-direction: column-reverse; /* Cancelar abajo, Continuar arriba */
-        gap: 10px;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 14px; /* Botones un poco más altos para dedos táctiles */
+        flex-direction: column;
     }
 }

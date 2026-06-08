@@ -3,56 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta</title>
+    <title>Crear cuenta - WildLens</title>
     <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="/Presentacion/css/crear-cuenta.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/Presentacion/css/transicion.css">
+    <link rel="stylesheet" href="/Presentacion/css/login.css">
+    <link rel="stylesheet" href="/Presentacion/css/estilo_index.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        /* Pequeños ajustes específicos para los checkboxes largos del registro */
+        .registro-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+        }
+        .registro-checkbox input[type="checkbox"] {
+            margin-top: 3px;
+        }
+        .form-section {
+            overflow-y: auto; /* Por si la pantalla es chica y el formulario es largo */
+        }
+    </style>
 </head>
 <body>
-    <div class="registro-container">
-        <form class="registro-form">
-            <h2>Crear Nueva Cuenta</h2>
-            <p>Ingresa tus datos para registrarte.</p>
 
-            <div class="input-group">
-                <label for="nombre">Nombre(s)</label>
-                <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Antonio">
+    <header class="navbar">
+        <div class="nav-content">
+            
+            <div class="nav-left">
+                <div class="logo-container">
+                    <img src="/Presentacion/images/WildLens.png" alt="Logo WildLens" class="logo-logo">
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="../Index.html" class="active">Home</a>
+                    <a href="#">Comunidad ⌵</a>
+                    <a href="explorador.html">Explorar ⌵</a>
+                </nav>
             </div>
+        
+            <div class="nav-right">
+                <div id="menu-visitante">
+                    <a href="login.html">Acceder</a> o 
+                    <a href="crear-cuenta.html">Crear una cuenta</a>       
+                </div>
+            </div>
+            
+        </div>
+    </header>
 
-            <div class="input-group">
-                <label for="apellido">Apellidos</label>
-                <input type="text" id="apellido" name="apellido" required placeholder="Ej: Pérez García">
+    <div class="split-layout">
+        
+        <div class="image-section" id="dynamic-bg">
+            <div class="photo-credit">
+                <img src="https://ui-avatars.com/api/?name=W&background=2B7055&color=fff" alt="Avatar" class="credit-avatar" id="bg-avatar">
+                <div class="credit-text">
+                    <p><em id="bg-especie">Cargando especie...</em> observado por</p>
+                    <h4 id="bg-autor">Cargando guardián...</h4>
+                    <p id="bg-lugar" style="display: none;">en la naturaleza</p>
+                </div>
             </div>
+        </div>
 
-            <div class="input-group">
-                <label for="correo">Correo Electrónico</label>
-                <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
-            </div>
+        <div class="form-section">
+            <div class="form-container">
+                <div class="logo-container">
+                    <a href="../Index.html" style="text-decoration: none;">
+                        <h1 style="color: #2B7055; font-family: 'Lora', serif;">🌿 WildLens</h1>
+                    </a>
+                </div>
 
-            <div class="input-group">
-                <label for="contrasenia">Contraseña</label>
-                <input type="password" id="contrasenia" name="contrasenia" required placeholder="Mínimo 8 caracteres">
-            </div>
+                <h2 style="font-size: 22px;">¡Únete a la red de guardianes!</h2>
 
-            <div class="input-group">
-                <label for="confirm-contrasenia">Confirmar Contraseña</label>
-                <input type="password" id="confirm-contrasenia" required placeholder="Repite la contraseña">
-            </div>
+                <form id="registroForm">
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="nombre" placeholder="Nombre(s)" size="50" maxlength="50" required>
+                    </div>
 
-            <div class="button-group">
-                <button type="submit" class="button-continuar">Continuar</button>
-                <button type="button" class="button-cancelar" onclick="history.back()">Cancelar</button>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="apellido" placeholder="Apellidos" size="50" maxlength="50" required>
+                    </div>
+
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="correo" placeholder="Correo electrónico" size="100" maxlength="100" required>
+                    </div>
+
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="contrasenia" placeholder="Contraseña" required maxlength="8">
+                    </div>
+
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirmar_contrasenia" placeholder="Confirmar contraseña" required maxlength="8">
+                    </div>
+
+                    <div class="registro-checkbox">
+                        <input type="checkbox" id="licencia" required>
+                        <label for="licencia">Sí, dar licencia a científicos para que puedan utilizar mis fotografías, sonidos y observaciones en WildLens.</label>
+                    </div>
+
+                    <div class="registro-checkbox">
+                        <input type="checkbox" id="terminos" required>
+                        <label for="terminos">Acepto los Términos de Servicio y la Política de Privacidad.</label>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="btn-submit">Crear cuenta</button>
+                    
+                    <div class="footer-links">
+                        <p>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+
     </div>
 
-    <div class="footer-links">
-        <a href="login.html">Ya tengo una cuenta</a>
-    </div>
+    <script>
+        // =========================================================
+        // 1. CARGAR FOTO DINÁMICA DE FONDO (Reutilizamos la misma ruta)
+        // =========================================================
+        async function cargarImagenFondo() {
+            try {
+                const respuesta = await fetch('http://127.0.0.1:3000/api/login-imagen-aleatoria', {
+                    cache: 'no-store' 
+                });
+                
+                if (respuesta.ok) {
+                    const datos = await respuesta.json();
+                    document.getElementById('dynamic-bg').style.backgroundImage = `url('http://127.0.0.1:3000${datos.foto}')`;
+                    
+                    // Aquí asumo que ya arreglaste el nombre de la columna en tu backend (ej. especie_nombre)
+                    document.getElementById('bg-especie').innerText = datos.especie_nombre || 'Especie por identificar';
+                    document.getElementById('bg-autor').innerText = datos.nombre_usuario;
+                    
+                    const avatarImg = document.getElementById('bg-avatar');
+                    if (datos.avatar) {
+                        avatarImg.src = `http://127.0.0.1:3000${datos.avatar}`;
+                    } else {
+                        avatarImg.src = `https://ui-avatars.com/api/?name=${datos.nombre_usuario}&background=2B7055&color=fff`;
+                    }
+                }
+            } catch (error) {
+                console.error("Error al cargar imagen dinámica.", error);
+            }
+        }
 
-    <script src="/Negocio/src/presentacion/crear_cuenta.js"></script>
+        cargarImagenFondo();
 
+        // =========================================================
+        // 2. LÓGICA DE REGISTRO
+        // =========================================================
+        const registroForm = document.getElementById('registroForm');
+
+        registroForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const apellido = document.getElementById('apellido').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const contrasenia = document.getElementById('contrasenia').value;
+            const confirmarContrasenia = document.getElementById('confirmar_contrasenia').value;
+
+            // Validar que las contraseñas coincidan
+            if (contrasenia !== confirmarContrasenia) {
+                Swal.fire({
+                    title: 'Las contraseñas no coinciden',
+                    text: 'Por favor, asegúrate de escribir la misma contraseña en ambos campos.',
+                    icon: 'warning',
+                    confirmButtonColor: '#2B7055'
+                });
+                return;
+            }
+
+            // Cambiar el texto del botón mientras carga
+            const btnSubmit = document.getElementById('btn-submit');
+            const textoOriginal = btnSubmit.innerText;
+            btnSubmit.innerText = 'Creando cuenta...';
+            btnSubmit.disabled = true;
+
+            try {
+                // Hacemos la petición a la ruta que envía el correo de verificación
+                const respuesta = await fetch('http://127.0.0.1:3000/api/registro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, apellido, correo, contrasenia })
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    // ¡Éxito! Lo mandamos a la pantalla del sobrecito
+                    window.location.href = 'esperando_verificacion.html'; 
+                } else {
+                    // Error (ej. El correo ya existe)
+                    Swal.fire({
+                        title: 'Ups...',
+                        text: resultado.error || 'No se pudo crear la cuenta.',
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                    btnSubmit.innerText = textoOriginal;
+                    btnSubmit.disabled = false;
+                }
+            } catch (error) {
+                console.error("Error de red:", error);
+                Swal.fire({
+                    title: 'Error de conexión',
+                    text: 'Asegúrate de que el servidor esté encendido.',
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+                btnSubmit.innerText = textoOriginal;
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
