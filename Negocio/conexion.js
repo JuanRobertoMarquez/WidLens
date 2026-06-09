@@ -202,7 +202,7 @@ app.post('/api/registro', async (req, res) => {
             db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], (errInsert, resultado) => {
                 if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
 
-                const enlaceVerificacion = `http://127.0.0.1:5500/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
+                const enlaceVerificacion = `http://wildlens.free.nf/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
                 
                 const opcionesCorreo = {
                     from: '"Equipo WildLens" <juanrobertomarquez1@gmail.com>', 
@@ -394,8 +394,8 @@ app.post('/api/recuperar-password', (req, res) => {
             db.query(sqlUpdate, [tokenReset, correo], (errUpdate) => {
                 if (errUpdate) return console.error("Error guardando token:", errUpdate);
 
-                // IMPORTANTE: Cuando subas el frontend a InfinityFree, tendrás que cambiar este http://127.0.0.1:5500 por la URL de InfinityFree
-                const enlaceReset = `http://127.0.0.1:5500/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
+                // IMPORTANTE: Cuando subas el frontend a InfinityFree, tendrás que cambiar este http://wildlens.free.nf por la URL de InfinityFree
+                const enlaceReset = `http://wildlens.free.nf/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
 
                 const opcionesCorreo = {
                     from: '"Equipo WildLens" <juanrobertomarquez1@gmail.com>',
