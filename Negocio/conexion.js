@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs'); 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
@@ -13,7 +14,7 @@ const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 
-// --- 1. CONFIGURACIÓN DE CLOUDINARY (DEBE IR ANTES QUE EL STORAGE) ---
+// --- 1. CONFIGURACIÓN DE CLOUDINARY ---
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -21,8 +22,6 @@ cloudinary.config({
 });
 
 // --- 2. CONFIGURACIÓN DE STORAGE (MULTER + CLOUDINARY) ---
-
-// Storage para Avistamientos
 const storageAvistamientos = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -32,7 +31,6 @@ const storageAvistamientos = new CloudinaryStorage({
 });
 const uploadAvistamientos = multer({ storage: storageAvistamientos });
 
-// Storage para Perfiles (Corregido para usar Cloudinary en lugar de disco local)
 const storagePerfiles = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
@@ -41,7 +39,6 @@ const storagePerfiles = new CloudinaryStorage({
     },
 });
 const uploadPerfiles = multer({ storage: storagePerfiles });
-
 
 // --- 3. CONEXIÓN A LA BASE DE DATOS ---
 const db = mysql.createConnection({
@@ -64,13 +61,23 @@ db.connect((error) => {
     console.log('✅ Conectado exitosamente a la base de datos MySQL');
 });
 
-// Directorio de datos locales (opcional si aún guardas otros estáticos ahí)
 app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
 
+// --- 4. CONFIGURACIÓN DE CORREO (NODEMAILER) ---
+// Aquí ya está tu nueva contraseña lista y configurada para Render
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'juanrobertomarquez1@gmail.com', 
+        pass: 'pcxrjissfuunxpvf' 
+    },
+    tls: {
+        rejectUnauthorized: false 
+    }
+});
 
-// --- 4. RUTAS DEL API (ENDPOINTS) ---
+// --- 5. RUTAS DE LA API ---
 
-// RUTA PRINCIPAL (Para evitar el Cannot GET /)
 app.get('/', (req, res) => {
     res.send('<h1>¡El Backend de WildLens está en línea! 🌿</h1><p>Las rutas de la API están funcionando correctamente.</p>');
 });
@@ -184,8 +191,6 @@ app.get('/api/top-guardianes', (req, res) => {
 
 app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, res) => {
     const { id_usuario, id_especie, latitud, longitud, fecha_avistamiento } = req.body;
-    
-    // Cloudinary devuelve la URL segura en req.file.path
     const rutaFoto = req.file ? req.file.path : null;    
     
     if (!rutaFoto) {
@@ -202,34 +207,6 @@ app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, r
     });
 });
 
-// --- AUTENTICACIÓN Y USUARIOS ---
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'juanrobertomarquez1@gmail.com', 
-        pass: 'pcxrjissfuunxpvf' // Reemplaza esto con los 16 caracteres nuevos
-    },
-    tls: {
-        rejectUnauthorized: false // Esto evita bloqueos de seguridad por certificados en Render
-    }
-});
-
-// --- CONFIGURACIÓN DE CORREO (NODEMAILER) ---
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'juanrobertomarquez1@gmail.com', 
-        // Tu nueva contraseña de aplicación (sin espacios)
-        pass: 'pcxrjissfuunxpvf' 
-    },
-    tls: {
-        // Evita bloqueos de seguridad por certificados en servidores como Render
-        rejectUnauthorized: false 
-    }
-});
-
-// --- RUTA DE REGISTRO ---
 app.post('/api/registro', async (req, res) => {
     const { nombre, apellido, correo, contrasenia } = req.body;
 
@@ -239,17 +216,14 @@ app.post('/api/registro', async (req, res) => {
         if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
 
         try {
-            // 1. Encriptar contraseña y generar token
             const saltRounds = 10;
             const contraseniaEncriptada = await bcrypt.hash(contrasenia, saltRounds);
             const tokenVerificacion = crypto.randomBytes(32).toString('hex');
 
-            // 2. Insertar usuario en la base de datos
             const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion) VALUES (?, ?, ?, ?, ?)";
             db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], async (errInsert, resultado) => {
                 if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
 
-                // 3. Preparar el correo
                 const enlaceVerificacion = `http://wildlens.free.nf/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
                 
                 const opcionesCorreo = {
@@ -266,29 +240,20 @@ app.post('/api/registro', async (req, res) => {
                     `
                 };
 
-                // 4. Intentar enviar el correo
                 try {
-                    // Usamos await para que Node.js NO avance hasta que Gmail confirme el envío
                     await transporter.sendMail(opcionesCorreo);
                     res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
                 } catch (errorCorreo) {
                     console.error("❌ Error enviando correo:", errorCorreo);
-                    
-                    // ROLLBACK: Borramos al usuario de la BD porque el correo falló
                     db.query("DELETE FROM Usuarios WHERE correo = ?", [correo]);
-                    
                     res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
                 }
             });
-
         } catch (errorHash) {
-            // Este es el catch que hacía falta para cerrar el bloque try de arriba
-            console.error("Error procesando la seguridad:", errorHash);
             res.status(500).json({ error: "Error de seguridad al procesar la cuenta." });
         }
     });
 });
-
 
 app.post('/api/login', (req, res) => {
     const { correo, contrasenia } = req.body;
@@ -352,23 +317,18 @@ app.get('/api/perfil/:id', (req, res) => {
     });
 });
 
-// Ruta de editar perfil modificada para Cloudinary
 app.put('/api/editar-perfil/:id', uploadPerfiles.single('avatar'), (req, res) => {
     const idUsuario = req.params.id;
     const { nombre, apellido, correo } = req.body;
-    
-    // Cloudinary devuelve la URL directamente en req.file.path
     const rutaAvatarNuevo = req.file ? req.file.path : null;
 
     if (rutaAvatarNuevo) {
-        // Como Cloudinary maneja los archivos, actualizamos directamente la base de datos con la nueva URL
         const sqlUpdate = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ?, avatar = ? WHERE id_usuario = ?";
         db.query(sqlUpdate, [nombre, apellido, correo, rutaAvatarNuevo, idUsuario], (err, resultado) => {
             if (err) return res.status(500).json({ error: "Error en la base de datos al actualizar avatar" });
             res.status(200).json({ mensaje: "Perfil actualizado con éxito", nuevoAvatar: rutaAvatarNuevo });
         });
     } else {
-        // Si no subió foto, solo actualizamos los datos de texto
         const sql = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ? WHERE id_usuario = ?";
         db.query(sql, [nombre, apellido, correo, idUsuario], (err, resultado) => {
             if (err) return res.status(500).json({ error: "Error en la base de datos" });
@@ -444,9 +404,11 @@ app.post('/api/recuperar-password', (req, res) => {
                     to: correo,
                     subject: '🌿 Recupera tu contraseña de WildLens',
                     html: `
-                        <h2>¡Hola, ${usuario.nombre}!</h2>
-                        <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
-                        <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Restablecer Contraseña</a>
+                        <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
+                            <h2 style="color: #2B7055;">¡Hola, ${usuario.nombre}!</h2>
+                            <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
+                            <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Restablecer Contraseña</a>
+                        </div>
                     `
                 };
 
@@ -544,7 +506,6 @@ app.get('/api/login-imagen-aleatoria', (req, res) => {
     });
 });
 
-// ARRANCAR EL SERVIDOR
 const PUERTO = process.env.PORT || 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor de WildLens corriendo en el puerto ${PUERTO}`);
