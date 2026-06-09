@@ -381,7 +381,7 @@ app.get('/api/mis-observaciones/:id', (req, res) => {
     });
 });
 
-app.post('/api/recuperar-password', (req, res) => {
+app.post('/api/recuperar-password', async (req, res) => {
     const { correo } = req.body;
 
     const sqlBuscar = `SELECT id_usuario, nombre FROM Usuarios WHERE correo = ? LIMIT 1`;
@@ -394,10 +394,17 @@ app.post('/api/recuperar-password', (req, res) => {
             
             const sqlUpdate = `UPDATE Usuarios SET token_recuperacion = ?, expiracion_token = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE correo = ?`;
             
-            db.query(sqlUpdate, [tokenReset, correo], (errUpdate) => {
+            db.query(sqlUpdate, [tokenReset, correo], async (errUpdate) => {
                 if (errUpdate) return console.error("Error guardando token:", errUpdate);
 
+                // ⚠️ IMPORTANTE PARA TUS PRUEBAS ⚠️
+                // Si estás probando en tu computadora, comenta la línea de InfinityFree y descomenta la de 127.0.0.1
+                
+                // PARA PRODUCCIÓN (Cuando subas tus archivos a InfinityFree):
                 const enlaceReset = `http://wildlens.free.nf/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
+                
+                // PARA PRUEBAS LOCALES (Live Server en tu compu):
+                // const enlaceReset = `http://127.0.0.1:5500/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
 
                 const opcionesCorreo = {
                     from: '"Equipo WildLens" <juanrobertomarquez1@gmail.com>',
@@ -406,15 +413,25 @@ app.post('/api/recuperar-password', (req, res) => {
                     html: `
                         <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
                             <h2 style="color: #2B7055;">¡Hola, ${usuario.nombre}!</h2>
-                            <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
-                            <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Restablecer Contraseña</a>
+                            <p>Recibimos una solicitud para restablecer tu contraseña.</p>
+                            <p>Haz clic en el siguiente botón para crear una nueva:</p>
+                            <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0;">Restablecer Contraseña</a>
+                            <p style="font-size: 12px; color: #999;">Si no solicitaste este cambio, puedes ignorar este mensaje. El enlace expirará en 1 hora.</p>
                         </div>
                     `
                 };
 
-                transporter.sendMail(opcionesCorreo);
+                try {
+                    // Ahora sí, Node.js esperará obligatoriamente a que Google envíe el correo
+                    await transporter.sendMail(opcionesCorreo);
+                    console.log("✅ Correo de recuperación enviado con éxito a:", correo);
+                } catch (errorCorreo) {
+                    console.error("❌ Error enviando correo de recuperación:", errorCorreo);
+                }
             });
         }
+        
+        // Siempre se responde éxito, exista o no el correo (esto evita que los hackers adivinen qué correos están registrados)
         res.json({ exito: true, mensaje: "Si el correo existe, enviamos un enlace de recuperación." });
     });
 });

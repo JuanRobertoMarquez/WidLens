@@ -11,55 +11,27 @@
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="nav-content">
-            <div class="nav-left">
-                <div class="logo-container">
-                    <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo">
-                </div>
-                <nav class="nav-links">
-                    <a href="../index.html" class="active">Home</a>
-                    <a href="#">Comunidad ⌵</a>
-                    <a href="explorador.html">Explorar ⌵</a>
-                </nav>
+    <a href="../index.html" class="branding-logo">
+        <img src="../images/WildLens.png" alt="Logo WildLens">
+    </a>
+
+    <div class="reset-container">
+        <h2><i class="fas fa-lock"></i> Recuperar Acceso</h2>
+        <p>Ingresa tu correo asociado a WildLens y te enviaremos un enlace para restablecer tu contraseña.</p>
+
+        <form class="solicitud-form">
+            
+            <div class="input-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
             </div>
-            <div class="nav-right">
-                <div id="menu-visitante">
-                    <a href="login.html">Acceder</a> o 
-                    <a href="crear-cuenta.html">Crear una cuenta</a>       
-                </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-submit" id="btn-enviar">Enviar enlace</button>
+                <a href="login.html" class="btn btn-cancel" style="text-decoration: none; text-align: center; display: inline-block; line-height: 1.4;">Cancelar</a>
             </div>
-        </div>
-    </header>
-
-    <div class="split-layout">
-        <div class="image-section"></div>
-
-        <div class="form-section">
-            <div class="form-container">
-                <div class="logo-container">
-                    <a href="../index.html" style="text-decoration: none;">
-                        <h1 style="color: #2B7055; font-family: 'Lora', serif;">🌿 WildLens</h1>
-                    </a>
-                </div>
-
-                <h2 style="font-size: 24px;">Recuperar Acceso</h2>
-                <p style="color: #555; margin-bottom: 25px; font-size: 14px;">Ingresa tu correo asociado a WildLens y te enviaremos un enlace para restablecer tu contraseña.</p>
-
-                <form class="solicitud-form">
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="correo" name="correo" required placeholder="ejemplo@gmail.com">
-                    </div>
-
-                    <button type="submit" class="btn-primary" id="btn-enviar" style="margin-bottom: 15px;">Enviar enlace</button>
-                    
-                    <div class="footer-links">
-                        <p><a href="login.html">Regresar al Login</a></p>
-                    </div>
-                </form>
-            </div>
-        </div>
+            
+        </form>
     </div>
 
     <script src="../js/src/presentacion/solicitar_recuperacion.js"></script>
