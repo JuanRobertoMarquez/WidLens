@@ -133,13 +133,13 @@
         // =========================================================
         async function cargarImagenFondo() {
             try {
-                const respuesta = await fetch('http://127.0.0.1:3000/api/login-imagen-aleatoria', {
+                const respuesta = await fetch('https://widlens.onrender.com/api/login-imagen-aleatoria', {
                     cache: 'no-store' 
                 });
                 
                 if (respuesta.ok) {
                     const datos = await respuesta.json();
-                    document.getElementById('dynamic-bg').style.backgroundImage = `url('http://127.0.0.1:3000${datos.foto}')`;
+                    document.getElementById('dynamic-bg').style.backgroundImage = `url('https://widlens.onrender.com${datos.foto}')`;
                     
                     // Aquí asumo que ya arreglaste el nombre de la columna en tu backend (ej. especie_nombre)
                     document.getElementById('bg-especie').innerText = datos.especie_nombre || 'Especie por identificar';
@@ -147,7 +147,7 @@
                     
                     const avatarImg = document.getElementById('bg-avatar');
                     if (datos.avatar) {
-                        avatarImg.src = `http://127.0.0.1:3000${datos.avatar}`;
+                        avatarImg.src = `https://widlens.onrender.com${datos.avatar}`;
                     } else {
                         avatarImg.src = `https://ui-avatars.com/api/?name=${datos.nombre_usuario}&background=2B7055&color=fff`;
                     }
@@ -192,7 +192,7 @@
 
             try {
                 // Hacemos la petición a la ruta que envía el correo de verificación
-                const respuesta = await fetch('http://127.0.0.1:3000/api/registro', {
+                const respuesta = await fetch('https://widlens.onrender.com/api/registro', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, apellido, correo, contrasenia })
