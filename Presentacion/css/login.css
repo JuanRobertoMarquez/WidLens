@@ -9,8 +9,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    height: 100vh; 
-    overflow: hidden; 
+    min-height: 100vh; /* Cambiamos a min-height */
     background-color: #ffffff;
     margin: 0;
     padding: 0;
@@ -19,8 +18,9 @@ body {
 .split-layout {
     display: flex;
     width: 100%;
-    margin-top: 55px; /* Empuja el contenido debajo del navbar delgado */
-    height: calc(100vh - 55px); /* Matemáticas exactas: Pantalla completa menos el navbar */
+    margin-top: 55px; 
+    min-height: calc(100vh - 55px);
+    align-items: stretch; /* <-- 1. Añadimos esto para forzar que ambas mitades sean exactamente del mismo alto */
 }
 
 /* MITAD IZQUIERDA (Imagen) */
@@ -30,7 +30,7 @@ body {
     background-image: url('https://cdn.pixabay.com/photo/2025/03/31/06/37/ai-generated-9504113_1280.jpg');
     background-size: cover;
     background-position: center;
-    height: 100%; /* NUEVO: Obliga a la foto a estirarse hasta abajo */
+    /* height: 100%; <-- 2. ¡BORRAMOS ESTA LÍNEA! Es la culpable del error en la laptop */
 }
 
 /* El cintillo gris oscuro abajo para los créditos de la foto */
@@ -198,14 +198,22 @@ h2 {
 }
 
 /* Adaptación para celulares */
+/* Adaptación para celulares */
 @media (max-width: 768px) {
     .split-layout {
         flex-direction: column;
+        height: auto; /* Permite que el contenido crezca hacia abajo */
     }
+    
     .image-section {
-        display: none; /* Ocultamos la imagen en celular para que el login sea rápido y usable */
+        /* display: none; <-- Eliminado para que la foto regrese */
+        display: block;
+        height: 250px; /* Altura perfecta para que se vea el ajolote en el cel */
+        flex: none; /* Quita el comportamiento elástico del escritorio */
     }
+    
     .form-section {
-        height: 100vh;
+        height: auto; /* Deja que el formulario ocupe el espacio que necesite */
+        padding: 30px 20px;
     }
 }

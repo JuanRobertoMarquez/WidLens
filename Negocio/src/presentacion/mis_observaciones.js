@@ -112,3 +112,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+const btnCerrarSesion = document.getElementById('btn-cerrar-sesion');
+if(btnCerrarSesion) {
+    btnCerrarSesion.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('usuarioWildLens'); // Borramos los datos
+        window.location.href = 'login.html';
+    });
+}

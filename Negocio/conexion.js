@@ -208,10 +208,28 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'juanrobertomarquez1@gmail.com', 
-        pass: 'dhnlfrmxreynktds' 
+        pass: 'pcxrjissfuunxpvf' // Reemplaza esto con los 16 caracteres nuevos
+    },
+    tls: {
+        rejectUnauthorized: false // Esto evita bloqueos de seguridad por certificados en Render
     }
 });
 
+// --- CONFIGURACIÓN DE CORREO (NODEMAILER) ---
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'juanrobertomarquez1@gmail.com', 
+        // Tu nueva contraseña de aplicación (sin espacios)
+        pass: 'pcxrjissfuunxpvf' 
+    },
+    tls: {
+        // Evita bloqueos de seguridad por certificados en servidores como Render
+        rejectUnauthorized: false 
+    }
+});
+
+// --- RUTA DE REGISTRO ---
 app.post('/api/registro', async (req, res) => {
     const { nombre, apellido, correo, contrasenia } = req.body;
 
@@ -221,14 +239,17 @@ app.post('/api/registro', async (req, res) => {
         if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
 
         try {
+            // 1. Encriptar contraseña y generar token
             const saltRounds = 10;
             const contraseniaEncriptada = await bcrypt.hash(contrasenia, saltRounds);
             const tokenVerificacion = crypto.randomBytes(32).toString('hex');
 
+            // 2. Insertar usuario en la base de datos
             const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion) VALUES (?, ?, ?, ?, ?)";
-            db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], (errInsert, resultado) => {
+            db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], async (errInsert, resultado) => {
                 if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
 
+                // 3. Preparar el correo
                 const enlaceVerificacion = `http://wildlens.free.nf/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
                 
                 const opcionesCorreo = {
@@ -245,17 +266,29 @@ app.post('/api/registro', async (req, res) => {
                     `
                 };
 
-                transporter.sendMail(opcionesCorreo, (errorCorreo) => {
-                    if (errorCorreo) console.error("Error enviando correo de verificación:", errorCorreo);
-                });
-
-                res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
+                // 4. Intentar enviar el correo
+                try {
+                    // Usamos await para que Node.js NO avance hasta que Gmail confirme el envío
+                    await transporter.sendMail(opcionesCorreo);
+                    res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
+                } catch (errorCorreo) {
+                    console.error("❌ Error enviando correo:", errorCorreo);
+                    
+                    // ROLLBACK: Borramos al usuario de la BD porque el correo falló
+                    db.query("DELETE FROM Usuarios WHERE correo = ?", [correo]);
+                    
+                    res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
+                }
             });
+
         } catch (errorHash) {
+            // Este es el catch que hacía falta para cerrar el bloque try de arriba
+            console.error("Error procesando la seguridad:", errorHash);
             res.status(500).json({ error: "Error de seguridad al procesar la cuenta." });
         }
     });
 });
+
 
 app.post('/api/login', (req, res) => {
     const { correo, contrasenia } = req.body;

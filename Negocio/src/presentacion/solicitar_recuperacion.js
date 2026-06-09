@@ -15,7 +15,7 @@ formSolicitud.addEventListener('submit', async function(e) {
 
         // por seguridad, sin importar si el correo existía en la BD o no.
         alert("Si el correo está registrado, recibirás un enlace con instrucciones.");
-        window.location.href = '../login.html';
+        window.location.href = 'login.html';
 
     } catch (error) {
         console.error("Error de red:", error);
