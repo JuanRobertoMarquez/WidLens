@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!usuarioString) {
         alert("Debes iniciar sesión para ver tu perfil.");
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
 

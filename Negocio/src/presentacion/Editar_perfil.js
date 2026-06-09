@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             confirmButtonColor: '#2B7055',
             confirmButtonText: 'Ir al Login'
         }).then(() => {
-            window.location.href = 'login.html'; // Redirige DESPUÉS de que le den OK
+            window.location.href = './login.html'; // Redirige DESPUÉS de que le den OK
         });
         return;
     }
@@ -93,15 +93,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const resultado = await respuesta.json();
 
             if (respuesta.ok) {
-                // *** CAMBIO 2: ACTUALIZAR EL LOCALSTORAGE CENTRAL ***
-                // En lugar de crear una variable nueva, actualizamos el objeto original
-                // para que el Navbar muestre el nuevo nombre automáticamente
                 usuarioLogueado.nombre = document.getElementById('edit-nombre').value; 
                 
-                // (Opcional) Si tu backend te devuelve la ruta de la nueva foto en la respuesta, 
-                // puedes descomentar la siguiente línea para que el avatar del navbar también se actualice sin recargar:
-                // if (resultado.nuevoAvatar) { usuarioLogueado.avatar = resultado.nuevoAvatar; }
-
                 localStorage.setItem('usuarioWildLens', JSON.stringify(usuarioLogueado));
                 
                 // --- MENSAJE DE ÉXITO PREMIUM (SweeAlert2) ---

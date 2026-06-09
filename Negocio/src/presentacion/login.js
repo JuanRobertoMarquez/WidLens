@@ -8,17 +8,18 @@ async function cargarImagenFondo() {
         if (respuesta.ok) {
             const datos = await respuesta.json();
             
-            // 1. Cambiamos la imagen de fondo con la ruta correcta (datos.foto)
-            document.getElementById('dynamic-bg').style.backgroundImage = `url('https://widlens.onrender.com${datos.foto}')`;
+            // 1. Cambiamos la imagen de fondo (Validando si viene de Cloudinary o local)
+            let rutaFondo = datos.foto.startsWith('http') ? datos.foto : `https://widlens.onrender.com${datos.foto}`;
+            document.getElementById('dynamic-bg').style.backgroundImage = `url('${rutaFondo}')`;
 
             // 2. Actualizamos los textos (con seguro por si la especie es NULL)
             document.getElementById('bg-especie').innerText = datos.especie_nombre || 'Especie por identificar';
             document.getElementById('bg-autor').innerText = datos.nombre_usuario;                    
             
-            // 3. Actualizamos el avatar del usuario
+            // 3. Actualizamos el avatar del usuario (Validando la ruta)
             const avatarImg = document.getElementById('bg-avatar');
             if (datos.avatar) {
-                avatarImg.src = `https://widlens.onrender.com${datos.avatar}`;
+                avatarImg.src = datos.avatar.startsWith('http') ? datos.avatar : `https://widlens.onrender.com${datos.avatar}`;
             } else {
                 avatarImg.src = `https://ui-avatars.com/api/?name=${datos.nombre_usuario}&background=2B7055&color=fff`;
             }
@@ -74,7 +75,7 @@ loginForm.addEventListener('submit', async function(e) {
                 confirmButtonText: 'Entrar',
                 backdrop: `rgba(43, 112, 85, 0.2)` 
             }).then(() => {
-                window.location.href = '../Index.html'; 
+                window.location.href = '../index.html'; 
             });
         } else {
             // Si la contraseña es incorrecta, reiniciamos el reCAPTCHA por seguridad

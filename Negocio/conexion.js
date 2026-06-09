@@ -3,16 +3,47 @@ const mysql = require('mysql2');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs'); 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const app = express();
 app.use(cors()); 
 app.use(express.json()); 
 
-// Conexion a la base de datos
+// --- 1. CONFIGURACIÓN DE CLOUDINARY (DEBE IR ANTES QUE EL STORAGE) ---
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// --- 2. CONFIGURACIÓN DE STORAGE (MULTER + CLOUDINARY) ---
+
+// Storage para Avistamientos
+const storageAvistamientos = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'wildlens_avistamientos', 
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+  },
+});
+const uploadAvistamientos = multer({ storage: storageAvistamientos });
+
+// Storage para Perfiles (Corregido para usar Cloudinary en lugar de disco local)
+const storagePerfiles = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'wildlens_perfiles', 
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+    },
+});
+const uploadPerfiles = multer({ storage: storagePerfiles });
+
+
+// --- 3. CONEXIÓN A LA BASE DE DATOS ---
 const db = mysql.createConnection({
     host: 'gateway01.us-east-1.prod.aws.tidbcloud.com',      
     port: 4000, 
@@ -25,28 +56,6 @@ const db = mysql.createConnection({
     }
 });
 
-app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
-
-const storageAvistamientos = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../Datos/subidas/avistamientos/')); 
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-const uploadAvistamientos = multer({ storage: storageAvistamientos });
-
-const storagePerfiles = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, '../Datos/subidas/Perfiles/')); 
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-const uploadPerfiles = multer({ storage: storagePerfiles });
-
 db.connect((error) => {
     if (error) {
         console.error('❌ Error conectando a la base de datos:', error.message);
@@ -55,12 +64,17 @@ db.connect((error) => {
     console.log('✅ Conectado exitosamente a la base de datos MySQL');
 });
 
-// --- RUTA PRINCIPAL (Para evitar el Cannot GET /) ---
+// Directorio de datos locales (opcional si aún guardas otros estáticos ahí)
+app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
+
+
+// --- 4. RUTAS DEL API (ENDPOINTS) ---
+
+// RUTA PRINCIPAL (Para evitar el Cannot GET /)
 app.get('/', (req, res) => {
     res.send('<h1>¡El Backend de WildLens está en línea! 🌿</h1><p>Las rutas de la API están funcionando correctamente.</p>');
 });
 
-// RUTAS DEL API (ENDPOINTS)
 app.get('/api/estado', (req, res) => {
     res.json({ mensaje: '¡El servidor de WildLens está funcionando al 100%!' });
 });
@@ -170,7 +184,10 @@ app.get('/api/top-guardianes', (req, res) => {
 
 app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, res) => {
     const { id_usuario, id_especie, latitud, longitud, fecha_avistamiento } = req.body;
-    const rutaFoto = req.file ? '/Datos/subidas/avistamientos/' + req.file.filename : null;
+    
+    // Cloudinary devuelve la URL segura en req.file.path
+    const rutaFoto = req.file ? req.file.path : null;    
+    
     if (!rutaFoto) {
         return res.status(400).json({ error: "No se subió ninguna foto" });
     }
@@ -183,6 +200,16 @@ app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, r
         }
         res.status(200).json({ mensaje: "¡Observación guardada!", ruta_imagen: rutaFoto });
     });
+});
+
+// --- AUTENTICACIÓN Y USUARIOS ---
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'juanrobertomarquez1@gmail.com', 
+        pass: 'dhnlfrmxreynktds' 
+    }
 });
 
 app.post('/api/registro', async (req, res) => {
@@ -292,32 +319,23 @@ app.get('/api/perfil/:id', (req, res) => {
     });
 });
 
+// Ruta de editar perfil modificada para Cloudinary
 app.put('/api/editar-perfil/:id', uploadPerfiles.single('avatar'), (req, res) => {
     const idUsuario = req.params.id;
     const { nombre, apellido, correo } = req.body;
-    const rutaAvatarNuevo = req.file ? '/Datos/subidas/Perfiles/' + req.file.filename : null;
+    
+    // Cloudinary devuelve la URL directamente en req.file.path
+    const rutaAvatarNuevo = req.file ? req.file.path : null;
 
     if (rutaAvatarNuevo) {
-        const sqlBuscar = "SELECT avatar FROM Usuarios WHERE id_usuario = ?";
-        
-        db.query(sqlBuscar, [idUsuario], (err, resultados) => {
-            if (!err && resultados.length > 0 && resultados[0].avatar) {
-                const avatarViejo = resultados[0].avatar;
-                const rutaReal = path.join(__dirname, '..', avatarViejo);                
-                fs.unlink(rutaReal, (errorFs) => {
-                    if (errorFs) console.log("Aviso: No se encontró la foto vieja para borrarla.");
-                    else console.log("🗑️ Foto vieja eliminada del servidor.");
-                });
-            }
-
-            const sqlUpdate = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ?, avatar = ? WHERE id_usuario = ?";
-            db.query(sqlUpdate, [nombre, apellido, correo, rutaAvatarNuevo, idUsuario], (err, resultado) => {
-                if (err) return res.status(500).json({ error: "Error en la base de datos" });
-                res.status(200).json({ mensaje: "Perfil actualizado con éxito", nuevoAvatar: rutaAvatarNuevo });
-            });
+        // Como Cloudinary maneja los archivos, actualizamos directamente la base de datos con la nueva URL
+        const sqlUpdate = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ?, avatar = ? WHERE id_usuario = ?";
+        db.query(sqlUpdate, [nombre, apellido, correo, rutaAvatarNuevo, idUsuario], (err, resultado) => {
+            if (err) return res.status(500).json({ error: "Error en la base de datos al actualizar avatar" });
+            res.status(200).json({ mensaje: "Perfil actualizado con éxito", nuevoAvatar: rutaAvatarNuevo });
         });
-
     } else {
+        // Si no subió foto, solo actualizamos los datos de texto
         const sql = "UPDATE Usuarios SET nombre = ?, apellido = ?, correo = ? WHERE id_usuario = ?";
         db.query(sql, [nombre, apellido, correo, idUsuario], (err, resultado) => {
             if (err) return res.status(500).json({ error: "Error en la base de datos" });
@@ -370,14 +388,6 @@ app.get('/api/mis-observaciones/:id', (req, res) => {
     });
 });
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'juanrobertomarquez1@gmail.com', 
-        pass: 'dhnlfrmxreynktds' 
-    }
-});
-
 app.post('/api/recuperar-password', (req, res) => {
     const { correo } = req.body;
 
@@ -394,7 +404,6 @@ app.post('/api/recuperar-password', (req, res) => {
             db.query(sqlUpdate, [tokenReset, correo], (errUpdate) => {
                 if (errUpdate) return console.error("Error guardando token:", errUpdate);
 
-                // IMPORTANTE: Cuando subas el frontend a InfinityFree, tendrás que cambiar este http://wildlens.free.nf por la URL de InfinityFree
                 const enlaceReset = `http://wildlens.free.nf/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
 
                 const opcionesCorreo = {
@@ -502,7 +511,7 @@ app.get('/api/login-imagen-aleatoria', (req, res) => {
     });
 });
 
-// ARRANCAR EL SERVIDOR (MODIFICADO PARA RENDER)
+// ARRANCAR EL SERVIDOR
 const PUERTO = process.env.PORT || 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor de WildLens corriendo en el puerto ${PUERTO}`);

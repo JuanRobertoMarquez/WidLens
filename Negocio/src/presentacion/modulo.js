@@ -160,9 +160,16 @@ async function cargarHistoriaReciente() {
             const iconoObs = document.getElementById('icono-obs');
             
             if (imgPrincipal && iconoObs) {
-                const rutaSegura = datos.observacion_foto ? 'https://widlens.onrender.com' + datos.observacion_foto : '';
-                const rutaIcono = datos.especie_imagen ? 'https://widlens.onrender.com' + datos.especie_imagen : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
-                
+                // Validamos si ya trae el "http" de Cloudinary
+                let rutaSegura = '';
+                if (datos.observacion_foto) {
+                    rutaSegura = datos.observacion_foto.startsWith('http') ? datos.observacion_foto : 'https://widlens.onrender.com' + datos.observacion_foto;
+                }
+
+                let rutaIcono = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+                if (datos.especie_imagen) {
+                    rutaIcono = datos.especie_imagen.startsWith('http') ? datos.especie_imagen : 'https://widlens.onrender.com' + datos.especie_imagen;
+                }                
                 imgPrincipal.src = rutaSegura;
                 imgPrincipal.style.display = 'block';
                 
@@ -285,8 +292,10 @@ function verificarSesion() {
         
         // Inyectamos su nombre y su foto
         navNombreUsuario.innerText = usuarioLogueado.nombre;
-        if(usuarioLogueado.avatar) {
-            navAvatar.src = 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+        if (usuarioLogueado.avatar) {
+            navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
+                ? usuarioLogueado.avatar 
+                : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
         }
     } else {
         // NO hay sesión iniciada

@@ -316,31 +316,6 @@ body {
     font-size: 24px;
 }
 
-/* --- DISEÑO RESPONSIVO --- */
-@media (max-width: 768px) {
-    .hero-section {
-        flex-direction: column;
-        text-align: center;
-        margin-top: 30px;
-    }
-    
-    .hero-buttons {
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .nav-content {
-        flex-direction: column;
-        gap: 15px;
-        border-radius: 20px;
-    }
-
-    .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-}
-
 /* --- NUEVO HERO INMERSIVO --- */
 .hero-background {
     /* Aquí pondrás la ruta de tu foto épica de un ajolote */
@@ -541,30 +516,6 @@ body {
     color: var(--text-light);
     line-height: 1.7;
     margin-bottom: 20px;
-}
-
-/* --- DISEÑO RESPONSIVO --- */
-@media (max-width: 768px) {
-    .nav-content {
-        flex-direction: column;
-        gap: 15px;
-        border-radius: 20px;
-    }
-
-    .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .hero-content-center h1 {
-        font-size: 32px; /* Letra más pequeña en celular */
-    }
-    
-    .hero-buttons {
-        display: flex;
-        flex-direction: column; /* Botones uno arriba de otro en celular */
-        gap: 15px;
-    }
 }
 
 /* --- TOP GUARDIANES --- */
@@ -1067,22 +1018,6 @@ body {
     align-items: center;
     gap: 5px;
 }
-
-/* Adaptación para celulares */
-@media (max-width: 768px) {
-    .story-grid-inat {
-        grid-template-columns: 1fr; /* Pasa a una sola columna */
-        gap: 20px;
-    }
-    .border-bottom-inat {
-        border-bottom: none; /* Quitamos la línea en móviles para no saturar */
-    }
-}
-
-/* ==================================================
-   BLOQUE FINAL TIPO iNATURALIST (ESTADÍSTICAS, PASOS, POR QUÉ)
-   ================================================== */
-
 /* 1. ESTADÍSTICAS BLANCAS */
 .inat-stats-section {
     background-color: #ffffff;
@@ -1214,18 +1149,6 @@ body {
     color: #222222;
     margin: 0;
     line-height: 1.5;
-}
-
-/* RESPONSIVO MÓVILES */
-@media (max-width: 768px) {
-    .inat-stats-grid { gap: 40px; }
-    .inat-why-container {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-    .why-title { text-align: center; }
-    .why-underline { width: 50%; margin: 5px auto 0 auto; }
 }
 
 /* 1. SECCIÓN BOLETÍN (Con fondo oscuro de naturaleza) */
@@ -1384,7 +1307,7 @@ details[open] .faq-icon {
 }
 
 .faq-answer p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px; /* Texto de respuesta fino */
     color: #555;
     line-height: 1.6;
@@ -1425,7 +1348,7 @@ details[open] .faq-icon {
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-dark);
@@ -1513,7 +1436,7 @@ details[open] .faq-icon {
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-dark);
@@ -1560,4 +1483,146 @@ details[open] .faq-icon {
 /* Mostrar al hacer hover */
 .dropdown-container:hover .dropdown-content {
     display: block;
+}
+
+/* ==================================================
+   DISEÑO RESPONSIVO (CELULARES)
+   ================================================== */
+/* ==================================================
+   DISEÑO RESPONSIVO (CELULARES)
+   ================================================== */
+@media (max-width: 768px) {
+    
+    /* 1. ELIMINAR EL HUECO BLANCO A LA DERECHA */
+    html, body {
+        overflow-x: hidden;
+        width: 100vw;
+    }
+
+    /* 2. Menú de navegación */
+    .navbar {
+        height: auto; 
+        padding: 15px 0; 
+        position: relative; 
+    }
+
+    .nav-content, .nav-left, .nav-right {
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    #menu-visitante {
+        text-align: center;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    /* 3. Hero y Video */
+    .hero-video-container {
+        margin-top: 0;
+        height: 60vh; 
+    }
+    
+    .hero-content-center h1 { 
+        font-size: 28px; 
+    }
+    
+    .hero-buttons { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        gap: 15px; 
+    }
+
+    /* 4. SOLUCIÓN AL MAPA Y LA CUADRÍCULA ESTRECHA */
+    .story-grid-inat, .story-grid {
+        grid-template-columns: 1fr; /* Cambia a una sola columna */
+        gap: 30px;
+    }
+
+    /* Hacemos que la etiqueta ("Qué", "Donde") se apile sobre la imagen */
+    .story-item-inat {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .story-label-inat {
+        margin-bottom: 5px;
+        width: auto;
+    }
+
+    /* El mapa ahora tomará el ancho completo de la pantalla */
+    .mini-map-inat {
+        width: 100%;
+        height: 250px;
+    }
+
+    .observation-display-inat {
+        flex-direction: column;
+    }
+
+    /* 5. Ajuste de las Estadísticas (Números verdes) */
+    .inat-stats-grid {
+        gap: 40px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* 6. Ajuste de los pasos (1, 2, 3) */
+    .inat-steps-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .inat-step {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+}
+
+/* ==================================================
+   MENÚ DE VISITANTE (LOGIN / REGISTRO)
+   ================================================== */
+#menu-visitante {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio exacto entre los botones */
+    font-family: 'Lora', sans-serif;
+    font-size: 14px;
+    color: var(--text-light); /* Aplica al texto suelto como la "o" */
+}
+
+#menu-visitante a {
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* Estilo para el enlace de "Acceder" */
+#menu-visitante a:first-child {
+    color: var(--text-dark);
+}
+
+#menu-visitante a:first-child:hover {
+    color: var(--dark-green);
+}
+
+/* Estilo para el botón de "Crear una cuenta" */
+#menu-visitante a:last-child {
+    color: var(--text-dark);
+}
+
+#menu-visitante a:last-child:hover {
+    color: var(--dark-green);
 }

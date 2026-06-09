@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - WildLens</title>
+        <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/estilo_index.css"> 
+    <link rel="stylesheet" href="../css/estilo_perfil.css"> 
     
-    <!-- Ícono de la pestaña -->
-    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
-    
-    <!-- Hojas de estilos -->
-    <link rel="stylesheet" href="/Presentacion/css/estilo_index.css"> 
-    <link rel="stylesheet" href="/Presentacion/css/estilo_perfil.css"> 
-    
-    <!-- Fuentes de Google (Lora y Open Sans) -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -24,29 +19,27 @@
                     <span class="logo-text">WildLens</span>
                 </div>
                 <nav class="nav-links">
-                    <a href="/Presentacion/index.html">Home</a>
+                    <a href="../index.html">Home</a>
                     <a href="#">Comunidad ⌵</a>
-                    <a href="/Presentacion/paginas/explorador.html">Explorar ⌵</a>
+                    <a href="explorador.html">Explorar ⌵</a>
                 </nav>
             </div>
 
             <div class="nav-right">
-                <!-- Menú para usuarios NO logueados -->
                 <div id="menu-visitante">
-                    <a href="/Presentacion/paginas/login.html">Acceder o Crear una cuenta</a>
+                    <a href="login.html">Acceder o Crear una cuenta</a>
                 </div>
 
-                <!-- Menú para usuarios SÍ logueados -->
                 <div id="menu-usuario" style="display: none;" class="user-dropdown">
-                    <a href="/Presentacion/paginas/subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <a href="subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
                     <div class="dropdown-container">
                         <button class="dropbtn">
                             <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
                             <span id="nav-nombre-usuario">Bienvenido</span> ⌵
                         </button>
                         <div class="dropdown-content">
-                            <a href="/Presentacion/paginas/perfil.html">Mi Perfil</a>
-                            <a href="/Presentacion/paginas/mis_observaciones.html">Mis Observaciones</a>
+                            <a href="perfil.html">Mi Perfil</a>
+                            <a href="mis_observaciones.html">Mis Observaciones</a>
                             <a href="#">Configuración</a>
                             <hr>
                             <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
@@ -57,12 +50,8 @@
         </div>
     </header>
 
-    <!-- ==========================================
-         CONTENIDO DEL PERFIL LITE (UX para principiantes)
-         ========================================== -->
     <div class="perfil-wrapper-lite">
         
-        <!-- Cabecera Amigable -->
         <div class="perfil-header-lite">
             <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="avatar-lite" id="avatar-perfil">
             <div class="perfil-info-lite">
@@ -72,7 +61,6 @@
             </div>
         </div>
 
-        <!-- Logros (Estadísticas fáciles de entender) -->
         <div class="stats-row-lite">
             <div class="stat-box-lite">
                 <div class="stat-icon-lite">📷</div>
@@ -90,7 +78,6 @@
             </div>
         </div>
 
-        <!-- Muro de descubrimientos -->
         <div class="observaciones-section-lite">
             <h3 class="seccion-titulo-lite">Mi diario de descubrimientos</h3>
             
@@ -101,9 +88,8 @@
 
     </div>
 
-    <script src="/Negocio/src/presentacion/perfil.js"></script>
+    <script src="../js/src/presentacion/perfil.js"></script>
     
-    <!-- (Opcional) Script global para que la barra de navegación lea la sesión aquí también -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const menuVisitante = document.getElementById('menu-visitante');
@@ -117,8 +103,12 @@
                 if (menuVisitante) menuVisitante.style.display = 'none';
                 if (menuUsuario) menuUsuario.style.display = 'flex';
                 if (navNombreUsuario) navNombreUsuario.innerText = usuarioLogueado.nombre;
+                
+                // --- SOLUCIÓN AQUÍ: Validamos la URL del avatar del navbar ---
                 if (navAvatar && usuarioLogueado.avatar) {
-                    navAvatar.src = 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+                    navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
+                        ? usuarioLogueado.avatar 
+                        : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
                 }
             }
 
@@ -127,7 +117,7 @@
                 btnCerrarSesion.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('usuarioWildLens');
-                    window.location.href = '/Presentacion/index.html'; 
+                    window.location.href = '../index.html'; 
                 });
             }
         });

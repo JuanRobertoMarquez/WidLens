@@ -19,7 +19,7 @@ if (!idUsuarioLogeado) {
         icon: 'warning',
         confirmButtonColor: '#2B7055'
     }).then(() => {
-        window.location.href = '../paginas/login.html'; 
+        window.location.href = './login.html'; 
     });
 } else {
     // Si inició sesión correctamente, inyectamos dinámicamente su ID en el formulario
@@ -148,15 +148,18 @@ async function cambiarAlPaso(pasoDestino) {
         stepperWrapper.className = "map-mode-stepper";
         setTimeout(() => map.invalidateSize(), 100); 
     } else if (pasoDestino === 3) {
-        document.getElementById('paso-3').classList.add('paso-activo');
-        document.getElementById('step1-indicator').classList.add('active');
-        document.getElementById('step2-indicator').classList.add('active');
-        document.getElementById('step3-indicator').classList.add('active');
-        navbar.style.display = "block";
-        stepperWrapper.className = "page-wrapper";
-        
-        // Dispara la consulta a iNaturalist con el valor seleccionado por defecto
-        cargarInfoiNaturalist(document.getElementById('id-especie').value);
+            document.getElementById('paso-3').classList.add('paso-activo');
+            document.getElementById('step1-indicator').classList.add('active');
+            document.getElementById('step2-indicator').classList.add('active');
+            document.getElementById('step3-indicator').classList.add('active');
+            navbar.style.display = "block";
+            stepperWrapper.className = "page-wrapper";
+            
+            // 1. Renderiza el resumen con la foto local, predicción de IA y dirección
+            cargarResumenPaso3();
+            
+            // 2. Consulta iNaturalist y dibuja la tarjeta con el enlace de redirección "Ver más detalles..."
+            cargarInfoiNaturalist(document.getElementById('id-especie').value);
     }
 }
 
@@ -434,7 +437,7 @@ document.getElementById('formulario-registro-maestro').addEventListener('submit'
                 icon: 'success',
                 confirmButtonColor: '#2B7055'
             }).then(() => {
-                window.location.href = '../Index.html'; 
+                window.location.href = '../index.html'; 
             });
         } else {
             Swal.fire('Error al guardar', resultado.error || 'Problema de BD', 'error');
@@ -522,6 +525,36 @@ async function cargarInfoiNaturalist(idLocal) {
         contenedor.innerHTML = `<div style="color: #d9534f; padding: 10px; border: 1px solid #d9534f; border-radius: 8px;">Error al conectar con iNaturalist.</div>`;
         console.error("Error obteniendo datos de iNaturalist:", error);
     }
+}
+
+// --- NUEVA FUNCIÓN: Llenar el resumen en el Paso 3 ---
+async function cargarResumenPaso3() {
+    const contenedorResumen = document.getElementById('resumen-registro');
+    if (!contenedorResumen) return;
+
+    // 1. Mostrar la primera imagen subida
+    const fotosSubidas = photos.filter(p => p !== null);
+    if (fotosSubidas.length > 0) {
+        document.getElementById('resumen-img').src = fotosSubidas[0]; // Extrae el Base64 de la foto
+    }
+
+    // 2. Mostrar la predicción y confianza de la IA (guardadas en el sessionStorage en el Paso 1)
+    const especieIA = sessionStorage.getItem('especieDetectada') || 'Desconocido';
+    const confianzaIA = sessionStorage.getItem('confianza') || '0';
+    document.getElementById('resumen-ia').innerHTML = `${especieIA} <span style="color: #2B7055; font-weight: bold;">(${confianzaIA}%)</span>`;
+
+    // 3. Mostrar Coordenadas
+    const lat = parseFloat(document.getElementById('latitud').value);
+    const lng = parseFloat(document.getElementById('longitud').value);
+    document.getElementById('resumen-coords').innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+
+    // Mostramos el contenedor
+    contenedorResumen.style.display = 'block';
+
+    // 4. Obtener el nombre de la calle/lugar reciclando tu función obtenerDireccion()
+    document.getElementById('resumen-ubicacion').innerText = "Traduciendo coordenadas...";
+    const direccion = await obtenerDireccion(lat, lng);
+    document.getElementById('resumen-ubicacion').innerHTML = `<strong>${direccion}</strong>`;
 }
 
 // 1. Escuchar cuando el usuario cambie la especie en el menú desplegable

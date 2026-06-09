@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear cuenta - WildLens</title>
-    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/Presentacion/css/login.css">
-    <link rel="stylesheet" href="/Presentacion/css/estilo_index.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/estilo_index.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
@@ -37,7 +37,7 @@
             
             <div class="nav-left">
                 <div class="logo-container">
-                    <img src="/Presentacion/images/WildLens.png" alt="Logo WildLens" class="logo-logo">
+                    <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo">
                 </div>
                 
                 <nav class="nav-links">
@@ -128,9 +128,6 @@
     </div>
 
     <script>
-        // =========================================================
-        // 1. CARGAR FOTO DINÁMICA DE FONDO (Reutilizamos la misma ruta)
-        // =========================================================
         async function cargarImagenFondo() {
             try {
                 const respuesta = await fetch('https://widlens.onrender.com/api/login-imagen-aleatoria', {
@@ -139,15 +136,18 @@
                 
                 if (respuesta.ok) {
                     const datos = await respuesta.json();
-                    document.getElementById('dynamic-bg').style.backgroundImage = `url('https://widlens.onrender.com${datos.foto}')`;
                     
-                    // Aquí asumo que ya arreglaste el nombre de la columna en tu backend (ej. especie_nombre)
+                    // Lógica corregida para la imagen de fondo
+                    let rutaFondo = datos.foto.startsWith('http') ? datos.foto : `https://widlens.onrender.com${datos.foto}`;
+                    document.getElementById('dynamic-bg').style.backgroundImage = `url('${rutaFondo}')`;
+                    
                     document.getElementById('bg-especie').innerText = datos.especie_nombre || 'Especie por identificar';
                     document.getElementById('bg-autor').innerText = datos.nombre_usuario;
                     
+                    // Lógica corregida para el avatar
                     const avatarImg = document.getElementById('bg-avatar');
                     if (datos.avatar) {
-                        avatarImg.src = `https://widlens.onrender.com${datos.avatar}`;
+                        avatarImg.src = datos.avatar.startsWith('http') ? datos.avatar : `https://widlens.onrender.com${datos.avatar}`;
                     } else {
                         avatarImg.src = `https://ui-avatars.com/api/?name=${datos.nombre_usuario}&background=2B7055&color=fff`;
                     }
@@ -159,9 +159,6 @@
 
         cargarImagenFondo();
 
-        // =========================================================
-        // 2. LÓGICA DE REGISTRO
-        // =========================================================
         const registroForm = document.getElementById('registroForm');
 
         registroForm.addEventListener('submit', async function(e) {

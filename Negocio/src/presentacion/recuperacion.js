@@ -34,7 +34,7 @@ formRestablecer.addEventListener('submit', async function(e) {
 
         if (respuesta.ok) {
             alert("¡Contraseña actualizada con éxito!");
-            window.location.href = 'login.html'; // Lo mandamos a iniciar sesión
+            window.location.href = '../login.html'; // Lo mandamos a iniciar sesión
         } else {
             alert("Error al restablecer: " + resultado.error);
         }

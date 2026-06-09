@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. Validar sesión y cargar Navbar
     const usuarioString = localStorage.getItem('usuarioWildLens');
     if (!usuarioString) {
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
     
@@ -61,12 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         year: 'numeric', month: 'short', day: 'numeric'
                     });
 
-                    // Manejar la ruta de la foto y el estatus
-                    const rutaFoto = obs.foto ? `https://widlens.onrender.com${obs.foto}` : '/Presentacion/images/placeholder.png';
+                    // --- SOLUCIÓN AQUÍ: Manejar la ruta de la foto de forma segura ---
+                    let rutaFoto = '../images/placeholder.png';
+                    if (obs.foto) {
+                        rutaFoto = obs.foto.startsWith('http') ? obs.foto : `https://widlens.onrender.com${obs.foto}`;
+                    }
+
                     const claseEstatus = obs.estatus_validacion === 'Validado' ? 'validado' : 'pendiente';
 
-                    // --- SOLUCIÓN AQUÍ: Convertimos texto a número de forma segura ---
-                    // Si hay latitud, la convierte a número y le pone 4 decimales. Si no, pone "N/D" (No Disponible).
+                    // Convertimos texto a número de forma segura
                     const latFormat = obs.latitud ? parseFloat(obs.latitud).toFixed(4) : "N/D";
                     const lngFormat = obs.longitud ? parseFloat(obs.longitud).toFixed(4) : "N/D";
 

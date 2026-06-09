@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WildLens - Registrar Avistamiento</title>
     
-    <link rel="shortcut icon" href="/Presentacion/images/mini-icon.png" type="image/x-icon">
-    
+    <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    
-    <link rel="stylesheet" href="/Presentacion/css/estilo_index.css">
-    <link rel="stylesheet" href="/Presentacion/css/estilo_subirfoto.css">
-    <link rel="stylesheet" href="/Presentacion/css/estilo_mapa.css">
+    <link rel="stylesheet" href="../css/estilo_index.css">
+    <link rel="stylesheet" href="../css/estilo_subirfoto.css">
+    <link rel="stylesheet" href="../css/estilo_mapa.css">
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -38,7 +36,6 @@
         .map-mode-stepper .step-line {
             width: 20px; 
         }
-        /* ------------------------------------------------ */
 
         /* Estilo elegante para el Paso 3 */
         .details-section { background: #faf8f5; min-height: 100vh; padding-top: 120px; padding-bottom: 40px; }
@@ -65,8 +62,7 @@
             <nav class="nav-links">
                 <a href="../index.html">Home</a>
                 <a href="#" class="active">Registros</a>
-                <a href="#">Contactos</a>
-                <a href="../paginas/exploracion.html" class="btn-nav">Explorar</a>
+                <a href="exploracion.html" class="btn-nav">Explorar</a>
             </nav>
         </div>
     </header>
@@ -156,33 +152,45 @@
             </div>
         </div>
 
-        <div id="paso-3" class="seccion-paso details-section">
-            <div class="details-container">
-                <h2 style="font-family: 'Montserrat'; color: #2B7055;">Detalles del Avistamiento</h2>
-                <p style="color: #666; margin-bottom: 25px;">Completa la información final para enviar tu reporte a la red de BioNode.</p>
-                
-                <input type="hidden" id="id-especie" name="id_especie" value="1">
-                
-                <div id="inaturalist-widget" style="margin-bottom: 25px; display: none;">
-                </div>
-                
-                <div class="form-group">
-                    <label for="informe-notas">Notas de campo / Informes de conservación:</label>
-                    <textarea id="informe-notas" name="descripcion" class="form-control" rows="5" placeholder="Comportamiento, estado del agua, amenazas..."></textarea>
-                </div>
-
-                <div class="btn-flex-container">
-                    <button type="button" class="btn-back" onclick="cambiarAlPaso(2)" style="padding: 12px 20px; border-radius: 8px; font-weight: 600;">← Volver al Mapa</button>
-                    <button type="submit" class="btn-confirmar" id="btnFinalizar" style="flex: 1; border-radius: 8px;">Finalizar y Guardar Registro</button>
+<div id="paso-3" class="seccion-paso details-section">
+    <div class="details-container">
+        <h2 style="font-family: 'Montserrat'; color: #2B7055;">Detalles del Avistamiento</h2>
+        <p style="color: #666; margin-bottom: 25px;">Completa la información final para enviar tu reporte a la red de BioNode.</p>
+        
+        <input type="hidden" id="id-especie" name="id_especie" value="1">
+        
+        <div id="resumen-registro" style="margin-bottom: 25px; display: none; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <h3 style="font-family: 'Montserrat', sans-serif; color: #2B7055; margin-top: 0; margin-bottom: 15px; font-size: 16px;">Resumen de tu registro</h3>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <img id="resumen-img" src="" alt="Evidencia" style="width: 90px; height: 90px; object-fit: cover; border-radius: 8px; border: 2px solid #2B7055;">
+                <div>
+                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>IA Detectó:</strong> <span id="resumen-ia"></span></p>
+                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>Ubicación:</strong> <span id="resumen-ubicacion">Cargando...</span></p>
+                    <p style="margin: 0; font-size: 12px; color: #666;"><strong>Coordenadas:</strong> <span id="resumen-coords"></span></p>
                 </div>
             </div>
         </div>
+        
+        <div id="inaturalist-widget" style="margin-bottom: 25px; display: none;">
+        </div>
+        
+        <div class="form-group">
+            <label for="informe-notas">Notas de campo / Informes de conservación:</label>
+            <textarea id="informe-notas" name="descripcion" class="form-control" rows="5" placeholder="Comportamiento, estado del agua, amenazas..."></textarea>
+        </div>
+
+        <div class="btn-flex-container">
+            <button type="button" class="btn-back" onclick="cambiarAlPaso(2)" style="padding: 12px 20px; border-radius: 8px; font-weight: 600;">← Volver al Mapa</button>
+            <button type="submit" class="btn-confirmar" id="btnFinalizar" style="flex: 1; border-radius: 8px;">Finalizar y Guardar Registro</button>
+        </div>
+    </div>
+</div>
 
     </form>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="/Negocio/src/datos/Subir_foto.js"></script>
+<script src="../js/src/datos/Subir_foto.js"></script>
 
 </body>
 </html>

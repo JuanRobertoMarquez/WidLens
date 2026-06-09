@@ -27,7 +27,7 @@ const registroForm = document.querySelector('.registro-form');
 
         // Cuando la petición fetch responda que la cuenta se creó exitosamente:
         if (respuesta.ok) {
-            window.location.href = 'esperando_verificacion.html';
+            window.location.href = './esperando_verificacion.html';
         } else {
             alert("Error al registrar: " + resultado.error);
         }

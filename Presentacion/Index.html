@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WildLens - BioNode</title>
-    <link rel="shortcut icon" href="../Presentacion/images/mini-icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/estilo_index.css">
+    <link rel="shortcut icon" href="./images/mini-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/estilo_index.css">
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -13,67 +13,67 @@
 
 <body>
 
-<header class="navbar">
-<div class="nav-content">
-    
-    <div class="nav-left">
-                <div class="logo-container">
-                    <img src="/Presentacion/images/WildLens.png" alt="Logo WildLens" class="logo-logo">
-                </div>
-                
-        <nav class="nav-links">
-            <a href="/Presentacion/index.html" class="active">Home</a>
-            <a href="#">Comunidad ⌵</a>
-            <a href="paginas/explorador.html">Explorar ⌵</a>
-        </nav>
-    </div>
-
-    <div class="nav-right">
-        <div id="menu-visitante">
-            <a href="paginas/login.html">Acceder</a>    o 
-            <a href="paginas/crear-cuenta.html">Crear una cuenta</a>       
-        </div>
-
-        <div id="menu-usuario" style="display: none;" class="user-dropdown">
-            <a href="paginas/subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+    <header class="navbar">
+        <div class="nav-content">
             
-            <div class="dropdown-container">
-                <button class="dropbtn">
-                    <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
-                    <span id="nav-nombre-usuario">Bienvenido</span> ⌵
-                </button>
-                
-                <div class="dropdown-content">
-                    <a href="paginas/perfil.html">Mi Perfil</a>
-                    <a href="paginas/mis_observaciones.html">Mis Observaciones</a>
-                    <a href="paginas/configuracion.html">Configuración</a>
-                    <hr>
-                    <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+            <div class="nav-left">
+                <div class="logo-container">
+                    <img src="./images/WildLens.png" alt="Logo WildLens" class="logo-logo">
                 </div>
+                <nav class="nav-links">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="#">Comunidad ⌵</a>
+                    <a href="./paginas/explorador.html">Explorar ⌵</a>
+                </nav>
             </div>
+
+            <div class="nav-right">
+                
+                <div id="menu-visitante">
+                    <a href="./paginas/login.html" class="btn-acceder">Acceder</a> 
+                                        <a href="#"> o </a>
+                    <a href="./paginas/crear-cuenta.html" class="btn-registro">Crear una cuenta</a>       
+                </div>
+
+                <div id="menu-usuario" style="display: none;" class="user-dropdown">
+                    <a href="./paginas/subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <div class="dropdown-container">
+                        <button class="dropbtn">
+                            <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                            <span id="nav-nombre-usuario">Bienvenido</span> ⌵
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="./paginas/perfil.html">Mi Perfil</a>
+                            <a href="./paginas/mis_observaciones.html">Mis Observaciones</a>
+                            <a href="./paginas/configuracion.html">Configuración</a>
+                            <hr>
+                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
         </div>
-    </div>
-    
-</div>
-</header>
+    </header>
 
         <main>
-        <section class="hero-section hero-video-container">
-            <video autoplay muted loop playsinline id="heroVideo" class="video-bg">
-                <source src="/Presentacion/images/Video_Xolotl.mp4" type="video/mp4">
-                Tu navegador no soporta video.
-            </video>
-            
-            <div class="hero-overlay">
-                <div class="hero-content-center">
-                    <h1>SÉ UN GUARDIÁN DE LA BIODIVERSIDAD LOCAL</h1>
-                    <p>Únete a la red comunitaria de monitoreo de ajolotes y fauna urbana.</p>
-                    <div class="hero-buttons">
-                        <a href="paginas/crear-cuenta.html" class="btn-blanco-sombra">Únete a la comunidad</a>                    </div>
+    <section class="hero-section hero-video-container">
+        <video autoplay muted loop playsinline class="video-bg">
+            <source src="https://github.com/JuanRobertoMarquez/WidLens/raw/refs/heads/master/Presentacion/images/Video_Xolotl.mp4" type="video/mp4">
+            Tu navegador no soporta video.
+        </video>
+        
+        <div class="hero-overlay">
+            <div class="hero-content-center">
+                <h1>SÉ UN GUARDIÁN DE LA BIODIVERSIDAD LOCAL</h1>
+                <p>Únete a la red comunitaria de monitoreo de ajolotes y fauna urbana.</p>
+                <div class="hero-buttons">
+                    <a href="./paginas/crear-cuenta.html" class="btn-blanco-sombra">Únete a la comunidad</a>
                 </div>
             </div>
-        </section>
-
+        </div>
+    </section>
             <section class="how-it-works-flat">
                 <h2>Con WildLens, puedes:</h2>
                 
@@ -203,7 +203,7 @@
                 </div>
 
                 <div class="stories-btn-container">
-                    <a href="paginas/explorador.html" class="btn-inature-green">Explorar más registros</a>
+                    <a href="./paginas/explorador.html" class="btn-inature-green">Explorar más registros</a>
                 </div>
             </section>
 
@@ -342,7 +342,7 @@
                 <div class="newsletter-content">
                     <h2>¡Recibe nuestro boletín mensual!</h2>
                     <p>Mantente conectado con historias y descubrimientos de la comunidad WildLens.</p>
-                    <a href="/Presentacion/paginas/crear-cuenta.html" class="btn-blanco-sombra">Regístrate</a>
+                    <a href="./paginas/crear-cuenta.html" class="btn-blanco-sombra">Regístrate</a>
                 </div>
             </div>
         </section>
@@ -410,7 +410,7 @@
         </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="/Negocio/src/presentacion/modulo.js"></script>
+    <script src="./js/src/presentacion/modulo.js"></script>
 
 </body>
 </html>
