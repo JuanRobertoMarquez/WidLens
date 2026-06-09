@@ -40,8 +40,8 @@ const storagePerfiles = new CloudinaryStorage({
 });
 const uploadPerfiles = multer({ storage: storagePerfiles });
 
-// --- 3. CONEXIÓN A LA BASE DE DATOS ---
-const db = mysql.createConnection({
+// --- 3. CONEXIÓN A LA BASE DE DATOS (AHORA CON POOL) ---
+const db = mysql.createPool({
     host: 'gateway01.us-east-1.prod.aws.tidbcloud.com',      
     port: 4000, 
     user: '266QR9U7MSUDEEJ.root',           
@@ -50,7 +50,21 @@ const db = mysql.createConnection({
     ssl: {
         minVersion: 'TLSv1.2',
         rejectUnauthorized: true 
+    },
+    // Estas 3 líneas son la magia del Pool
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// Verificamos que el Pool se conecte correctamente
+db.getConnection((err, connection) => {
+    if (err) {
+        console.error('❌ Error conectando a la base de datos:', err.message);
+        return;
     }
+    if (connection) connection.release(); // Soltamos la conexión de prueba
+    console.log('✅ Conectado exitosamente a la base de datos MySQL (Pool activo)');
 });
 
 db.connect((error) => {
