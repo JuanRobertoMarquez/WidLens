@@ -7,7 +7,7 @@ formSolicitud.addEventListener('submit', async function(e) {
 
     try {
         // Le pedimos a Node.js que busque el correo y envíe el enlace
-        const respuesta = await fetch('http://127.0.0.1:3000/api/recuperar-password', {
+        const respuesta = await fetch('https://widlens.onrender.com/api/recuperar-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo })

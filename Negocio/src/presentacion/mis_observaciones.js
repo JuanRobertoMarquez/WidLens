@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let rutaAvatar = usuarioLogueado.avatar;
         // Le agregamos la ruta del servidor si viene directo de la BD
         if (!rutaAvatar.startsWith('http')) {
-            rutaAvatar = 'http://127.0.0.1:3000' + rutaAvatar;
+            rutaAvatar = 'https://widlens.onrender.com' + rutaAvatar;
         }
         navAvatar.src = rutaAvatar;
     }
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarDashboard(terminoBusqueda = '') {
         try {
             // Construimos la URL con el ID y el posible filtro de búsqueda
-            let url = `http://127.0.0.1:3000/api/mis-observaciones/${idUsuario}`;
+            let url = `https://widlens.onrender.com/api/mis-observaciones/${idUsuario}`;
             if (terminoBusqueda) url += `?q=${encodeURIComponent(terminoBusqueda)}`;
 
             const respuesta = await fetch(url);
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     // Manejar la ruta de la foto y el estatus
-                    const rutaFoto = obs.foto ? `http://127.0.0.1:3000${obs.foto}` : '/Presentacion/images/placeholder.png';
+                    const rutaFoto = obs.foto ? `https://widlens.onrender.com${obs.foto}` : '/Presentacion/images/placeholder.png';
                     const claseEstatus = obs.estatus_validacion === 'Validado' ? 'validado' : 'pendiente';
 
                     // --- SOLUCIÓN AQUÍ: Convertimos texto a número de forma segura ---

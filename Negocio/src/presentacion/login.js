@@ -1,7 +1,7 @@
 async function cargarImagenFondo() {
     try {
         // El parámetro cache: 'no-store' obliga al navegador a pedir una foto nueva siempre
-        const respuesta = await fetch('http://127.0.0.1:3000/api/login-imagen-aleatoria', {
+        const respuesta = await fetch('https://widlens.onrender.com/api/login-imagen-aleatoria', {
             cache: 'no-store' 
         });
         
@@ -9,7 +9,7 @@ async function cargarImagenFondo() {
             const datos = await respuesta.json();
             
             // 1. Cambiamos la imagen de fondo con la ruta correcta (datos.foto)
-            document.getElementById('dynamic-bg').style.backgroundImage = `url('http://127.0.0.1:3000${datos.foto}')`;
+            document.getElementById('dynamic-bg').style.backgroundImage = `url('https://widlens.onrender.com${datos.foto}')`;
 
             // 2. Actualizamos los textos (con seguro por si la especie es NULL)
             document.getElementById('bg-especie').innerText = datos.especie_nombre || 'Especie por identificar';
@@ -18,7 +18,7 @@ async function cargarImagenFondo() {
             // 3. Actualizamos el avatar del usuario
             const avatarImg = document.getElementById('bg-avatar');
             if (datos.avatar) {
-                avatarImg.src = `http://127.0.0.1:3000${datos.avatar}`;
+                avatarImg.src = `https://widlens.onrender.com${datos.avatar}`;
             } else {
                 avatarImg.src = `https://ui-avatars.com/api/?name=${datos.nombre_usuario}&background=2B7055&color=fff`;
             }
@@ -54,7 +54,7 @@ loginForm.addEventListener('submit', async function(e) {
     const contrasenia = document.getElementById('contrasenia').value;
 
     try {
-        const respuesta = await fetch('http://127.0.0.1:3000/api/login', {
+        const respuesta = await fetch('https://widlens.onrender.com/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo, contrasenia })

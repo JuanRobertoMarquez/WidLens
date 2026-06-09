@@ -421,7 +421,7 @@ document.getElementById('formulario-registro-maestro').addEventListener('submit'
     empaqueDatos.append('fecha_avistamiento', new Date().toISOString().slice(0, 19).replace('T', ' '));
 
     try {
-        const respuesta = await fetch('http://127.0.0.1:3000/api/guardar-observacion', {
+        const respuesta = await fetch('https://widlens.onrender.com/api/guardar-observacion', {
             method: 'POST',
             body: empaqueDatos 
         });

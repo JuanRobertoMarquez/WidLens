@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // 2. Hacemos la petición a la ruta GET que agregamos a tu backend
-        const respuesta = await fetch(`http://127.0.0.1:3000/api/verificar-cuenta?token=${token}`);
+        const respuesta = await fetch(`https://widlens.onrender.com/api/verificar-cuenta?token=${token}`);
         const resultado = await respuesta.json();
 
         if (respuesta.ok) {

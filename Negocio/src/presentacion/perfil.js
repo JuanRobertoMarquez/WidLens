@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
         // 2. Pedir los datos a Node.js (Esto ya formará la URL correcta: /api/perfil/5)
-        const respuesta = await fetch(`http://127.0.0.1:3000/api/perfil/${idUsuario}`);
+        const respuesta = await fetch(`https://widlens.onrender.com/api/perfil/${idUsuario}`);
         const datos = await respuesta.json();
                 
         if (respuesta.ok) {
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let rutaAvatar = datos.datosPersonales.avatar;
                 // Le agregamos la ruta del servidor local
                 if (!rutaAvatar.startsWith('http')) {
-                    rutaAvatar = 'http://127.0.0.1:3000' + rutaAvatar;
+                    rutaAvatar = 'https://widlens.onrender.com' + rutaAvatar;
                 }
                 const imgPerfil = document.getElementById('avatar-perfil');
                 if(imgPerfil) imgPerfil.src = rutaAvatar;
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // Arreglar ruta de foto local
                     let rutaFoto = obs.foto;
                     if (!rutaFoto.startsWith('http')) {
-                        rutaFoto = 'http://127.0.0.1:3000' + rutaFoto;
+                        rutaFoto = 'https://widlens.onrender.com' + rutaFoto;
                     }
 
                     // Darle formato a la fecha

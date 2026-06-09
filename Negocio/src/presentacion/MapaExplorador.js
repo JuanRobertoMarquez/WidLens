@@ -25,7 +25,7 @@ const map = L.map('mapa-explorador', {
 
     // 4. FETCH: Traer los datos reales desde la BD a través de Node.js
     try {
-        const respuesta = await fetch('http://127.0.0.1:3000/api/explorar-avistamientos');
+        const respuesta = await fetch('https://widlens.onrender.com/api/explorar-avistamientos');
         
         if (!respuesta.ok) {
             throw new Error(`HTTP error! status: ${respuesta.status}`);
@@ -38,7 +38,7 @@ const map = L.map('mapa-explorador', {
             // Aseguramos que la ruta de la imagen apunte a tu servidor si es un archivo local
             let rutaFoto = animal.observacion_foto;
             if (rutaFoto && !rutaFoto.startsWith('http')) {
-                rutaFoto = 'http://127.0.0.1:3000' + rutaFoto;
+                rutaFoto = 'https://widlens.onrender.com' + rutaFoto;
             }
 
             // Formatear la fecha para que se lea natural (Ej: "15 Mayo 2026")

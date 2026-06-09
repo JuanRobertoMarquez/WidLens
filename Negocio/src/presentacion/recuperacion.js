@@ -24,7 +24,7 @@ formRestablecer.addEventListener('submit', async function(e) {
 
     try {
         // Hacemos la petición a la Fase 3 (El Cerebro)
-        const respuesta = await fetch('http://127.0.0.1:3000/api/restablecer-password', {
+        const respuesta = await fetch('https://widlens.onrender.com/api/restablecer-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token, nuevaContrasenia: nuevacontrasenia })

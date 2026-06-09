@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Obtenemos los números reales de la BD antes de animar
     if (statObservaciones && statEspecies && statGuardianes) {
         try {
-            const respuestaStats = await fetch('http://127.0.0.1:3000/api/estadisticas');
+            const respuestaStats = await fetch('https://widlens.onrender.com/api/estadisticas');
             const stats = await respuestaStats.json();
             if (respuestaStats.ok) {
                 statObservaciones.setAttribute('data-target', stats.total_observaciones || 0);
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const contenedorTop = document.getElementById('contenedor-top-guardianes');
     if (contenedorTop) {
         try {
-            const respuestaTop = await fetch('http://127.0.0.1:3000/api/top-guardianes');
+            const respuestaTop = await fetch('https://widlens.onrender.com/api/top-guardianes');
             const topGuardianes = await respuestaTop.json();
 
             if (respuestaTop.ok && topGuardianes.length > 0) {
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let contenidoAvatar = '';
                     if (guardian.avatar) {
                         let rutaAvatar = guardian.avatar;
-                        if (!rutaAvatar.startsWith('http')) rutaAvatar = 'http://127.0.0.1:3000' + rutaAvatar;
+                        if (!rutaAvatar.startsWith('http')) rutaAvatar = 'https://widlens.onrender.com' + rutaAvatar;
                         contenidoAvatar = `<img src="${rutaAvatar}" alt="${guardian.nombre}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
                     } else {
                         contenidoAvatar = emojisFallback[index] || '👤';
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // 5. FUNCIÓN: HISTORIA RECIENTE Y MINI-MAPA
 async function cargarHistoriaReciente() {
     try {
-        const respuesta = await fetch('http://127.0.0.1:3000/api/observacion-reciente');
+        const respuesta = await fetch('https://widlens.onrender.com/api/observacion-reciente');
         const datos = await respuesta.json();
         
         console.log("Datos recibidos de la API:", datos);
@@ -152,7 +152,7 @@ async function cargarHistoriaReciente() {
 
             if(elNombreUsuario) elNombreUsuario.innerText = datos.nombre_usuario;
             if(elAvatarUsuario && datos.usuario_avatar) {
-                elAvatarUsuario.src = 'http://127.0.0.1:3000' + datos.usuario_avatar;
+                elAvatarUsuario.src = 'https://widlens.onrender.com' + datos.usuario_avatar;
             }
 
             // 2. FOTOS DE LA OBSERVACIÓN E ÍCONO
@@ -160,8 +160,8 @@ async function cargarHistoriaReciente() {
             const iconoObs = document.getElementById('icono-obs');
             
             if (imgPrincipal && iconoObs) {
-                const rutaSegura = datos.observacion_foto ? 'http://127.0.0.1:3000' + datos.observacion_foto : '';
-                const rutaIcono = datos.especie_imagen ? 'http://127.0.0.1:3000' + datos.especie_imagen : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+                const rutaSegura = datos.observacion_foto ? 'https://widlens.onrender.com' + datos.observacion_foto : '';
+                const rutaIcono = datos.especie_imagen ? 'https://widlens.onrender.com' + datos.especie_imagen : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
                 
                 imgPrincipal.src = rutaSegura;
                 imgPrincipal.style.display = 'block';
@@ -226,7 +226,7 @@ async function cargarHistoriaReciente() {
 // 6. FUNCIÓN: CARRUSEL DINÁMICO (TARJETAS)
 async function cargarCarruselDinamico() {
     try {
-        const respuesta = await fetch('http://127.0.0.1:3000/api/carrusel-observaciones');
+        const respuesta = await fetch('https://widlens.onrender.com/api/carrusel-observaciones');
         const datos = await respuesta.json();
 
         const trackCarrusel = document.getElementById('track');
@@ -237,7 +237,7 @@ async function cargarCarruselDinamico() {
             datos.forEach(obs => {
                 let rutaFoto = obs.observacion_foto;
                 if (!rutaFoto.startsWith('http')) {
-                    rutaFoto = 'http://127.0.0.1:3000' + rutaFoto;
+                    rutaFoto = 'https://widlens.onrender.com' + rutaFoto;
                 }
 
                 let textoEstatus = obs.estatus_validacion === 'Validado' ? '✅ Verificado' : '📍 En revisión IA';
@@ -286,7 +286,7 @@ function verificarSesion() {
         // Inyectamos su nombre y su foto
         navNombreUsuario.innerText = usuarioLogueado.nombre;
         if(usuarioLogueado.avatar) {
-            navAvatar.src = 'http://127.0.0.1:3000' + usuarioLogueado.avatar;
+            navAvatar.src = 'https://widlens.onrender.com' + usuarioLogueado.avatar;
         }
     } else {
         // NO hay sesión iniciada

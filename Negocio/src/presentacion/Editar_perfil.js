@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 1. CARGAR DATOS ACTUALES (Desde Node.js)
     try {
-        const respuesta = await fetch(`http://127.0.0.1:3000/api/perfil/${idUsuario}`);
+        const respuesta = await fetch(`https://widlens.onrender.com/api/perfil/${idUsuario}`);
         const datos = await respuesta.json();
 
         if (respuesta.ok) {
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let rutaAvatar = datos.datosPersonales.avatar;
                 // Le agregamos la ruta del servidor local si no es url completa
                 if (!rutaAvatar.startsWith('http')) {
-                    rutaAvatar = 'http://127.0.0.1:3000' + rutaAvatar;
+                    rutaAvatar = 'https://widlens.onrender.com' + rutaAvatar;
                 }
                 document.getElementById('preview-img').src = rutaAvatar;
             }
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
             // Petición PUT al backend
-            const respuesta = await fetch(`http://127.0.0.1:3000/api/editar-perfil/${idUsuario}`, {
+            const respuesta = await fetch(`https://widlens.onrender.com/api/editar-perfil/${idUsuario}`, {
                 method: 'PUT',
                 body: empaqueDatos 
             });
