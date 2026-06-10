@@ -205,7 +205,7 @@ app.post('/api/registro', async (req, res) => {
             db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], async (errInsert) => {
                 if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
 
-                const enlaceVerificacion = `http://wildlens.free.nf/Presentacion/paginas/verificar.html?token=${tokenVerificacion}`; 
+                const enlaceVerificacion = `http://wildlens.free.nf/paginas/verificar.html?token=${tokenVerificacion}`; 
                 const htmlCorreo = `
                     <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
                         <h2 style="color: #2B7055;">¡Bienvenido a WildLens, ${nombre}!</h2>
@@ -272,7 +272,7 @@ app.post('/api/recuperar-password', async (req, res) => {
             db.query(sqlUpdate, [tokenReset, correo], async (errUpdate) => {
                 if (errUpdate) return console.error("Error guardando token:", errUpdate);
 
-                const enlaceReset = `http://wildlens.free.nf/Presentacion/paginas/recuperacion.html?token=${tokenReset}`;
+                const enlaceReset = `http://wildlens.free.nf/paginas/recuperacion.html?token=${tokenReset}`;
                 const htmlCorreo = `
                     <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
                         <h2 style="color: #2B7055;">¡Hola, ${usuario.nombre}!</h2>
