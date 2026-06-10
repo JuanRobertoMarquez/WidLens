@@ -71,16 +71,18 @@ app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
 
 // --- 4. CONFIGURACIÓN DE CORREO (NODEMAILER) ---
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', // Forzamos la conexión directa al servidor de Google
-    port: 465,              // Usamos el puerto seguro dedicado
-    secure: true,           // Obligamos a usar SSL
+    host: 'smtp.gmail.com', 
+    port: 465,              
+    secure: true,           
     auth: {
         user: 'juanrobertomarquez1@gmail.com', 
         pass: 'pcxrjissfuunxpvf' 
     },
     tls: {
         rejectUnauthorized: false 
-    }
+    },
+    // ¡ESTA ES LA MAGIA! Obligamos a Node.js a usar la red clásica (IPv4)
+    family: 4 
 });
 
 // --- 5. RUTAS DE LA API ---
