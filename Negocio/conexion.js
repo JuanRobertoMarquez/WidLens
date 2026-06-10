@@ -67,14 +67,6 @@ db.getConnection((err, connection) => {
     console.log('✅ Conectado exitosamente a la base de datos MySQL (Pool activo)');
 });
 
-db.connect((error) => {
-    if (error) {
-        console.error('❌ Error conectando a la base de datos:', error.message);
-        return;
-    }
-    console.log('✅ Conectado exitosamente a la base de datos MySQL');
-});
-
 app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
 
 // --- 4. CONFIGURACIÓN DE CORREO (NODEMAILER) ---
