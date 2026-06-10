@@ -70,9 +70,10 @@ db.getConnection((err, connection) => {
 app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
 
 // --- 4. CONFIGURACIÓN DE CORREO (NODEMAILER) ---
-// Aquí ya está tu nueva contraseña lista y configurada para Render
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com', // Forzamos la conexión directa al servidor de Google
+    port: 465,              // Usamos el puerto seguro dedicado
+    secure: true,           // Obligamos a usar SSL
     auth: {
         user: 'juanrobertomarquez1@gmail.com', 
         pass: 'pcxrjissfuunxpvf' 
