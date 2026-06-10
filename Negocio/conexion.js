@@ -10,6 +10,10 @@ const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+// 🛡️ EL ESCUDO DEFINITIVO CONTRA RENDER E IPv6
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
 const app = express();
 app.use(cors()); 
 app.use(express.json()); 
@@ -254,7 +258,12 @@ app.post('/api/registro', async (req, res) => {
                     res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
                 } catch (errorCorreo) {
                     console.error("❌ Error enviando correo:", errorCorreo);
-                    db.query("DELETE FROM Usuarios WHERE correo = ?", [correo]);
+                    
+                    // ROLLBACK CORREGIDO: Le agregamos el (errDelete) => {} al final
+                    db.query("DELETE FROM Usuarios WHERE correo = ?", [correo], (errDelete) => {
+                        if(errDelete) console.error("No se pudo borrar al fantasma:", errDelete);
+                    });
+                    
                     res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
                 }
             });
