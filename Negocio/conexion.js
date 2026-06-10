@@ -75,9 +75,10 @@ app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
 
 // --- 4. CONFIGURACIÓN DE CORREO (NODEMAILER) ---
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', 
-    port: 465,              
-    secure: true,           
+    host: 'smtp.gmail.com',
+    port: 587,             /* Cambiamos al puerto 587 que tiene menos bloqueos */
+    secure: false,         /* false es obligatorio cuando usamos el puerto 587 */
+    requireTLS: true,      /* Obligamos a cifrar la conexión por seguridad */
     auth: {
         user: 'juanrobertomarquez1@gmail.com', 
         pass: 'pcxrjissfuunxpvf' 
@@ -85,10 +86,14 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false 
     },
-    // ¡ESTA ES LA MAGIA! Obligamos a Node.js a usar la red clásica (IPv4)
-    family: 4 
+    // EL TRUCO MAESTRO: Interceptamos la búsqueda de red a nivel de socket
+    lookup: (hostname, options, callback) => {
+        // Obligamos a que solo devuelva direcciones IPv4 (family: 4)
+        dns.lookup(hostname, { family: 4 }, (err, address, family) => {
+            callback(err, address, family);
+        });
+    }
 });
-
 // --- 5. RUTAS DE LA API ---
 
 app.get('/', (req, res) => {
