@@ -1,3 +1,36 @@
+// LÓGICA DE BARRITA EN TIEMPO REAL
+const passInputRec = document.getElementById('nueva-contrasenia');
+const containerRec = document.getElementById('strength-container-rec');
+const barRec = document.getElementById('strength-bar-rec');
+
+passInputRec.addEventListener('input', function() {
+    const val = this.value;
+    containerRec.style.display = val.length > 0 ? 'block' : 'none';
+
+    let score = 0;
+    const checks = {
+        'req-upper-rec': /[A-Z]/.test(val),
+        'req-lower-rec': /[a-z]/.test(val),
+        'req-number-rec': /\d/.test(val),
+        'req-special-rec': /[\W_]/.test(val)
+    };
+
+    for (const [id, isValid] of Object.entries(checks)) {
+        const li = document.getElementById(id);
+        if (isValid) {
+            li.classList.add('valid');
+            score += 25;
+        } else {
+            li.classList.remove('valid');
+        }
+    }
+
+    barRec.style.width = score + '%';
+    if (score <= 50) barRec.style.backgroundColor = '#d33';
+    else if (score === 75) barRec.style.backgroundColor = '#f39c12';
+    else barRec.style.backgroundColor = '#2B7055';
+});
+
 const formRestablecer = document.querySelector('.reset-form');
 
 formRestablecer.addEventListener('submit', async function(e) {
@@ -11,6 +44,17 @@ formRestablecer.addEventListener('submit', async function(e) {
         Swal.fire({
             title: 'Las contraseñas no coinciden',
             text: 'Por favor, asegúrate de escribir la misma contraseña en ambos campos.',
+            icon: 'warning',
+            confirmButtonColor: '#2B7055'
+        });
+        return;
+    }
+
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{1,8}$/;
+    if (!regexPassword.test(nuevacontrasenia)) {
+        Swal.fire({
+            title: 'Contraseña débil',
+            text: 'Debe tener máximo 8 caracteres e incluir: 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial (ej. @, #, $, !).',
             icon: 'warning',
             confirmButtonColor: '#2B7055'
         });

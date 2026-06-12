@@ -1,7 +1,3 @@
-/* Reseteo básico */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body, html { height: 100%; font-family: 'Open Sans', sans-serif; }
-
 /* El mapa ocupa toda la pantalla */
 #mapa-explorador {
     width: 100vw;
@@ -9,17 +5,25 @@ body, html { height: 100%; font-family: 'Open Sans', sans-serif; }
     z-index: 1; /* Nivel base */
 }
 
-/* Encabezado flotante (Glassmorphism) */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body, html { 
+    font-family: 'Lora', sans-serif; 
+    background-color: #F9F8F2; /* Fondo color crema */
+}
+
+/* Header ya no es absoluto flotante, ahora fluye normal */
 .header-explorador {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    z-index: 1000;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    pointer-events: none; /* Para no bloquear el mapa */
+}
+
+/* El nuevo contenedor principal */
+.explorador-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .logo {
@@ -27,7 +31,7 @@ body, html { height: 100%; font-family: 'Open Sans', sans-serif; }
     backdrop-filter: blur(8px);
     padding: 10px 20px;
     border-radius: 30px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-weight: 700;
     color: #2B7055;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -74,7 +78,7 @@ body, html { height: 100%; font-family: 'Open Sans', sans-serif; }
 }
 
 .popup-info h3 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     color: #2B7055;
     margin-bottom: 5px;
     font-size: 16px;
@@ -92,4 +96,54 @@ body, html { height: 100%; font-family: 'Open Sans', sans-serif; }
     border-top: 1px solid #eee;
     padding-top: 8px;
     margin-top: 8px;
+}
+
+/* Título estilo iNaturalist / WildLens */
+.section-title-container { margin-bottom: 20px; }
+.section-title-container h2 {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    color: #2B7055;
+    margin: 0;
+}
+.title-underline {
+    height: 3px; width: 60px;
+    background-color: #74AC00;
+    margin-top: 6px; border-radius: 2px;
+}
+
+/* El enmarcado del mapa */
+.map-wrapper {
+    width: 100%;
+    height: 70vh; /* Ocupa el 70% de la pantalla, no toda */
+    border-radius: 16px;
+    border: 1px solid #C3D59D;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    overflow: hidden; /* Para que el mapa respete las esquinas redondas */
+    position: relative;
+    background-color: #eee;
+}
+
+#mapa-explorador {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* =========================================
+   MAGIA: INVERTIR POPUPS HACIA ABAJO
+   ========================================= */
+.popup-hacia-abajo {
+    bottom: auto !important;
+    top: 25px !important; /* Obliga a la tarjeta a aparecer debajo del pin */
+}
+
+.popup-hacia-abajo .leaflet-popup-tip-container {
+    top: -20px !important; /* Mueve el contenedor de la flechita a la parte superior */
+    bottom: auto !important;
+}
+
+.popup-hacia-abajo .leaflet-popup-tip {
+    margin: 12px auto 0 !important; /* Invierte el cuadrado para que apunte hacia arriba */
+    box-shadow: 0 -3px 15px rgba(0,0,0,0.1) !important; /* Invierte la sombra */
 }

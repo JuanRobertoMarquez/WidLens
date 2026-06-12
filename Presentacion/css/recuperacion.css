@@ -201,3 +201,56 @@ body {
         flex-direction: column;
     }
 }
+
+/* =========================================
+   BARRA DE SEGURIDAD EN TIEMPO REAL
+========================================= */
+.password-strength-container {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    text-align: left;
+    display: none; /* Oculto por defecto hasta que escriba */
+}
+
+.strength-bar-bg {
+    background-color: #e0e0e0;
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.strength-reqs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    color: #777;
+}
+
+.strength-reqs li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.strength-reqs li i {
+    font-size: 8px; /* El puntito de la lista */
+}
+
+/* Clase que aplicaremos con JS cuando cumpla el requisito */
+.strength-reqs li.valid {
+    color: #2B7055;
+    text-decoration: line-through;
+}
+.strength-reqs li.valid i {
+    color: #2B7055;
+}

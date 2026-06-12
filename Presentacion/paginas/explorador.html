@@ -7,14 +7,65 @@
     <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="../css/estilo_explorador.css">
+    <link rel="stylesheet" href="../css/estilo_index.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header class="header-explorador">
-        <div class="logo">🌿 WildLens</div>
-        <a href="../index.html" class="btn-volver">Volver al inicio</a>
+<header class="navbar" id="mainNavbar">
+        <div class="nav-content">
+            
+            <div class="nav-left">
+                <div class="logo-container">
+                    <a href="../index.html">
+                        <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo" style="height: 25px;">
+                    </a>
+                </div>
+                <nav class="nav-links">
+                    <a href="../index.html">Home</a>
+                    <a href="./comunidad.html">Comunidad ⌵</a>
+                    <a href="./explorador.html" class="active">Explorar ⌵</a>
+                </nav>
+            </div>
+
+            <div class="nav-right">
+                <div id="menu-visitante" style="display: none;">
+                    <a href="./login.html" class="btn-acceder">Acceder</a> 
+                    <a href="#"> o </a>
+                    <a href="./crear-cuenta.html" class="btn-registro">Crear una cuenta</a>       
+                </div>
+
+                <div id="menu-usuario" class="user-dropdown" style="display: flex;">
+                    <a href="./subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <div class="dropdown-container">
+                        <button class="dropbtn">
+                            <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                            <span id="nav-nombre-usuario">Usuario</span> ⌵
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="./perfil.html">Mi Perfil</a>
+                            <a href="./mis_observaciones.html">Mis Observaciones</a>
+                            <a href="./configuracion.html">Configuración</a>
+                            <hr>
+                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
     </header>
+
+    <main class="explorador-main" style="margin-top: 75px;">
+            <div class="section-title-container">
+            <h2>Mapa de Avistamientos Colectivos</h2>
+            <div class="title-underline"></div>
+        </div>
+        
+        <div class="map-wrapper">
+            <div id="mapa-explorador"></div>
+        </div>
+    </main>
 
     <div id="mapa-explorador"></div>
 

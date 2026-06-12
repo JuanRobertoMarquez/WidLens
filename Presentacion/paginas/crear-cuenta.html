@@ -103,6 +103,23 @@
 
                     <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
+                        <input type="password" id="contrasenia" placeholder="Contraseña" required maxlength="8">
+                    </div>
+                    
+                    <div class="password-strength-container" id="strength-container-crear">
+                        <div class="strength-bar-bg">
+                            <div class="strength-bar" id="strength-bar-crear"></div>
+                        </div>
+                        <ul class="strength-reqs">
+                            <li id="req-upper-crear"><i class="fas fa-circle"></i> 1 Mayúscula</li>
+                            <li id="req-lower-crear"><i class="fas fa-circle"></i> 1 Minúscula</li>
+                            <li id="req-number-crear"><i class="fas fa-circle"></i> 1 Número</li>
+                            <li id="req-special-crear"><i class="fas fa-circle"></i> 1 Carácter especial (@,#,$,etc)</li>
+                        </ul>
+                    </div>
+
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
                         <input type="password" id="confirmar_contrasenia" placeholder="Confirmar contraseña" required maxlength="8">
                     </div>
 
@@ -160,6 +177,42 @@
         cargarImagenFondo();
 
         const registroForm = document.getElementById('registroForm');
+const passInputCrear = document.getElementById('contrasenia');
+        const containerCrear = document.getElementById('strength-container-crear');
+        const barCrear = document.getElementById('strength-bar-crear');
+
+        passInputCrear.addEventListener('input', function() {
+            const val = this.value;
+            // Mostrar la barrita solo si ya empezó a escribir
+            containerCrear.style.display = val.length > 0 ? 'block' : 'none';
+
+            let score = 0;
+
+            // Evaluaciones Regex
+            const checks = {
+                'req-upper-crear': /[A-Z]/.test(val),
+                'req-lower-crear': /[a-z]/.test(val),
+                'req-number-crear': /\d/.test(val),
+                'req-special-crear': /[\W_]/.test(val)
+            };
+
+            // Tachar los completados y sumar puntos
+            for (const [id, isValid] of Object.entries(checks)) {
+                const li = document.getElementById(id);
+                if (isValid) {
+                    li.classList.add('valid');
+                    score += 25; // Cada requisito vale 25%
+                } else {
+                    li.classList.remove('valid');
+                }
+            }
+
+            // Pintar la barra según el puntaje
+            barCrear.style.width = score + '%';
+            if (score <= 50) barCrear.style.backgroundColor = '#d33'; // Rojo
+            else if (score === 75) barCrear.style.backgroundColor = '#f39c12'; // Naranja
+            else barCrear.style.backgroundColor = '#2B7055'; // Verde
+        });
 
         registroForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -175,6 +228,18 @@
                 Swal.fire({
                     title: 'Las contraseñas no coinciden',
                     text: 'Por favor, asegúrate de escribir la misma contraseña en ambos campos.',
+                    icon: 'warning',
+                    confirmButtonColor: '#2B7055'
+                });
+                return;
+            }
+
+            //  NUEVA VALIDACIÓN DE SEGURIDAD (REGEX)
+            const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{1,8}$/;
+            if (!regexPassword.test(contrasenia)) {
+                Swal.fire({
+                    title: 'Contraseña débil',
+                    text: 'Debe tener máximo 8 caracteres e incluir: 1 mayúscula, 1 minúscula, 1 número y 1 carácter especial (ej. @, #, $, !).',
                     icon: 'warning',
                     confirmButtonColor: '#2B7055'
                 });

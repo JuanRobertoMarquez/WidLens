@@ -198,11 +198,16 @@ app.post('/api/registro', async (req, res) => {
         if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
 
         try {
-            const contraseniaEncriptada = await bcrypt.hash(contrasenia, 10);
-            const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+                    const contraseniaEncriptada = await bcrypt.hash(contrasenia, 10);
+                    const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+                    
+                    // --- NUEVO: Generar avatar automático con iniciales y el verde de WildLens ---
+                    const avatarPorDefecto = `https://ui-avatars.com/api/?name=${nombre}+${apellido}&background=2B7055&color=fff&size=256`;
 
-            const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion) VALUES (?, ?, ?, ?, ?)";
-            db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion], async (errInsert) => {
+                    // Agregamos 'avatar' al INSERT y mandamos la variable 'avatarPorDefecto'
+                    const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion, avatar) VALUES (?, ?, ?, ?, ?, ?)";
+                    
+                    db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion, avatarPorDefecto], async (errInsert) => {    
                 if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
 
                 const enlaceVerificacion = `http://wildlens.free.nf/paginas/verificar.html?token=${tokenVerificacion}`; 

@@ -22,7 +22,7 @@
                 </div>
                 <nav class="nav-links">
                     <a href="index.html" class="active">Home</a>
-                    <a href="#">Comunidad ⌵</a>
+                    <a href="./paginas/comunidad.html">Comunidad ⌵</a>
                     <a href="./paginas/explorador.html">Explorar ⌵</a>
                 </nav>
             </div>
@@ -69,8 +69,7 @@
                 <h1>SÉ UN GUARDIÁN DE LA BIODIVERSIDAD LOCAL</h1>
                 <p>Únete a la red comunitaria de monitoreo de ajolotes y fauna urbana.</p>
                 <div class="hero-buttons">
-                    <a href="./paginas/crear-cuenta.html" class="btn-blanco-sombra">Únete a la comunidad</a>
-                </div>
+                    <a href="./paginas/crear-cuenta.html" id="hero-cta" class="btn-blanco-sombra">Únete a la comunidad</a>                </div>
             </div>
         </div>
     </section>
@@ -156,54 +155,30 @@
                 </div>
             </section>
 
-            <section class="inature-stories-section">
-                <h2>El poder de la comunidad WildLens</h2>
-                
-                <div class="inature-cards-grid">
+            <section class="inature-stories-section" style="background-color: #ffffff; padding: 60px 20px; text-align: center;">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <h2 style="font-family: 'Lora', serif; color: var(--dark-green); margin-bottom: 20px;">
+                        Conectados con la Ciencia Global
+                    </h2>
                     
-                    <div class="inature-story-card">
-                        <div class="story-image-wrapper">
-                            <img src="https://images.unsplash.com/photo-1712874364529-2d17f6111bb1?q=80&w=1074&auto=format&fit=crop" alt="Ajolote Mexicano">
-                            <div class="story-title-overlay">
-                                <h3>Mapeando zonas de refugio urbano</h3>
-                            </div>
-                        </div>
-                        <div class="story-content">
-                            <p>Se registró un ajolote en un canal que se creía inactivo. Este hallazgo ayuda a la comunidad a identificar nuevos puntos críticos para la conservación de la especie en la zona metropolitana.</p>
-                            <span class="story-meta">Visto por roberto_m en Ciudad Nezahualcóyotl</span>
-                        </div>
+                    <p style="font-family: 'Open Sans', sans-serif; font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 30px;">
+                        En WildLens creemos en el poder de los datos abiertos. Nuestras dinámicas de recolección de datos sobre la biodiversidad local se inspiran en grandes redes como <strong>iNaturalist</strong>. Al documentar al Ajolote Mexicano (<em>Ambystoma mexicanum</em>) y otros anfibios, tú también eres parte de un esfuerzo de conservación a nivel mundial.
+                    </p>
+
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <img src="https://images.unsplash.com/photo-1712874364529-2d17f6111bb1?q=80&w=1074&auto=format&fit=crop" 
+                            alt="Ajolote Mexicano" 
+                            style="width: 100%; max-width: 400px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px;">
                     </div>
 
-                    <div class="inature-story-card">
-                        <div class="story-image-wrapper">
-                            <img src="https://imgs.search.brave.com/Dxm99dLlHl3FPToxiCpLf0cIy-mZhpJInIrjHauNTj4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9hcmFu/ZGFuby5sYWpvcm5h/ZGFtYXlhLm14L2lt/Zy9jdWVycG8tMS9h/Y2hvcXVlMi5qcGVn" alt="Achoque de Pátzcuaro">
-                            <div class="story-title-overlay">
-                                <h3>Identificando especies endémicas</h3>
-                            </div>
-                        </div>
-                        <div class="story-content">
-                            <p>Nuestra red neuronal confirmó un avistamiento de <em>A. dumerilii</em> (Achoque), permitiendo a los investigadores locales monitorear la salud de las poblaciones fuera de su hábitat habitual.</p>
-                            <span class="story-meta">Visto por elena_bio en Michoacán</span>
-                        </div>
+                    <div class="stories-btn-container" style="margin-top: 20px;">
+                        <a href="https://www.inaturalist.org/taxa/26748-Ambystoma-mexicanum" 
+                        target="_blank" 
+                        class="btn-inature-green" 
+                        style="display: inline-block; padding: 12px 25px; font-size: 16px;">
+                        Ver observaciones globales en iNaturalist ↗
+                        </a>
                     </div>
-
-                    <div class="inature-story-card">
-                        <div class="story-image-wrapper">
-                            <img src="https://imgs.search.brave.com/uf5fJBpRnvzjuBxqNSyAUmgH1RkuDOgrzpgcbE_q2S4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS90b21hci1tdWVz/dHJhLWFndWEtZXN0/YW5xdWUtY29tcHJv/YmFyLWNhbGlkYWQt/YWd1YV8zMjg2Nzgt/MjI3LmpwZz9zZW10/PWFpc19oeWJyaWQ" alt="Ajolote en cautiverio">
-                            <div class="story-title-overlay">
-                                <h3>Monitoreo de calidad del agua</h3>
-                            </div>
-                        </div>
-                        <div class="story-content">
-                            <p>Un grupo de voluntarios locales está utilizando la plataforma para correlacionar los avistamientos de crías de ajolote con los niveles de oxigenación y temperatura del agua.</p>
-                            <span class="story-meta">Visto por carlos_eco en Xochimilco</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="stories-btn-container">
-                    <a href="./paginas/explorador.html" class="btn-inature-green">Explorar más registros</a>
                 </div>
             </section>
 
@@ -342,7 +317,7 @@
                 <div class="newsletter-content">
                     <h2>¡Recibe nuestro boletín mensual!</h2>
                     <p>Mantente conectado con historias y descubrimientos de la comunidad WildLens.</p>
-                    <a href="./paginas/crear-cuenta.html" class="btn-blanco-sombra">Regístrate</a>
+                    <a href="./paginas/crear-cuenta.html" id="newsletter-cta" class="btn-blanco-sombra">Regístrate</a>
                 </div>
             </div>
         </section>

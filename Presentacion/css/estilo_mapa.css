@@ -6,18 +6,15 @@
 }
 
 body, html {
-    height: 100%; /* Ocupar toda la altura de la ventana */
-    font-family: 'Open Sans', sans-serif;
+    height: 100%; 
 }
 
-/* El contenedor del mapa ocupa toda la pantalla de fondo */
 #map {
     height: 100vh;
     width: 100vw;
-    position: absolute; /* Para que quede de fondo */
+    position: absolute; 
     top: 0;
     left: 0;
-    z-index: 1; /* Nivel base */
 }
 .info-card {
     position: absolute;

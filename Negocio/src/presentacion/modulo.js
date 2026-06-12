@@ -279,6 +279,10 @@ function verificarSesion() {
     const menuUsuario = document.getElementById('menu-usuario');
     const navNombreUsuario = document.getElementById('nav-nombre-usuario');
     const navAvatar = document.getElementById('nav-avatar');
+    
+    // NUEVO: Seleccionamos los botones que vamos a transformar
+    const heroCta = document.getElementById('hero-cta');
+    const newsletterCta = document.getElementById('newsletter-cta');
 
     // 1. Buscamos si hay datos de usuario guardados en el navegador
     const usuarioString = localStorage.getItem('usuarioWildLens');
@@ -297,10 +301,31 @@ function verificarSesion() {
                 ? usuarioLogueado.avatar 
                 : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
         }
+
+        // NUEVO: Modificamos los botones para el usuario registrado
+        if (heroCta) {
+            heroCta.innerText = "Cargar nueva observación";
+            heroCta.href = "./paginas/subir_fotos.html";
+        }
+        if (newsletterCta) {
+            newsletterCta.innerText = "Explorar observaciones";
+            newsletterCta.href = "./paginas/explorador.html";
+        }
+
     } else {
         // NO hay sesión iniciada
-        menuVisitante.style.display = 'block'; // Mostramos el login
+        menuVisitante.style.display = 'flex'; // Cambiado a 'flex' para respetar tu CSS
         menuUsuario.style.display = 'none';    // Ocultamos el menú desplegable
+
+        // NUEVO: Devolvemos los botones a su estado original (por si cierra sesión)
+        if (heroCta) {
+            heroCta.innerText = "Únete a la comunidad";
+            heroCta.href = "./paginas/crear-cuenta.html";
+        }
+        if (newsletterCta) {
+            newsletterCta.innerText = "Regístrate";
+            newsletterCta.href = "./paginas/crear-cuenta.html";
+        }
     }
 }
 

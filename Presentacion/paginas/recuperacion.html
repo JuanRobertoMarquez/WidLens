@@ -11,62 +11,49 @@
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="nav-content">
-            <div class="nav-left">
-                <div class="logo-container">
-                    <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo">
-                </div>
-                <nav class="nav-links">
-                    <a href="../index.html" class="active">Home</a>
-                    <a href="#">Comunidad ⌵</a>
-                    <a href="explorador.html">Explorar ⌵</a>
-                </nav>
+    <a href="../index.html" class="branding-logo">
+        <img src="../images/WildLens.png" alt="Logo WildLens">
+    </a>
+
+    <div class="reset-container">
+        <h2><i class="fas fa-key"></i> Nueva Contraseña</h2>
+        <p>Define tu nueva contraseña para recuperar el acceso a tu cuenta.</p>
+
+        <form class="reset-form">
+            <div class="input-group">
+                <label for="nueva-contrasenia">Nueva Contraseña</label>
+                <input type="password" id="nueva-contrasenia" name="contrasenia" required maxlength="8" placeholder="Mínimo 8 caracteres">
             </div>
-            <div class="nav-right">
-                <div id="menu-visitante">
-                    <a href="login.html">Acceder</a> o 
-                    <a href="crear-cuenta.html">Crear una cuenta</a>       
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <div class="split-layout">
-        <div class="image-section"></div>
-
-        <div class="form-section">
-            <div class="form-container">
-                <div class="logo-container">
-                    <a href="../index.html" style="text-decoration: none;">
-                        <h1 style="color: #2B7055; font-family: 'Lora', serif;">🌿 WildLens</h1>
-                    </a>
-                </div>
-
-                <h2 style="font-size: 24px;">Nueva Contraseña</h2>
-                <p style="color: #555; margin-bottom: 25px; font-size: 14px;">Define tu nueva contraseña para recuperar el acceso a tu cuenta.</p>
-
-                <form class="reset-form">
-                    <div class="input-with-icon">
-                        <i class="fas fa-key"></i>
-                        <input type="password" id="nueva-contrasenia" name="contrasenia" required maxlength="8" placeholder="Nueva Contraseña (Máx 8)">
-                    </div>
-
-                    <div class="input-with-icon">
+            <div class="input-with-icon">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="confirm-contrasenia" required maxlength="8" placeholder="Confirmar Contraseña">
+                        <input type="password" id="contrasenia" placeholder="Contraseña" required maxlength="8">
+                    </div>
+                    
+                    <div class="password-strength-container" id="strength-container-crear">
+                        <div class="strength-bar-bg">
+                            <div class="strength-bar" id="strength-bar-crear"></div>
+                        </div>
+                        <ul class="strength-reqs">
+                            <li id="req-upper-crear"><i class="fas fa-circle"></i> 1 Mayúscula</li>
+                            <li id="req-lower-crear"><i class="fas fa-circle"></i> 1 Minúscula</li>
+                            <li id="req-number-crear"><i class="fas fa-circle"></i> 1 Número</li>
+                            <li id="req-special-crear"><i class="fas fa-circle"></i> 1 Carácter especial (@,#,$,etc)</li>
+                        </ul>
                     </div>
 
-                    <button type="submit" class="btn-primary" id="btn-guardar" style="margin-bottom: 15px;">Guardar contraseña</button>
-                    
-                    <div class="footer-links">
-                        <p><a href="login.html">Cancelar y regresar al Login</a></p>
-                    </div>
-                </form>
+            <div class="input-group">
+                <label for="confirm-contrasenia">Confirmar Contraseña</label>
+                <input type="password" id="confirm-contrasenia" required maxlength="8" placeholder="Repite la nueva contraseña">
             </div>
-        </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-submit" id="btn-guardar">Guardar contraseña</button>
+                <a href="login.html" class="btn btn-cancel" style="text-decoration: none; text-align: center; display: inline-block; line-height: 1.4;">Cancelar</a>
+            </div>
+        </form>
     </div>
 
-    <script src="../js/src/presentacion/recuperacion.js"></script>
+    <script src="../js/recuperacion.js"></script>
 </body>
 </html>

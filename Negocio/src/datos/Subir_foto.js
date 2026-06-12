@@ -10,6 +10,17 @@ let idUsuarioLogeado = null;
 if (usuarioString) {
     const usuarioLogueado = JSON.parse(usuarioString);
     idUsuarioLogeado = usuarioLogueado.id_usuario || usuarioLogueado.id;
+    
+    // --- MAGIA PARA ACTUALIZAR EL NOMBRE Y FOTO EN EL NAVBAR ---
+    const navNombre = document.getElementById('nav-nombre-usuario');
+    const navAvatar = document.getElementById('nav-avatar');
+    
+    if (navNombre) navNombre.innerText = usuarioLogueado.nombre || "Usuario";
+    if (navAvatar && usuarioLogueado.avatar) {
+        navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
+            ? usuarioLogueado.avatar 
+            : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+    }
 }
 
 if (!idUsuarioLogeado) {
@@ -25,6 +36,7 @@ if (!idUsuarioLogeado) {
     // Si inició sesión correctamente, inyectamos dinámicamente su ID en el formulario
     document.getElementById('id-usuario').value = idUsuarioLogeado;
 }
+
 // EL CEREBRO DE LA IA (Integración de TensorFlow)
 async function analizarFotoIA(base64Image) {
     try {
@@ -58,13 +70,13 @@ async function analizarFotoIA(base64Image) {
 
 async function cambiarAlPaso(pasoDestino) {
     
-    // --- BARRERA DE SEGURIDAD 
+    // --- BARRERA DE SEGURIDAD PARA PASAR AL MAPA (PASO 2)
     if (pasoDestino === 2) {
         const fotosSubidas = photos.filter(p => p !== null);
         
         if (fotosSubidas.length === 0) {
             Swal.fire('Falta Evidencia', 'Por favor, añade al menos una fotografía de evidencia.', 'warning');
-            return;
+            return; // Bloqueo si no hay foto
         }
 
         // 🧠 Inicia el análisis de la IA con la primera foto subida
@@ -92,32 +104,29 @@ async function cambiarAlPaso(pasoDestino) {
             sessionStorage.setItem('especieDetectada', animalDetectado);
             sessionStorage.setItem('confianza', porcentajeConfianza);
 
-            // Si la IA cree que no es un ajolote, lanzamos alerta preventiva
+            // NUEVA LÓGICA: Bloqueo estricto si NO es un ajolote
             if (animalDetectado !== "Ajolote") {
-                const result = await Swal.fire({
-                    title: 'Análisis IA Completado',
-                    text: `Nuestra red neuronal estima con un ${porcentajeConfianza}% de seguridad que la imagen NO contiene un ajolote. ¿Deseas continuar con el registro de todos modos?`,
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#2B7055',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, es un ajolote',
-                    cancelButtonText: 'Revisar foto'
+                await Swal.fire({
+                    title: '¡Alto ahí!',
+                    text: `Nuestra IA está un ${porcentajeConfianza}% segura de que esto NO es un ajolote. Recuerda que la red de WildLens es exclusiva para monitoreo de esta especie. Por favor, intenta con otra foto.`,
+                    icon: 'error',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Entendido'
                 });
 
-                if (!result.isConfirmed) {
-                    btnContinuar.innerText = textoOriginal;
-                    btnContinuar.disabled = false;
-                    return; // Abortamos el cambio de página
-                }
-            } else if (animalDetectado == "Ajolote"){
-                const result = await Swal.fire({
-                    title: 'Analisis de IA completo',
-                    text: `Nuestra red neuronal estima con un ${porcentajeConfianza}% de seguridad que la imagen si es un Ajolote`,
-                    icon:'question',
-                    showCancelButton: true,
-                    confirmButtonColor:' #2B7055',
-                    confirmButtonText: 'Continuar',
+                // 🛑 FRENO DE MANO: Restauramos el botón y CORTAMOS la ejecución aquí
+                btnContinuar.innerText = textoOriginal;
+                btnContinuar.disabled = false;
+                return; // <--- ESTO DETIENE LA FUNCIÓN Y EVITA QUE PASE AL MAPA
+                
+            } else {
+                // Si SÍ es un ajolote, lo felicitamos y dejamos que el código siga
+                await Swal.fire({
+                    title: '¡Análisis IA completado!',
+                    text: `Nuestra red neuronal estima con un ${porcentajeConfianza}% de seguridad que la imagen es un Ajolote. ¡Excelente hallazgo!`,
+                    icon: 'success',
+                    confirmButtonColor: '#2B7055',
+                    confirmButtonText: 'Continuar'
                 });
             }
         }
@@ -127,6 +136,7 @@ async function cambiarAlPaso(pasoDestino) {
         btnContinuar.disabled = false;
     }
     
+// 1. Limpiamos las clases
     document.querySelectorAll('.seccion-paso').forEach(sec => sec.classList.remove('paso-activo'));
     document.getElementById('step1-indicator').classList.remove('active');
     document.getElementById('step2-indicator').classList.remove('active');
@@ -135,31 +145,25 @@ async function cambiarAlPaso(pasoDestino) {
     const navbar = document.getElementById('mainNavbar');
     const stepperWrapper = document.getElementById('stepperWrapper');
     
+    // 2. ¡LA MAGIA AQUÍ! El Navbar SIEMPRE visible y el contenedor SIEMPRE normal
+    if (navbar) navbar.style.display = "block";
+    if (stepperWrapper) stepperWrapper.className = "page-wrapper";
+
     if (pasoDestino === 1) {
         document.getElementById('paso-1').classList.add('paso-activo');
-        document.getElementById('step1-indicator').classList.add('active');
-        navbar.style.display = "block";
-        stepperWrapper.className = "page-wrapper"; 
+        document.getElementById('step1-indicator').classList.add('active'); // Solo el 1
+        
     } else if (pasoDestino === 2) {
         document.getElementById('paso-2').classList.add('paso-activo');
-        document.getElementById('step1-indicator').classList.add('active');
-        document.getElementById('step2-indicator').classList.add('active');
-        navbar.style.display = "none"; 
-        stepperWrapper.className = "map-mode-stepper";
+        document.getElementById('step2-indicator').classList.add('active'); // Solo el 2
         setTimeout(() => map.invalidateSize(), 100); 
+        
     } else if (pasoDestino === 3) {
-            document.getElementById('paso-3').classList.add('paso-activo');
-            document.getElementById('step1-indicator').classList.add('active');
-            document.getElementById('step2-indicator').classList.add('active');
-            document.getElementById('step3-indicator').classList.add('active');
-            navbar.style.display = "block";
-            stepperWrapper.className = "page-wrapper";
-            
-            // 1. Renderiza el resumen con la foto local, predicción de IA y dirección
-            cargarResumenPaso3();
-            
-            // 2. Consulta iNaturalist y dibuja la tarjeta con el enlace de redirección "Ver más detalles..."
-            cargarInfoiNaturalist(document.getElementById('id-especie').value);
+        document.getElementById('paso-3').classList.add('paso-activo');
+        document.getElementById('step3-indicator').classList.add('active'); // Solo el 3
+        
+        cargarResumenPaso3();
+        cargarInfoiNaturalist(document.getElementById('id-especie').value);
     }
 }
 
@@ -256,12 +260,20 @@ if (uploadSection) {
     });
 }
 
-const limitesMexico = [[19.152970, -99.156045], [19.318469, -99.006223]];
+// Coordenadas estrictas que encierran a Xochimilco y sus canales
+const limitesXochimilco = [
+    [19.1850, -99.1350], // Suroeste (Abajo a la izquierda)
+    [19.3000, -98.9900]  // Noreste (Arriba a la derecha)
+];
 
 const map = L.map('map', { 
-    doubleClickZoom: false, attributionControl: false, zoomControl: false,       
-    maxBounds: limitesMexico, maxBoundsViscosity: 1.0, minZoom: 9               
-}).setView([19.152501, -99.006223], 10);
+    doubleClickZoom: false, 
+    attributionControl: false, 
+    zoomControl: false,       
+    maxBounds: limitesXochimilco, // Asignamos la nueva caja fuerte
+    maxBoundsViscosity: 1.0,      // Pared sólida, el mapa rebota si intentas salir
+    minZoom: 12                   // Zoom mínimo más cercano para que no se vea fuera del borde
+}).setView([19.2550, -99.0850], 13); // Centramos la cámara en los canales principales
 
 const mapaBasico = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 20 });
 const mapaSatelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
@@ -288,10 +300,10 @@ const iconoPersonalizado = L.icon({
     iconUrl: '../images/sub_icon.png', iconSize: [50, 55], iconAnchor: [22, 45], popupAnchor: [0, -45] 
 });
 
-const marker = L.marker([19.4326, -99.1332], { draggable: true, icon: iconoPersonalizado }).addTo(map);
+const marker = L.marker([19.2550, -99.0850], { draggable: true, icon: iconoPersonalizado }).addTo(map);
 
-document.getElementById('latitud').value = 19.4326;
-document.getElementById('longitud').value = -99.1332;
+document.getElementById('latitud').value = 19.2550;
+document.getElementById('longitud').value = -99.0850;
 
 const coordsDisplay = document.getElementById('coords-display');
 

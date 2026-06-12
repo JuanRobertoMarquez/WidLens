@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunidad y Observaciones - WildLens</title>
+    <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../css/estilo_index.css">
+    <link rel="stylesheet" href="../css/comunidad.css">
+    <!-- Fuentes y Leaflet -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <!-- NAVBAR (Ajustada para la carpeta /paginas) -->
+    <header class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <div class="logo-container">
+                    <a href="../index.html">
+                        <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo">
+                    </a>
+                </div>
+                <nav class="nav-links">
+                    <a href="../index.html">Home</a>
+                    <a href="comunidad.html" class="active">Comunidad</a>
+                    <a href="explorador.html">Explorar ⌵</a>
+                </nav>
+            </div>
+
+            <div class="nav-right">
+                <div id="menu-visitante">
+                    <a href="./login.html" class="btn-acceder">Acceder</a> 
+                    <a href="#"> o </a>
+                    <a href="./crear-cuenta.html" class="btn-registro">Crear una cuenta</a>       
+                </div>
+
+                <div id="menu-usuario" style="display: none;" class="user-dropdown">
+                    <a href="./subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <div class="dropdown-container">
+                        <button class="dropbtn">
+                            <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                            <span id="nav-nombre-usuario">Bienvenido</span> ⌵
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="./perfil.html">Mi Perfil</a>
+                            <a href="./mis_observaciones.html">Mis Observaciones</a>
+                            <a href="./configuracion.html">Configuración</a>
+                            <hr>
+                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="comunidad-main">
+        <!-- Encabezado de la página -->
+        <section class="comunidad-header">
+            <h1>Comunidad de Guardianes WildLens</h1>
+            <p>Explora los avistamientos biológicos recientes, mapas de distribución y contribuciones de la red BioNode.</p>
+        </section>
+
+        <!-- Sección del Mapa Global de la Comunidad -->
+        <section class="mapa-comunidad-section">
+            <div class="section-title-container">
+                <h2>Mapa de Avistamientos Colectivos</h2>
+                <div class="title-underline"></div>
+            </div>
+            <div id="mapa-comunidad" class="global-map"></div>
+        </section>
+
+        <!-- Filtros y Grid de Observaciones -->
+        <section class="observaciones-section">
+            <div class="section-title-container">
+                <h2>Observaciones de la Comunidad</h2>
+                <div class="title-underline"></div>
+            </div>
+
+            <!-- Barra de Herramientas de Filtros -->
+            <div class="filtros-bar">
+                <div class="search-box">
+                    <input type="text" id="search-especie" placeholder="Buscar por especie (ej. Ajolote)...">
+                </div>
+                <div class="select-box">
+                    <select id="filter-estatus">
+                        <option value="todos">Todos los estatus</option>
+                        <option value="Validado">Validado ✔</option>
+                        <option value="Pendiente">Pendiente 🕒</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid Dinámico -->
+            <div class="obs-grid" id="grid-observaciones">
+                <!-- Se inyecta dinámicamente con JS -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="partner-footer">
+        <span class="partner-text">Desarrollado por el equipo de software de WildLens |</span>
+        <div class="bionode-logo">
+            <span class="flower-icon">❁</span> BioNode
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/comunidad.js"></script>
+</body>
+</html>

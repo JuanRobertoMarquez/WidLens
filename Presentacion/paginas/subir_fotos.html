@@ -44,150 +44,201 @@
             border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.05);
         }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 600; margin-bottom: 8px; color: #333; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Open Sans', sans-serif; font-size: 14px; }
+        .form-group label { display: block; font-family: 'Lora', sans-serif; font-weight: 600; margin-bottom: 8px; color: #333; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Lora', sans-serif; font-size: 14px; }
         .form-control:focus { border-color: #2B7055; outline: none; }
         .btn-flex-container { display: flex; gap: 15px; margin-top: 25px; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <header class="navbar" id="mainNavbar">
+<header class="navbar" id="mainNavbar">
         <div class="nav-content">
-            <div class="logo-container">
-                <img src="../images/Logo.png" alt="WildLens Logo" class="logo-logo">
-                <span class="logo-text">WildLens</span>
+            
+            <div class="nav-left">
+                <div class="logo-container">
+                    <a href="../index.html" style="text-decoration: none;">
+                        <img src="../images/WildLens.png" alt="Logo WildLens" class="logo-logo">
+                    </a>
+                </div>
+                <nav class="nav-links">
+                    <a href="../index.html">Home</a>
+                    <a href="./comunidad.html">Comunidad ⌵</a>
+                    <a href="./explorador.html" class="active">Explorar ⌵</a>
+                </nav>
             </div>
-            <nav class="nav-links">
-                <a href="../index.html">Home</a>
-                <a href="#" class="active">Registros</a>
-                <a href="exploracion.html" class="btn-nav">Explorar</a>
-            </nav>
+
+            <div class="nav-right">
+                <div id="menu-visitante" style="display: none;">
+                    <a href="./login.html" class="btn-acceder">Acceder</a> 
+                    <a href="#"> o </a>
+                    <a href="./crear-cuenta.html" class="btn-registro">Crear una cuenta</a>       
+                </div>
+
+                <div id="menu-usuario" class="user-dropdown" style="display: flex;">
+                    <a href="./subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
+                    <div class="dropdown-container">
+                        <button class="dropbtn">
+                            <img id="nav-avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="nav-avatar-img">
+                            <span id="nav-nombre-usuario">Usuario</span> ⌵
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="./perfil.html">Mi Perfil</a>
+                            <a href="./mis_observaciones.html">Mis Observaciones</a>
+                            <a href="./configuracion.html">Configuración</a>
+                            <hr>
+                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </header>
 
-    <form id="formulario-registro-maestro">
-        
-        <input type="hidden" id="latitud" name="latitud" value="">
-        <input type="hidden" id="longitud" name="longitud" value="">
-        <input type="hidden" id="id-usuario" name="id_usuario" value="1"> 
+    <div class="main-container" style="padding-top: 70px;">
+        <form id="formulario-registro-maestro">
+            
+            <input type="hidden" id="latitud" name="latitud" value="">
+            <input type="hidden" id="longitud" name="longitud" value="">
+            <input type="hidden" id="id-usuario" name="id_usuario" value="1"> 
 
-        <div class="page-wrapper" id="stepperWrapper">
-            <div class="stepper" id="globalStepper">
-                <div class="step active" id="step1-indicator">
-                    <div class="step-circle">1</div><span>Subir Fotos</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step" id="step2-indicator">
-                    <div class="step-circle">2</div><span>Ubicación</span>
-                </div>
-                <div class="step-line"></div>
-                <div class="step" id="step3-indicator">
-                    <div class="step-circle">3</div><span>Detalles</span>
+            <div class="page-wrapper" id="stepperWrapper" style="padding-top: 20px;">
+                <div class="stepper" id="globalStepper">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-circle">1</div><span>Subir Fotos</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step2-indicator">
+                        <div class="step-circle">2</div><span>Ubicación</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" id="step3-indicator">
+                        <div class="step-circle">3</div><span>Detalles</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="paso-1" class="seccion-paso paso-activo">
-            <div class="page-wrapper">
-                <div class="upload-section" id="uploadSection">
-                    <h2 class="section-title">Subir Fotos</h2>
-                    <div class="photo-grid" id="photoGrid">
-                        <div class="photo-slot" onclick="triggerSlot(0)" id="slot0">
-                            <span class="slot-icon">📷</span>
-                            <button type="button" class="remove-btn" onclick="removePhoto(event, 0)">✕</button>
+            <div id="paso-1" class="seccion-paso paso-activo">
+                <div class="page-wrapper">
+                    <div class="upload-section" id="uploadSection" style="margin-top: 20px;">
+                        <h2 class="section-title">Subir Fotos</h2>
+                        <div class="photo-grid" id="photoGrid">
+                            <div class="photo-slot" onclick="triggerSlot(0)" id="slot0">
+                                <span class="slot-icon">📷</span>
+                                <button type="button" class="remove-btn" onclick="removePhoto(event, 0)">✕</button>
+                            </div>
+                        </div>
+                        
+                        <input type="file" id="fileInput" name="foto" accept="image/*" multiple onchange="handleFiles(this.files)" style="display: none;">
+                        
+                        <button type="button" class="btn-upload" onclick="document.getElementById('fileInput').click()"><span>+</span> Subir Fotos</button>
+                        <p class="upload-hint">Sube imágenes nítidas de tu avistamiento.<br>Formatos: JPG, PNG, WEBP · Máx. 10 MB c/u</p>
+
+                        <div class="progress-bar-wrap" id="progressWrap">
+                            <p class="progress-label">Cargando fotos...</p>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+                        
+                        <p class="photo-counter"><span id="photoCount">0</span> / 3 fotos</p>
+                        <button type="button" class="btn-continuar" id="btnContinuar" disabled onclick="cambiarAlPaso(2)">Continuar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="paso-2" class="seccion-paso">
+                <div class="details-container" style="max-width: 1200px; margin: 40px auto; padding: 20px; background: transparent; box-shadow: none;">
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h2 style="font-family: 'Lora', serif; font-size: 28px; color: #2B7055; margin: 0;">Selecciona la Ubicación</h2>
+                            <div style="height: 3px; width: 60px; background-color: #74AC00; margin-top: 6px; border-radius: 2px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper" style="position: relative; width: 100%; height: 70vh; border-radius: 16px; border: 1px solid #C3D59D; box-shadow: 0 8px 25px rgba(0,0,0,0.08); overflow: hidden;">
+                        
+                        <div id="map" style="width: 100%; height: 100%; z-index: 1;"></div>
+                        
+                        <div id="coordenadas-en-vivo" class="coords-vivo" style="z-index: 1000;">Lat: 0.00000 | Lng: 0.00000</div>
+                        
+                        <button type="button" class="btn-ubicacion" onclick="centrarEnMiUbicacion()" title="Ir a mi ubicación" style="z-index: 1000; bottom: 85px;">
+                            <svg viewBox="0 0 24 24" width="22" height="22" stroke="#2B7055" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                        
+                        <div class="buscador-custom" style="z-index: 1000;">
+                            <div class="buscador-input-container">
+                                <span class="lupa-icon">🔍</span>
+                                <input type="text" id="input-busqueda" placeholder="Buscar lugar" autocomplete="off">
+                            </div>
+                            <ul id="lista-resultados" class="oculto"></ul>
+                        </div>
+
+                        <div class="map-layer-menu" style="z-index: 1000; bottom: 85px;">
+                            <div class="map-options-container" id="menu-mapas">
+                                <button type="button" class="map-btn active" id="btn-basico" onclick="cambiarMapa('basico')"><span>Calles</span></button>
+                                <button type="button" class="map-btn" id="btn-satelite" onclick="cambiarMapa('satelite')"><span>Satélite</span></button>
+                            </div>
+                            <button type="button" class="btn-layer-toggle" onclick="toggleMenuMapas()">🗺️</button>
+                        </div>
+
+                        <div class="info-card" style="z-index: 1000; bottom: 15px; width: 90%; max-width: 400px; padding: 15px 25px;">
+                            <h2 style="font-size: 16px;">Confirmar Ubicación</h2>
+                            <p id="coords-display" style="font-size: 12px; margin-bottom: 10px; padding: 8px;">Arrastra el pin al lugar exacto</p>
+                            <div style="display: flex; gap: 10px; margin-top: 5px;">
+                                <button type="button" class="btn-back" onclick="cambiarAlPaso(1)" 
+                                style="padding: 10px 16px; border-radius: 8px; font-weight: 600; flex-shrink: 0;">
+                                ← Regresar
+                                </button>
+                                <button type="button" class="btn-confirmar" onclick="cambiarAlPaso(3)" 
+                                style="padding: 10px; flex: 1;">
+                                Continuar al paso 3
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="paso-3" class="seccion-paso details-section">
+                <div class="details-container">
+                    <h2 style="font-family: 'Montserrat'; color: #2B7055;">Detalles del Avistamiento</h2>
+                    <p style="color: #666; margin-bottom: 25px;">Completa la información final para enviar tu reporte a la red de BioNode.</p>
+                    
+                    <input type="hidden" id="id-especie" name="id_especie" value="1">
+                    
+                    <div id="resumen-registro" style="margin-bottom: 25px; display: none; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                        <h3 style="font-family: 'Montserrat', sans-serif; color: #2B7055; margin-top: 0; margin-bottom: 15px; font-size: 16px;">Resumen de tu registro</h3>
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <img id="resumen-img" src="" alt="Evidencia" style="width: 90px; height: 90px; object-fit: cover; border-radius: 8px; border: 2px solid #2B7055;">
+                            <div>
+                                <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>IA Detectó:</strong> <span id="resumen-ia"></span></p>
+                                <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>Ubicación:</strong> <span id="resumen-ubicacion">Cargando...</span></p>
+                                <p style="margin: 0; font-size: 12px; color: #666;"><strong>Coordenadas:</strong> <span id="resumen-coords"></span></p>
+                            </div>
                         </div>
                     </div>
                     
-                    <input type="file" id="fileInput" name="foto" accept="image/*" multiple onchange="handleFiles(this.files)" style="display: none;">
-                    
-                    <button type="button" class="btn-upload" onclick="document.getElementById('fileInput').click()"><span>+</span> Subir Fotos</button>
-                    <p class="upload-hint">Sube imágenes nítidas de tu avistamiento.<br>Formatos: JPG, PNG, WEBP · Máx. 10 MB c/u</p>
-
-                    <div class="progress-bar-wrap" id="progressWrap">
-                        <p class="progress-label">Cargando fotos...</p>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="progressFill"></div>
-                        </div>
+                    <div id="inaturalist-widget" style="margin-bottom: 25px; display: none;">
                     </div>
                     
-                    <p class="photo-counter"><span id="photoCount">0</span> / 3 fotos</p>
-                    <button type="button" class="btn-continuar" id="btnContinuar" disabled onclick="cambiarAlPaso(2)">Continuar</button>
+                    <div class="form-group">
+                        <label for="informe-notas">Notas de campo / Informes de conservación:</label>
+                        <textarea id="informe-notas" name="descripcion" class="form-control" rows="5" placeholder="Comportamiento, estado del agua, amenazas..."></textarea>
+                    </div>
+
+                    <div class="btn-flex-container">
+                        <button type="button" class="btn-back" onclick="cambiarAlPaso(2)" style="padding: 12px 20px; border-radius: 8px; font-weight: 600;">← Volver al Mapa</button>
+                        <button type="submit" class="btn-confirmar" id="btnFinalizar" style="flex: 1; border-radius: 8px;">Finalizar y Guardar Registro</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="paso-2" class="seccion-paso">
-            <button type="button" class="btn-back" onclick="cambiarAlPaso(1)" style="z-index: 1000; position: absolute; top: 20px; left: 20px;">← Regresar</button>
-            <div class="branding-logo" style="z-index: 1000;">🌿 WildLens</div>
-            <div id="coordenadas-en-vivo" class="coords-vivo" style="z-index: 1000;">Lat: 0.00000 | Lng: 0.00000</div>
-            
-            <div id="map"></div>
-            
-            <button type="button" class="btn-ubicacion" onclick="centrarEnMiUbicacion()" title="Ir a mi ubicación" style="z-index: 1000;">
-                <svg viewBox="0 0 24 24" width="22" height="22" stroke="#2B7055" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
-            
-            <div class="buscador-custom" style="z-index: 1000;">
-                <div class="buscador-input-container">
-                    <span class="lupa-icon">🔍</span>
-                    <input type="text" id="input-busqueda" placeholder="Buscar lugar" autocomplete="off">
-                </div>
-                <ul id="lista-resultados" class="oculto"></ul>
-            </div>
-
-            <div class="map-layer-menu" style="z-index: 1000;">
-                <div class="map-options-container" id="menu-mapas">
-                    <button type="button" class="map-btn active" id="btn-basico" onclick="cambiarMapa('basico')"><span>Calles</span></button>
-                    <button type="button" class="map-btn" id="btn-satelite" onclick="cambiarMapa('satelite')"><span>Satélite</span></button>
-                </div>
-                <button type="button" class="btn-layer-toggle" onclick="toggleMenuMapas()">🗺️</button>
-            </div>
-
-            <div class="info-card" style="z-index: 1000;">
-                <h2>Selección de Ubicación</h2>
-                <p id="coords-display">Arrastra el pin al lugar exacto</p>
-                <button type="button" class="btn-confirmar" onclick="cambiarAlPaso(3)">Confirmar Ubicación</button>
-            </div>
-        </div>
-
-<div id="paso-3" class="seccion-paso details-section">
-    <div class="details-container">
-        <h2 style="font-family: 'Montserrat'; color: #2B7055;">Detalles del Avistamiento</h2>
-        <p style="color: #666; margin-bottom: 25px;">Completa la información final para enviar tu reporte a la red de BioNode.</p>
-        
-        <input type="hidden" id="id-especie" name="id_especie" value="1">
-        
-        <div id="resumen-registro" style="margin-bottom: 25px; display: none; background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <h3 style="font-family: 'Montserrat', sans-serif; color: #2B7055; margin-top: 0; margin-bottom: 15px; font-size: 16px;">Resumen de tu registro</h3>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <img id="resumen-img" src="" alt="Evidencia" style="width: 90px; height: 90px; object-fit: cover; border-radius: 8px; border: 2px solid #2B7055;">
-                <div>
-                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>IA Detectó:</strong> <span id="resumen-ia"></span></p>
-                    <p style="margin: 0 0 5px 0; font-size: 14px; color: #333;"><strong>Ubicación:</strong> <span id="resumen-ubicacion">Cargando...</span></p>
-                    <p style="margin: 0; font-size: 12px; color: #666;"><strong>Coordenadas:</strong> <span id="resumen-coords"></span></p>
-                </div>
-            </div>
-        </div>
-        
-        <div id="inaturalist-widget" style="margin-bottom: 25px; display: none;">
-        </div>
-        
-        <div class="form-group">
-            <label for="informe-notas">Notas de campo / Informes de conservación:</label>
-            <textarea id="informe-notas" name="descripcion" class="form-control" rows="5" placeholder="Comportamiento, estado del agua, amenazas..."></textarea>
-        </div>
-
-        <div class="btn-flex-container">
-            <button type="button" class="btn-back" onclick="cambiarAlPaso(2)" style="padding: 12px 20px; border-radius: 8px; font-weight: 600;">← Volver al Mapa</button>
-            <button type="submit" class="btn-confirmar" id="btnFinalizar" style="flex: 1; border-radius: 8px;">Finalizar y Guardar Registro</button>
-        </div>
+        </form>
     </div>
-</div>
-
-    </form>
-</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="../js/src/datos/Subir_foto.js"></script>
