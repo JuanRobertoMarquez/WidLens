@@ -44,7 +44,7 @@ async function enviarCorreoBrevo(destinatario, asunto, htmlContent) {
     const API_KEY = process.env.BREVO_API_KEY; 
     const url = 'https://api.brevo.com/v3/smtp/email';
     const payload = {
-        sender: { name: "Equipo WildLens", email: "juanrobertomarquez1@gmail.com" },
+        sender: { name: "Equipo BioNode", email: "juanrobertomarquez1@gmail.com" },
         to: [{ email: destinatario }],
         subject: asunto,
         htmlContent: htmlContent
@@ -216,7 +216,7 @@ app.post('/api/registro', async (req, res) => {
                                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
                                         
                                         <div style="background-color: #2B7055; padding: 35px 20px; text-align: center;">
-                                            <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 1px;">🌿 WildLens</h1>
+                                            <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 1px;">WildLens</h1>
                                         </div>
                                         
                                         <div style="padding: 40px 30px; text-align: center; color: #444444;">
@@ -245,7 +245,7 @@ app.post('/api/registro', async (req, res) => {
                     `;
 
                 try {
-                    await enviarCorreoBrevo(correo, '🌿 Verifica tu cuenta de WildLens', htmlCorreo);
+                    await enviarCorreoBrevo(correo, 'Verifica tu cuenta de WildLens', htmlCorreo);
                     res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
                 } catch (errorCorreo) {
                     console.error("Error enviando correo por Brevo:", errorCorreo);
@@ -336,7 +336,7 @@ app.post('/api/recuperar-password', async (req, res) => {
                      `;
 
                 try {
-                    await enviarCorreoBrevo(correo, '🌿 Recupera tu contraseña de WildLens', htmlCorreo);
+                    await enviarCorreoBrevo(correo, 'Recupera tu contraseña de WildLens', htmlCorreo);
                     console.log("Correo de recuperación enviado con éxito a:", correo);
                 } catch (errorCorreo) {
                     console.error("Error enviando correo de recuperación:", errorCorreo);
