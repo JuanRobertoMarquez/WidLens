@@ -21,13 +21,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     // ----------------------------------------------
 
-    // 1. Inicializar el mapa con límites para XOCHIMILCO (Solución del borde superior)
+    // 1. Inicializar el mapa con límites para XOCHIMILCO
     const limitesXochimilco = [
         [19.1850, -99.1350], // Suroeste
-        [19.3500, -98.9900]  // Noreste (Subimos de 19.3000 a 19.3500 para darle "cielo" a los popups)
+        [19.4500, -98.9900]  // Noreste 
     ];
 
-    // Inicializamos el mapa con las restricciones
     const map = L.map('mapa-explorador', { 
         doubleClickZoom: false,
         attributionControl: false, 
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         iconAnchor: [10, 10]
     });
 
-    // 4. FETCH: Traer los datos reales desde la BD a través de Node.js
+    // 4. FETCH: Traer los datos reales
     try {
         const respuesta = await fetch('https://widlens.onrender.com/api/explorar-avistamientos');
         
@@ -58,7 +57,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const avistamientos = await respuesta.json();
 
-        // 5. Recorrer los datos y poner marcadores reales
+        // --- LÓGICA DEL MODAL ---
+        const modal = document.getElementById('modal-avistamiento');
+        const btnCerrarModal = document.querySelector('.modal-close');
+
+        if (btnCerrarModal) {
+            btnCerrarModal.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 5. Recorrer los datos y poner marcadores
         avistamientos.forEach(animal => {
             let rutaFoto = animal.observacion_foto;
             if (rutaFoto && !rutaFoto.startsWith('http')) {
@@ -69,23 +84,42 @@ document.addEventListener("DOMContentLoaded", async () => {
             const opcionesFecha = { day: 'numeric', month: 'long', year: 'numeric' };
             const fechaBonita = fechaObj.toLocaleDateString('es-ES', opcionesFecha);
 
-            const popupHTML = `
-                <img src="${rutaFoto}" alt="${animal.especie_nombre}" class="popup-imagen" style="width: 100%; height: 140px; object-fit: cover; border-radius: 8px 8px 0 0;">
-                <div class="popup-info" style="padding: 10px;">
-                    <h3 style="margin: 0 0 5px 0; color: #2B7055; font-family: Montserrat;">${animal.especie_nombre}</h3>
-                    <div class="popup-usuario" style="font-size: 12px; color: #555;">
-                        📸 Registrado por <strong>${animal.nombre_usuario}</strong> <br> 📅 ${fechaBonita}
-                    </div>
-                </div>
-            `;
+            const marcador = L.marker([animal.latitud, animal.longitud], { icon: iconoAvistamiento }).addTo(map);
 
-// SOLUCIÓN: Aplicamos la clase CSS para que la tarjeta se abra hacia ABAJO
-            L.marker([animal.latitud, animal.longitud], { icon: iconoAvistamiento })
-             .bindPopup(popupHTML, {
-                 className: 'popup-hacia-abajo', // Llama a nuestra magia de CSS
-                 autoPanPadding: [20, 20]        // Le da un respiro a los bordes para que no se pegue a las orillas
-             })
-             .addTo(map);
+            // NUEVO: Agregamos "async" a la función del clic para poder traducir las coordenadas
+            marcador.on('click', async () => {
+                
+                // Llenamos los datos básicos instantáneamente
+                document.getElementById('modal-img').src = rutaFoto;
+                document.getElementById('modal-especie').innerText = animal.especie_nombre;
+                document.getElementById('modal-usuario').innerText = animal.nombre_usuario;
+                document.getElementById('modal-fecha').innerText = fechaBonita;
+                
+                // Ponemos un mensaje de carga elegante mientras la API busca la calle
+                const elementoCoordenadas = document.getElementById('modal-coords');
+                elementoCoordenadas.innerHTML = "<em>Buscando dirección exacta... 🔎</em>";
+                
+                // Mostramos el modal de inmediato
+                modal.style.display = 'flex';
+
+                // Usamos la API de OpenStreetMap para traducir la latitud y longitud a texto
+                try {
+                    const resGeo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${animal.latitud}&lon=${animal.longitud}`);
+                    const geoDatos = await resGeo.json();
+                    
+                    if (geoDatos && geoDatos.display_name) {
+                        // display_name trae todo: Calle, Colonia, Municipio, Estado, País y CP.
+                        elementoCoordenadas.innerText = geoDatos.display_name;
+                    } else {
+                        // Si por algo no hay calles cerca (zona muy rural), dejamos las coordenadas
+                        elementoCoordenadas.innerText = `Coordenadas: ${animal.latitud}, ${animal.longitud}`;
+                    }
+                } catch (error) {
+                    console.error("Error al traducir las coordenadas:", error);
+                    // Plan de respaldo si falla el internet
+                    elementoCoordenadas.innerText = `Coordenadas: ${animal.latitud}, ${animal.longitud}`;
+                }
+            });
         });
 
     } catch (error) {

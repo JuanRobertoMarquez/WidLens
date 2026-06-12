@@ -148,3 +148,61 @@ body {
         font-size: 16px; 
     }
 }
+
+/* ========================================= */
+/* ESTILOS PARA LOS INPUTS CON ICONOS Y EL OJITO */
+/* ========================================= */
+
+/* Contenedor principal relativo para poder ubicar los iconos adentro */
+.input-with-icon {
+    position: relative;
+    margin-bottom: 18px;
+    width: 100%;
+    text-align: left;
+}
+
+/* El icono fijo de la izquierda (usuario, correo, candado) */
+.input-with-icon > i.fas:not(.fa-eye):not(.fa-eye-slash) {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6a7c7f;
+    font-size: 1.1em;
+    pointer-events: none; /* Para que el clic pase a través del icono hacia el input */
+}
+
+/* El campo de texto: le damos relleno a los lados para no aplastar los iconos */
+.input-with-icon input {
+    width: 100%;
+    padding: 12px 45px; /* 45px de espacio libre a los lados */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-with-icon input:focus {
+    border-color: #FA8E9A; /* Tu color rosa */
+    outline: none;
+    box-shadow: 0 0 5px rgba(250, 142, 154, 0.5);
+}
+
+/* El botón transparente del ojito a la derecha */
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6a7c7f;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 5px; /* Área de clic más cómoda */
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #2B7055; /* Cambia a tu verde característico de WildLens */
+}

@@ -85,11 +85,11 @@ const db = mysql.createPool({
 
 db.getConnection((err, connection) => {
     if (err) {
-        console.error('❌ Error conectando a la base de datos:', err.message);
+        console.error('Error conectando a la base de datos:', err.message);
         return;
     }
     if (connection) connection.release(); 
-    console.log('✅ Conectado exitosamente a la base de datos MySQL (Pool activo)');
+    console.log('Conectado exitosamente a la base de datos MySQL (Pool activo)');
 });
 
 app.use('/Datos', express.static(path.join(__dirname, '../Datos')));
@@ -212,19 +212,43 @@ app.post('/api/registro', async (req, res) => {
 
                 const enlaceVerificacion = `http://wildlens.free.nf/paginas/verificar.html?token=${tokenVerificacion}`; 
                 const htmlCorreo = `
-                    <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
-                        <h2 style="color: #2B7055;">¡Bienvenido a WildLens, ${nombre}!</h2>
-                        <p>Gracias por unirte a nuestra red de guardianes. Para poder iniciar sesión, necesitas verificar tu correo electrónico haciendo clic en el siguiente botón:</p>
-                        <a href="${enlaceVerificacion}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0;">Verificar mi cuenta</a>
-                        <p style="font-size: 12px; color: #999;">Si no creaste esta cuenta, puedes ignorar este mensaje.</p>
-                    </div>
-                `;
+                                <div style="background-color: #f5f3ec; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                                        
+                                        <div style="background-color: #2B7055; padding: 35px 20px; text-align: center;">
+                                            <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 1px;">🌿 WildLens</h1>
+                                        </div>
+                                        
+                                        <div style="padding: 40px 30px; text-align: center; color: #444444;">
+                                            <h2 style="color: #2B7055; margin-top: 0; font-size: 26px;">¡Bienvenido, ${nombre}!</h2>
+                                            
+                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
+                                                Estamos muy emocionados de que te unas a nuestra red de guardianes. Juntos, haremos la diferencia en la protección y estudio de la biodiversidad.
+                                            </p>
+                                            
+                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 40px;">
+                                                Para empezar a documentar especies y aparecer en nuestro mapa global, solo necesitamos asegurarnos de que este correo sea tuyo.
+                                            </p>
+                                            
+                                            <a href="${enlaceVerificacion}" style="background-color: #e68332; color: #ffffff; font-weight: bold; text-decoration: none; padding: 16px 35px; border-radius: 8px; display: inline-block; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Verificar mi cuenta</a>
+                                        </div>
+                                        
+                                        <div style="background-color: #f9f9f9; padding: 25px 20px; text-align: center; border-top: 1px solid #eeeeee;">
+                                            <p style="font-size: 13px; color: #999999; margin: 0; line-height: 1.5;">
+                                                Si no creaste esta cuenta, puedes ignorar o eliminar este mensaje con seguridad.<br>
+                                                © 2026 WildLens - Plataforma de Conservación
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                    `;
 
                 try {
                     await enviarCorreoBrevo(correo, '🌿 Verifica tu cuenta de WildLens', htmlCorreo);
                     res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
                 } catch (errorCorreo) {
-                    console.error("❌ Error enviando correo por Brevo:", errorCorreo);
+                    console.error("Error enviando correo por Brevo:", errorCorreo);
                     db.query("DELETE FROM Usuarios WHERE correo = ?", [correo], (errDelete) => {});
                     res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
                 }
@@ -279,20 +303,43 @@ app.post('/api/recuperar-password', async (req, res) => {
 
                 const enlaceReset = `http://wildlens.free.nf/paginas/recuperacion.html?token=${tokenReset}`;
                 const htmlCorreo = `
-                    <div style="font-family: Arial, sans-serif; text-align: center; color: #333;">
-                        <h2 style="color: #2B7055;">¡Hola, ${usuario.nombre}!</h2>
-                        <p>Recibimos una solicitud para restablecer tu contraseña.</p>
-                        <p>Haz clic en el siguiente botón para crear una nueva:</p>
-                        <a href="${enlaceReset}" style="background-color: #2B7055; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0;">Restablecer Contraseña</a>
-                        <p style="font-size: 12px; color: #999;">Si no solicitaste este cambio, puedes ignorar este mensaje. El enlace expirará en 1 hora.</p>
-                    </div>
-                `;
+                                <div style="background-color: #f5f3ec; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                                        
+                                        <div style="background-color: #2B7055; padding: 30px 20px; text-align: center;">
+                                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">🌿 WildLens</h1>
+                                        </div>
+                                        
+                                        <div style="padding: 40px 30px; text-align: center; color: #444444;">
+                                            <h2 style="color: #2B7055; margin-top: 0; font-size: 24px;">Restablecer contraseña</h2>
+                                            
+                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
+                                                ¡Hola, <strong>${usuario.nombre}</strong>! Hemos recibido una solicitud para cambiar tu contraseña de acceso.
+                                            </p>
+                                            
+                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 40px;">
+                                                No te preocupes, a todos nos pasa. Haz clic en el botón de abajo para configurar una nueva de forma segura y volver a la plataforma.
+                                            </p>
+                                            
+                                            <a href="${enlaceReset}" style="background-color: #2B7055; color: #ffffff; font-weight: bold; text-decoration: none; padding: 15px 30px; border-radius: 8px; display: inline-block; font-size: 16px;">Crear nueva contraseña</a>
+                                        </div>
+                                        
+                                        <div style="background-color: #fef8f8; padding: 25px 20px; text-align: center; border-top: 1px solid #ffeded;">
+                                            <p style="font-size: 13px; color: #d9534f; margin: 0; line-height: 1.5;">
+                                                🔒 <strong>Aviso de seguridad:</strong> Este enlace caducará en 1 hora.<br>
+                                                Si no fuiste tú quien solicitó este cambio, no hagas clic en el botón e ignora este mensaje. Tus datos están seguros.
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                     `;
 
                 try {
                     await enviarCorreoBrevo(correo, '🌿 Recupera tu contraseña de WildLens', htmlCorreo);
-                    console.log("✅ Correo de recuperación enviado con éxito a:", correo);
+                    console.log("Correo de recuperación enviado con éxito a:", correo);
                 } catch (errorCorreo) {
-                    console.error("❌ Error enviando correo de recuperación:", errorCorreo);
+                    console.error("Error enviando correo de recuperación:", errorCorreo);
                 }
             });
         }

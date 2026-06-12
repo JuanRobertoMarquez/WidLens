@@ -18,9 +18,10 @@ body {
 .split-layout {
     display: flex;
     width: 100%;
-    margin-top: 55px; 
-    min-height: calc(100vh - 55px);
-    align-items: stretch; /* <-- 1. Añadimos esto para forzar que ambas mitades sean exactamente del mismo alto */
+    margin-top: 55px;
+    height: calc(100vh - 55px);
+    overflow: hidden;
+    align-items: stretch;
 }
 
 /* MITAD IZQUIERDA (Imagen) */
@@ -69,14 +70,21 @@ body {
     font-weight: 600;
 }
 
-/* MITAD DERECHA (Formulario) */
 .form-section {
-    flex: 1; /* Ocupa el espacio restante */
+    flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-color: #ffffff;
     padding: 40px;
+    overflow-y: auto;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    margin: auto;
 }
 
 .form-container {
@@ -114,14 +122,16 @@ h2 {
 
 .input-with-icon input {
     width: 100%;
-    padding: 12px 15px 12px 45px; /* Mucho padding izquierdo para que no pise el icono */
+    padding: 12px 45px 12px 45px; /* Mucho padding izquierdo para que no pise el icono */
+    border: 1px solid #ddd;
+    border-radius: 6px;
     background-color: #f8f9fa; /* Fondo casi blanco */
     border: 1px solid #e0e0e0;
     border-radius: 6px; /* Borde más cuadrado, menos circular */
     font-size: 15px;
     font-family: 'Open Sans', sans-serif;
     outline: none;
-    transition: all 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .input-with-icon input:focus {
@@ -198,7 +208,6 @@ h2 {
 }
 
 /* Adaptación para celulares */
-/* Adaptación para celulares */
 @media (max-width: 768px) {
     .split-layout {
         flex-direction: column;
@@ -218,14 +227,14 @@ h2 {
     }
 }
 
-/* =========================================
-   BARRA DE SEGURIDAD EN TIEMPO REAL
-========================================= */
 .password-strength-container {
     margin-top: -10px;
     margin-bottom: 20px;
     text-align: left;
-    display: none; /* Oculto por defecto hasta que escriba */
+    min-height: 110px;   /* reserva el espacio desde el inicio */
+    visibility: hidden;  /* oculto visualmente */
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .strength-bar-bg {
@@ -269,4 +278,60 @@ h2 {
 }
 .strength-reqs li.valid i {
     color: #2B7055;
+}
+
+
+/* ========================================= */
+/* ESTILOS PARA LOS INPUTS CON ICONOS Y EL OJITO */
+/* ========================================= */
+
+/* Contenedor principal relativo para poder ubicar los iconos adentro */
+.input-with-icon {
+    position: relative;
+    margin-bottom: 18px;
+    width: 100%;
+    text-align: left;
+}
+
+.input-with-icon > i:first-child {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6a7c7f;
+    font-size: 1.1em;
+    pointer-events: none;
+}
+
+.input-with-icon input:focus {
+    border-color: #FA8E9A; /* Tu color rosa */
+    outline: none;
+    box-shadow: 0 0 5px rgba(250, 142, 154, 0.5);
+}
+
+/* El botón transparente del ojito a la derecha */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: #74AC00;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.toggle-password:hover {
+    color: #2B7055; /* Cambia a tu verde característico de WildLens */
 }

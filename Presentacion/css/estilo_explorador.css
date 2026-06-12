@@ -147,3 +147,97 @@ body, html {
     margin: 12px auto 0 !important; /* Invierte el cuadrado para que apunte hacia arriba */
     box-shadow: 0 -3px 15px rgba(0,0,0,0.1) !important; /* Invierte la sombra */
 }
+
+/* ========================================= */
+/* ESTILOS DEL MODAL (VENTANA EMERGENTE)     */
+/* ========================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo negro semi-transparente */
+    backdrop-filter: blur(3px); /* Un toque borroso elegante */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Nos aseguramos de que tape al mapa y al menú */
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px; /* Tamaño máximo para escritorio */
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    overflow: hidden;
+    animation: fadeInModal 0.3s ease-out; /* Efecto de entrada */
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* El botón de la X */
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: #d9534f; /* Rojo al pasar el mouse */
+}
+
+/* La foto dentro de la ventana */
+#modal-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+}
+
+.modal-info {
+    padding: 20px;
+}
+
+.modal-info h2 {
+    color: #2B7055;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.modal-ubicacion {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Recuadro de los créditos */
+.modal-registro {
+    background: #f5f3ec;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #e68332;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.6;
+}

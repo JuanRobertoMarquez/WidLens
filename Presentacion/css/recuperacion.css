@@ -184,32 +184,50 @@ body {
     transform: translateY(0);
 }
 
-/* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 600px) { /* Aumentamos a 600px para atrapar teléfonos grandes y medianos */
     .branding-logo {
-        top: 20px;
-        left: 20px;
+        top: 15px;
+        left: 15px;
         font-size: 20px;
     }
 
     .reset-container {
-        padding: 40px 25px;
-        margin-top: 40px; /* Da espacio para que el logo no choque con la tarjeta en celulares */
+        padding: 30px 20px; /* Reducimos drásticamente el margen blanco lateral */
+        margin-top: 50px; 
+        width: 95%; /* Obligamos a la tarjeta a usar casi toda la pantalla */
     }
 
+    .reset-container h2 {
+        font-size: 22px; /* Título un poco más compacto */
+    }
+
+    .reset-container p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    /* Solución a los botones amontonados */
     .button-group {
-        flex-direction: column;
+        flex-direction: column; /* Apilamos los botones verticalmente */
+        gap: 12px; /* Espacio entre el botón de guardar y cancelar */
+        margin-top: 25px;
+    }
+
+    .btn {
+        width: 100%; /* Los botones ahora ocuparán todo el ancho de la tarjeta */
+        padding: 14px;
     }
 }
 
-/* =========================================
-   BARRA DE SEGURIDAD EN TIEMPO REAL
-========================================= */
 .password-strength-container {
     margin-top: -10px;
     margin-bottom: 20px;
     text-align: left;
-    display: none; /* Oculto por defecto hasta que escriba */
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 0.3s ease;
 }
 
 .strength-bar-bg {
@@ -253,4 +271,57 @@ body {
 }
 .strength-reqs li.valid i {
     color: #2B7055;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding: 14px 45px 14px 45px;
+}
+
+.input-with-icon > i:first-child {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6a7c7f;
+    pointer-events: none;
+}
+
+/* ========================================= */
+/* CSS A PRUEBA DE BALAS PARA EL OJITO       */
+/* ========================================= */
+
+.password-container {
+    position: relative !important;
+    display: block !important;
+}
+
+.password-container input {
+    /* 45px lado derecho para el ojo, 45px lado izquierdo para el candado */
+    padding-right: 45px !important; 
+    padding-left: 45px !important; 
+}
+
+/* El botón forzado a estar en la capa más alta */
+.toggle-password {
+    position: absolute !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--dark-green) !important; /* Tu verde característico */
+    cursor: pointer !important;
+    font-size: 1.2rem !important;
+    z-index: 100 !important; /* ¡Esta es la magia que te permite darle clic! */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+}
+
+.toggle-password:hover {
+    color: #e68332 !important; /* Naranja al pasar el ratón */
 }

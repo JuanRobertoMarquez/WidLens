@@ -33,6 +33,17 @@ async function cargarImagenFondo() {
 cargarImagenFondo();
 
 const loginForm = document.getElementById('loginForm');
+const passInputLogin = document.getElementById('contrasenia');
+const togglePassword = document.getElementById('togglePassword');
+
+togglePassword.addEventListener('click', () => {
+    const isPassword = passInputLogin.type === 'password';
+    passInputLogin.type = isPassword ? 'text' : 'password';
+
+    const icon = togglePassword.querySelector('i');
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
+});
 
 loginForm.addEventListener('submit', async function(e) {
     e.preventDefault();

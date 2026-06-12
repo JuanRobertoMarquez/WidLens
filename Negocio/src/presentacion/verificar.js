@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             estadoDiv.innerHTML = `
                 <h2 style="color: #2B7055;"><i class="fas fa-check-circle"></i> ${titulo}</h2>
-                <p>${resultado.mensaje} Ya puedes acceder a tu cuenta de guardián.</p>
+                <p>${resultado.mensaje} Ya puedes acceder a tu cuenta de observador.</p>
             `;
             // Mostramos el botón para que vaya a iniciar sesión
             btnContainer.style.display = 'block';
