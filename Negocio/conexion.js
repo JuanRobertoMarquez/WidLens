@@ -516,33 +516,29 @@ app.delete('/api/desarrollo/eliminar-usuario', (req, res) => {
 
 // RUTA: OBTENER OBSERVACIONES DE LA COMUNIDAD
 app.get('/api/observaciones/comunidad', (req, res) => {
-    /* Hacemos un JOIN entre Observaciones y Usuarios para obtener 
-       la foto del ajolote, pero también saber quién la tomó y su avatar.
-       NOTA: Verifica que los nombres de las columnas coincidan con tu base de datos real.
-    */
     const sql = `
         SELECT 
             o.id_observacion,
             o.latitud AS lat,
             o.longitud AS lng,
+            e.nombre_comun AS nombreComun,
             u.nombre AS usuario,
             u.avatar AS avatar,
-            o.foto AS imagen,
+            o.foto AS imagen, 
             o.estatus_validacion AS estatus,
             o.fecha_avistamiento AS fecha
         FROM Observaciones o
         JOIN Usuarios u ON o.id_usuario = u.id_usuario
+        LEFT JOIN Especies e ON o.id_especie = e.id_especie
         ORDER BY o.fecha_avistamiento DESC
-        LIMIT 100; -- Traemos los 100 más recientes para no saturar el mapa
+        LIMIT 100;
     `;
 
     db.query(sql, (err, resultados) => {
         if (err) {
-            console.error("Error al consultar la comunidad en TiDB:", err);
+            console.error("Error al consultar la comunidad en la BD:", err);
             return res.status(500).json({ error: "Error al cargar las observaciones" });
         }
-        
-        // Si todo sale bien, enviamos el arreglo de datos al Frontend
         res.json(resultados);
     });
 });

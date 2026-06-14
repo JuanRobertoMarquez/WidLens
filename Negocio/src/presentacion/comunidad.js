@@ -70,18 +70,46 @@ function actualizarPinesMapa(datos) {
     markersGroup.clearLayers();
     
     datos.forEach(obs => {
-        // Asegúrate de que tu base de datos devuelva 'lat' y 'lng' o ajusta los nombres aquí
         if (obs.lat && obs.lng) {
             const marker = L.marker([obs.lat, obs.lng]);
+            
+            const nombreEspecie = obs.nombreComun || 'Especie en revisión';
+            const nombreUsuario = obs.usuario || 'Anónimo';
+            const idPopupLoc = `pop-${Math.random().toString(36).substr(2, 9)}`;
+
+            // Corregimos la ruta de la foto para que no se rompa
+            const rutaFoto = obs.imagen ? (obs.imagen.startsWith('http') ? obs.imagen : `https://widlens.onrender.com${obs.imagen}`) : 'https://via.placeholder.com/150';
+
             const popupContent = `
-                <div style="font-family: 'Open Sans', sans-serif; width: 160px;">
-                    <strong style="font-family:'Lora',serif;">${obs.nombreComun || 'Especie sin nombre'}</strong><br>
-                    <span style="font-size:11px; color:#666;">Por: @${obs.usuario || 'Anónimo'}</span><br>
-                    <img src="${obs.imagen || 'https://via.placeholder.com/150'}" style="width:100%; height:90px; object-fit:cover; border-radius:4px; margin-top:5px;"/>
+                <div style="font-family: 'Open Sans', sans-serif; width: 170px;">
+                    <strong style="font-family:'Lora',serif; font-size:15px; color:#2B7055;">${nombreEspecie}</strong><br>
+                    <span style="font-size:12px; color:#555;">📸 @${nombreUsuario}</span><br>
+                    <img src="${rutaFoto}" style="width:100%; height:110px; object-fit:cover; border-radius:6px; margin:8px 0;"/>
+                    <div style="font-size: 11px; color: #444; background: #f5f3ec; padding: 6px; border-radius: 4px; line-height: 1.4;">
+                        📍 <strong id="${idPopupLoc}">Buscando calle... 🔎</strong>
+                    </div>
                 </div>
             `;
+            
             marker.bindPopup(popupContent);
             markersGroup.addLayer(marker);
+
+            // MAGIA: Solo traduce coordenadas a Calle cuando el usuario le da clic al pin
+            marker.on('click', async () => {
+                const spanLoc = document.getElementById(idPopupLoc);
+                if(spanLoc && spanLoc.innerText.includes("Buscando")) {
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${obs.lat}&lon=${obs.lng}`);
+                        const geoDatos = await res.json();
+                        
+                        // Extraemos Específicamente la Calle (road) o la Colonia (suburb)
+                        let calleOAvenida = geoDatos.address.road || geoDatos.address.suburb || geoDatos.address.neighbourhood || geoDatos.address.city || "Ubicación silvestre";
+                        spanLoc.innerText = calleOAvenida;
+                    } catch(e) {
+                        spanLoc.innerText = `Lat: ${obs.lat}, Lng: ${obs.lng}`;
+                    }
+                }
+            });
         }
     });
 }
@@ -96,36 +124,54 @@ function renderizarObservaciones(datos) {
     }
 
     datos.forEach(obs => {
-        // Validamos el estatus para asignar los colores
         const estatus = obs.estatus || 'Pendiente';
         const badgeClass = estatus.toLowerCase() === "validado" ? "status-validado" : "status-pendiente";
         const cleanEstatus = estatus.toLowerCase() === "validado" ? "Validado ✔" : "Pendiente 🕒";
 
-        // Ajustamos la ruta de la imagen y el avatar por si vienen incompletas desde la BD
         const urlImagen = obs.imagen ? (obs.imagen.startsWith('http') ? obs.imagen : `https://widlens.onrender.com${obs.imagen}`) : 'https://via.placeholder.com/300';
-        const urlAvatar = obs.avatar ? (obs.avatar.startsWith('http') ? obs.avatar : `https://widlens.onrender.com${obs.avatar}`) : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+        const urlAvatar = obs.avatar ? (obs.avatar.startsWith('http') ? obs.avatar : `https://widlens.onrender.com${obs.avatar}`) : 'https://ui-avatars.com/api/?name=User&background=2B7055&color=fff';
+
+        const nombreEspecie = obs.nombreComun || 'Especie en revisión';
+        const nombreUsuario = obs.usuario || 'usuario_anonimo';
+        const idUnicoLoc = `loc-${Math.random().toString(36).substr(2, 9)}`;
 
         const card = document.createElement('div');
         card.className = 'obs-card-com';
         card.innerHTML = `
             <div class="obs-img-wrapper">
-                <img src="${urlImagen}" alt="${obs.nombreComun}">
+                <img src="${urlImagen}" alt="${nombreEspecie}">
                 <span class="status-badge ${badgeClass}">${cleanEstatus}</span>
             </div>
             <div class="obs-body">
                 <div class="obs-user-info">
                     <img src="${urlAvatar}" alt="Avatar" class="obs-avatar">
-                    <span class="obs-username">@${obs.usuario || 'usuario_anonimo'}</span>
+                    <span class="obs-username">@${nombreUsuario}</span>
                 </div>
-                <h3 class="obs-species-title">${obs.nombreComun || 'Especie desconocida'}</h3>
-                <p class="obs-scientific-name">${obs.nombreCientifico || 'Investigando...'}</p>
+                <h3 class="obs-species-title" style="margin-bottom: 12px;">${nombreEspecie}</h3>
+                
                 <div class="obs-footer-meta">
-                    <span>📍 ${obs.ubicacionText || 'Ubicación no especificada'}</span>
+                    <span>📍 <span id="${idUnicoLoc}">Buscando calle...</span></span>
                     <span>📅 ${obs.fecha ? new Date(obs.fecha).toLocaleDateString() : 'Fecha desconocida'}</span>
                 </div>
             </div>
         `;
         grid.appendChild(card);
+
+        // Geocodificación para las Tarjetas (Calles y Avenidas)
+        if (obs.lat && obs.lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${obs.lat}&lon=${obs.lng}`)
+                .then(res => res.json())
+                .then(geoDatos => {
+                    // Mismo filtro: prioriza nombres de calles (road)
+                    let calleOAvenida = geoDatos.address.road || geoDatos.address.suburb || geoDatos.address.neighbourhood || geoDatos.address.city || "Hábitat silvestre";
+                    document.getElementById(idUnicoLoc).innerText = calleOAvenida;
+                })
+                .catch(() => {
+                    document.getElementById(idUnicoLoc).innerText = "Ubicación en mapa";
+                });
+        } else {
+            document.getElementById(idUnicoLoc).innerText = "Ubicación no especificada";
+        }
     });
 }
 
