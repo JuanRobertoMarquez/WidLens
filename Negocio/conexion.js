@@ -543,6 +543,41 @@ app.get('/api/observaciones/comunidad', (req, res) => {
     });
 });
 
+// RUTA: ESTADÍSTICAS Y TOP GUARDIANES
+app.get('/api/comunidad/stats-top', (req, res) => {
+    // 1. Consulta para las estadísticas rápidas
+    const sqlStats = `
+        SELECT 
+            (SELECT COUNT(*) FROM Observaciones) AS obs_totales,
+            (SELECT COUNT(DISTINCT id_especie) FROM Observaciones WHERE id_especie IS NOT NULL) AS esp_identificadas,
+            (SELECT COUNT(DISTINCT id_usuario) FROM Observaciones) AS guard_activos
+    `;
+
+    // 2. Consulta para obtener el Top 3 de usuarios con más observaciones
+    const sqlTop = `
+        SELECT u.nombre, u.avatar, COUNT(o.id_observacion) AS total_avistamientos
+        FROM Usuarios u
+        JOIN Observaciones o ON u.id_usuario = o.id_usuario
+        GROUP BY u.id_usuario, u.nombre, u.avatar
+        ORDER BY total_avistamientos DESC
+        LIMIT 3
+    `;
+
+    db.query(sqlStats, (errStats, resStats) => {
+        if (errStats) return res.status(500).json({ error: "Error consultando estadísticas." });
+        
+        db.query(sqlTop, (errTop, resTop) => {
+            if (errTop) return res.status(500).json({ error: "Error consultando el top." });
+            
+            // Enviamos todo en un solo paquete al frontend
+            res.json({
+                estadisticas: resStats[0],
+                topGuardianes: resTop
+            });
+        });
+    });
+});
+
 const PUERTO = process.env.PORT || 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor de WildLens corriendo en el puerto ${PUERTO}`);

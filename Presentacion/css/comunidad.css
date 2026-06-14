@@ -364,3 +364,68 @@
         left: 20px;
     }
 }
+
+
+/* =========================================
+   ANIMACIONES CAPRICHOSAS DEL PODIO
+========================================= */
+.guardian-card {
+    transition: all 0.3s ease;
+    overflow: hidden; /* Para que la animación no se salga de la tarjeta */
+}
+
+/* Ocultar contenido suavemente al pasar el mouse */
+.guardian-card:hover .podium-avatar,
+.guardian-card:hover .guardian-name,
+.guardian-card:hover .guardian-score {
+    opacity: 0.15;
+    transform: scale(0.95);
+    transition: all 0.4s ease;
+}
+
+/* 1er Lugar: Trofeo Ajolote */
+.guardian-card.gold::after {
+    content: '🏆🦎';
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 55px;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Efecto rebote */
+    pointer-events: none;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.guardian-card.gold:hover::after {
+    top: 55%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* 2do y 3er Lugar: Confeti */
+.guardian-card.silver::after,
+.guardian-card.bronze::after {
+    content: '🎊🎉🎊';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    font-size: 40px;
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+}
+
+.guardian-card.silver:hover::after,
+.guardian-card.bronze:hover::after {
+    top: 55%;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: agitarConfeti 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes agitarConfeti {
+    from { transform: translate(-50%, -50%) rotate(-10deg) scale(1); }
+    to { transform: translate(-50%, -50%) rotate(10deg) scale(1.1); }
+}

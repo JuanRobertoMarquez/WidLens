@@ -57,24 +57,28 @@
 
     <main class="comunidad-main">
         <!-- Encabezado de la página -->
-        <section class="comunidad-header">
-            <h1>Comunidad de Observadores WildLens</h1>
-            <p>Explora los avistamientos biológicos recientes, mapas de distribución y contribuciones de la red BioNode.</p>
-        </section>
-
         <section class="comunidad-stats-section">
             <div class="stat-box">
-                <span class="stat-number">1,245</span>
+                <span class="stat-number" id="val-observaciones">0</span>
                 <span class="stat-label">Observaciones Totales</span>
             </div>
             <div class="stat-box">
-                <span class="stat-number">12</span>
+                <span class="stat-number" id="val-especies">0</span>
                 <span class="stat-label">Especies Identificadas</span>
             </div>
             <div class="stat-box">
-                <span class="stat-number">340</span>
+                <span class="stat-number" id="val-guardianes">0</span>
                 <span class="stat-label">Guardianes Activos</span>
             </div>
+        </section>
+
+        <section class="top-guardianes-section">
+            <div class="section-title-container">
+                <h2>Top Guardianes del Mes</h2>
+                <div class="title-underline"></div>
+            </div>
+            
+            <div class="podium-container" id="contenedor-podio"></div>
         </section>
 
         <section class="top-guardianes-section">

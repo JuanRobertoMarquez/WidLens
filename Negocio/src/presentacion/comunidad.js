@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. Traer los datos reales de tu base de datos
     obtenerObservacionesReales();
 
+    cargarEstadisticasYPodio();
+
     // 4. Escuchar los filtros
     document.getElementById('search-especie').addEventListener('input', filtrarDatos);
     document.getElementById('filter-estatus').addEventListener('change', filtrarDatos);
@@ -217,4 +219,94 @@ function verificarSesion() {
         if (menuVisitante) menuVisitante.style.display = 'flex';
         if (menuUsuario) menuUsuario.style.display = 'none';
     }
+}
+
+// CARGAR ESTADÍSTICAS Y RANKING DINÁMICO
+async function cargarEstadisticasYPodio() {
+    try {
+        const response = await fetch('https://widlens.onrender.com/api/comunidad/stats-top');
+        if (!response.ok) throw new Error('Error al conectar con la BD para stats');
+        
+        const datos = await response.json();
+
+        // 1. Animar los números de las estadísticas (Contador dinámico)
+        animarContador('val-observaciones', datos.estadisticas.obs_totales || 0);
+        animarContador('val-especies', datos.estadisticas.esp_identificadas || 0);
+        animarContador('val-guardianes', datos.estadisticas.guard_activos || 0);
+
+        // 2. Construir el Podio
+        const topDatos = datos.topGuardianes;
+        const podioContainer = document.getElementById('contenedor-podio');
+        podioContainer.innerHTML = '';
+
+        if (topDatos.length === 0) {
+            podioContainer.innerHTML = '<p style="color:#666;">Aún no hay guardianes registrados.</p>';
+            return;
+        }
+
+        // Extraemos a los ganadores (si existen)
+        const primero = topDatos[0];
+        const segundo = topDatos[1];
+        const tercero = topDatos[2];
+
+        // Construimos el HTML en el orden visual correcto: Plata, Oro, Bronce
+        let podioHTML = '';
+
+        if (segundo) {
+            const ava2 = segundo.avatar ? (segundo.avatar.startsWith('http') ? segundo.avatar : `https://widlens.onrender.com${segundo.avatar}`) : `https://ui-avatars.com/api/?name=${segundo.nombre}&background=E2E8F0`;
+            podioHTML += `
+                <div class="guardian-card silver">
+                    <div class="medal">🥈</div>
+                    <img src="${ava2}" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@${segundo.nombre}</h4>
+                    <span class="guardian-score">${segundo.total_avistamientos} avistamientos</span>
+                </div>`;
+        }
+
+        if (primero) {
+            const ava1 = primero.avatar ? (primero.avatar.startsWith('http') ? primero.avatar : `https://widlens.onrender.com${primero.avatar}`) : `https://ui-avatars.com/api/?name=${primero.nombre}&background=FDE047`;
+            podioHTML += `
+                <div class="guardian-card gold">
+                    <div class="medal">🥇</div>
+                    <img src="${ava1}" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@${primero.nombre}</h4>
+                    <span class="guardian-score">${primero.total_avistamientos} avistamientos</span>
+                </div>`;
+        }
+
+        if (tercero) {
+            const ava3 = tercero.avatar ? (tercero.avatar.startsWith('http') ? tercero.avatar : `https://widlens.onrender.com${tercero.avatar}`) : `https://ui-avatars.com/api/?name=${tercero.nombre}&background=FDBA74`;
+            podioHTML += `
+                <div class="guardian-card bronze">
+                    <div class="medal">🥉</div>
+                    <img src="${ava3}" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@${tercero.nombre}</h4>
+                    <span class="guardian-score">${tercero.total_avistamientos} avistamientos</span>
+                </div>`;
+        }
+
+        podioContainer.innerHTML = podioHTML;
+
+    } catch (error) {
+        console.error("Error cargando estadísticas y top:", error);
+    }
+}
+
+// Función extra para hacer que los números suban de 0 al total con una animación
+function animarContador(id, objetivo) {
+    const elemento = document.getElementById(id);
+    let inicio = 0;
+    const duracion = 1500; // 1.5 segundos
+    const incremento = objetivo / (duracion / 16); // Asumiendo 60fps
+
+    function actualizar() {
+        inicio += incremento;
+        if (inicio < objetivo) {
+            elemento.innerText = Math.ceil(inicio);
+            requestAnimationFrame(actualizar);
+        } else {
+            elemento.innerText = objetivo;
+        }
+    }
+    actualizar();
 }
