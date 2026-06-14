@@ -5,17 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunidad y Observaciones - WildLens</title>
     <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
-    <!-- Estilos -->
     <link rel="stylesheet" href="../css/estilo_index.css">
-    <link rel="stylesheet" href="../css/comunidad.css">
-    <!-- Fuentes y Leaflet -->
+    <link rel="stylesheet" href="../css/comunidad.css">   
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-    <!-- NAVBAR (Ajustada para la carpeta /paginas) -->
     <header class="navbar">
         <div class="nav-content">
             <div class="nav-left">
@@ -61,8 +58,53 @@
     <main class="comunidad-main">
         <!-- Encabezado de la página -->
         <section class="comunidad-header">
-            <h1>Comunidad de Guardianes WildLens</h1>
+            <h1>Comunidad de Observadores WildLens</h1>
             <p>Explora los avistamientos biológicos recientes, mapas de distribución y contribuciones de la red BioNode.</p>
+        </section>
+
+        <section class="comunidad-stats-section">
+            <div class="stat-box">
+                <span class="stat-number">1,245</span>
+                <span class="stat-label">Observaciones Totales</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">12</span>
+                <span class="stat-label">Especies Identificadas</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">340</span>
+                <span class="stat-label">Guardianes Activos</span>
+            </div>
+        </section>
+
+        <section class="top-guardianes-section">
+            <div class="section-title-container">
+                <h2>Top Guardianes del Mes</h2>
+                <div class="title-underline"></div>
+            </div>
+            
+            <div class="podium-container">
+                <div class="guardian-card silver">
+                    <div class="medal">🥈</div>
+                    <img src="https://ui-avatars.com/api/?name=Areli&background=E2E8F0&color=333" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@Areli</h4>
+                    <span class="guardian-score">85 avistamientos</span>
+                </div>
+
+                <div class="guardian-card gold">
+                    <div class="medal">🥇</div>
+                    <img src="https://ui-avatars.com/api/?name=Jesus&background=FDE047&color=333" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@Jesus</h4>
+                    <span class="guardian-score">112 avistamientos</span>
+                </div>
+
+                <div class="guardian-card bronze">
+                    <div class="medal">🥉</div>
+                    <img src="https://ui-avatars.com/api/?name=Victoria&background=FDBA74&color=333" alt="Avatar" class="podium-avatar">
+                    <h4 class="guardian-name">@Victoria</h4>
+                    <span class="guardian-score">64 avistamientos</span>
+                </div>
+            </div>
         </section>
 
         <!-- Sección del Mapa Global de la Comunidad -->
@@ -111,6 +153,6 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="../js/comunidad.js"></script>
+    <script src="../js/src/presentacion/comunidad.js"></script>
 </body>
 </html>

@@ -190,73 +190,98 @@ app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, r
 // --- 5. RUTAS DE USUARIOS Y AUTENTICACIÓN ---
 
 app.post('/api/registro', async (req, res) => {
-    const { nombre, apellido, correo, contrasenia } = req.body;
+    // 1. Recibimos los datos del usuario y el token de reCAPTCHA enviado por el frontend
+    const { nombre, apellido, correo, contrasenia, 'g-recaptcha-response': captchaToken } = req.body;
 
-    const verificarSql = "SELECT * FROM Usuarios WHERE correo = ?";
-    db.query(verificarSql, [correo], async (err, filas) => {
-        if (err) return res.status(500).json({ error: "Error interno del servidor" });
-        if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
+    // 2. Validación inicial del lado del servidor
+    if (!captchaToken) {
+        return res.status(400).json({ error: "El reCAPTCHA es obligatorio para poder registrarse." });
+    }
 
-        try {
-                    const contraseniaEncriptada = await bcrypt.hash(contrasenia, 10);
-                    const tokenVerificacion = crypto.randomBytes(32).toString('hex');
-                    
-                    // --- NUEVO: Generar avatar automático con iniciales y el verde de WildLens ---
-                    const avatarPorDefecto = `https://ui-avatars.com/api/?name=${nombre}+${apellido}&background=2B7055&color=fff&size=256`;
+    try {
+        // 3. Consultamos a la API de Google para validar si es un humano
+        const SECRET_KEY = "6Lcr6xstAAAAAJZWiyoErqJuFiJVnxA3BMwm_xib"; // <-- Coloca aquí tu llave secreta
+        const urlVerificar = `https://www.google.com/recaptcha/api/siteverify?secret=${SECRET_KEY}&response=${captchaToken}`;
 
-                    // Agregamos 'avatar' al INSERT y mandamos la variable 'avatarPorDefecto'
-                    const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion, avatar) VALUES (?, ?, ?, ?, ?, ?)";
-                    
-                    db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion, avatarPorDefecto], async (errInsert) => {    
-                if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
+        const respuestaGoogle = await fetch(urlVerificar, { method: 'POST' });
+        const resultadoGoogle = await respuestaGoogle.json();
 
-                const enlaceVerificacion = `http://wildlens.free.nf/paginas/verificar.html?token=${tokenVerificacion}`; 
-                const htmlCorreo = `
-                                <div style="background-color: #f5f3ec; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-                                    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
-                                        
-                                        <div style="background-color: #2B7055; padding: 35px 20px; text-align: center;">
-                                            <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 1px;">WildLens</h1>
-                                        </div>
-                                        
-                                        <div style="padding: 40px 30px; text-align: center; color: #444444;">
-                                            <h2 style="color: #2B7055; margin-top: 0; font-size: 26px;">¡Bienvenido, ${nombre}!</h2>
-                                            
-                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
-                                                Estamos muy emocionados de que te unas a nuestra red de guardianes. Juntos, haremos la diferencia en la protección y estudio de la biodiversidad.
-                                            </p>
-                                            
-                                            <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 40px;">
-                                                Para empezar a documentar especies y aparecer en nuestro mapa global, solo necesitamos asegurarnos de que este correo sea tuyo.
-                                            </p>
-                                            
-                                            <a href="${enlaceVerificacion}" style="background-color: #e68332; color: #ffffff; font-weight: bold; text-decoration: none; padding: 16px 35px; border-radius: 8px; display: inline-block; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Verificar mi cuenta</a>
-                                        </div>
-                                        
-                                        <div style="background-color: #f9f9f9; padding: 25px 20px; text-align: center; border-top: 1px solid #eeeeee;">
-                                            <p style="font-size: 13px; color: #999999; margin: 0; line-height: 1.5;">
-                                                Si no creaste esta cuenta, puedes ignorar o eliminar este mensaje con seguridad.<br>
-                                                © 2026 WildLens - Plataforma de Conservación
-                                            </p>
-                                        </div>
+        // Si la validación con Google falla (token expirado o bot detectado)
+        if (!resultadoGoogle.success) {
+            return res.status(401).json({ error: "La validación de reCAPTCHA falló. Inténtalo de nuevo." });
+        }
 
-                                    </div>
+        // 4. Si es humano, procedemos con tu lógica de base de datos habitual
+        const verificarSql = "SELECT * FROM Usuarios WHERE correo = ?";
+        db.query(verificarSql, [correo], async (err, filas) => {
+            if (err) return res.status(500).json({ error: "Error interno del servidor" });
+            if (filas.length > 0) return res.status(400).json({ error: "El correo electrónico ya está registrado." });
+
+            try {
+                const contraseniaEncriptada = await bcrypt.hash(contrasenia, 10);
+                const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+                
+                // Generar avatar automático con iniciales y el verde de WildLens
+                const avatarPorDefecto = `https://ui-avatars.com/api/?name=${nombre}+${apellido}&background=2B7055&color=fff&size=256`;
+
+                // Agregamos 'avatar' al INSERT y mandamos la variable 'avatarPorDefecto'
+                const insertarSql = "INSERT INTO Usuarios (nombre, apellido, correo, contrasenia, token_verificacion, avatar) VALUES (?, ?, ?, ?, ?, ?)";
+                
+                db.query(insertarSql, [nombre, apellido, correo, contraseniaEncriptada, tokenVerificacion, avatarPorDefecto], async (errInsert) => {    
+                    if (errInsert) return res.status(500).json({ error: "No se pudo crear la cuenta." });
+
+                    const enlaceVerificacion = `http://wildlens.free.nf/paginas/verificar.html?token=${tokenVerificacion}`; 
+                    const htmlCorreo = `
+                        <div style="background-color: #f5f3ec; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
+                                
+                                <div style="background-color: #2B7055; padding: 35px 20px; text-align: center;">
+                                    <h1 style="color: #ffffff; margin: 0; font-size: 32px; letter-spacing: 1px;">WildLens</h1>
                                 </div>
+                                
+                                <div style="padding: 40px 30px; text-align: center; color: #444444;">
+                                    <h2 style="color: #2B7055; margin-top: 0; font-size: 26px;">¡Bienvenido, ${nombre}!</h2>
+                                    
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
+                                        Estamos muy emocionados de que te unas a nuestra red de guardianes. Juntos, haremos la diferencia en la protección y estudio de la biodiversidad.
+                                    </p>
+                                    
+                                    <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 40px;">
+                                        Para empezar a documentar especies y aparecer en nuestro mapa global, solo necesitamos asegurarnos de que este correo sea tuyo.
+                                    </p>
+                                    
+                                    <a href="${enlaceVerificacion}" style="background-color: #e68332; color: #ffffff; font-weight: bold; text-decoration: none; padding: 16px 35px; border-radius: 8px; display: inline-block; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Verificar mi cuenta</a>
+                                </div>
+                                
+                                <div style="background-color: #f9f9f9; padding: 25px 20px; text-align: center; border-top: 1px solid #eeeeee;">
+                                    <p style="font-size: 13px; color: #999999; margin: 0; line-height: 1.5;">
+                                        Si no creaste esta cuenta, puedes ignorar o eliminar este mensaje con seguridad.<br>
+                                        © 2026 WildLens - Plataforma de Conservación
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
                     `;
 
-                try {
-                    await enviarCorreoBrevo(correo, 'Verifica tu cuenta de WildLens', htmlCorreo);
-                    res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
-                } catch (errorCorreo) {
-                    console.error("Error enviando correo por Brevo:", errorCorreo);
-                    db.query("DELETE FROM Usuarios WHERE correo = ?", [correo], (errDelete) => {});
-                    res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
-                }
-            });
-        } catch (errorHash) {
-            res.status(500).json({ error: "Error de seguridad al procesar la cuenta." });
-        }
-    });
+                    try {
+                        await enviarCorreoBrevo(correo, 'Verifica tu cuenta de WildLens', htmlCorreo);
+                        res.status(201).json({ mensaje: "¡Cuenta creada exitosamente! Revisa tu bandeja de entrada para verificar tu correo." });
+                    } catch (errorCorreo) {
+                        console.error("Error enviando correo por Brevo:", errorCorreo);
+                        db.query("DELETE FROM Usuarios WHERE correo = ?", [correo], (errDelete) => {});
+                        res.status(500).json({ error: "No pudimos enviar el correo de verificación. Intenta nuevamente." });
+                    }
+                });
+            } catch (errorHash) {
+                res.status(500).json({ error: "Error de seguridad al procesar la cuenta." });
+            }
+        });
+
+    } catch (errorCaptcha) {
+        console.error("❌ Error de comunicación con reCAPTCHA API:", errorCaptcha);
+        return res.status(500).json({ error: "Error al comprobar la seguridad del formulario." });
+    }
 });
 
 app.post('/api/login', (req, res) => {
@@ -486,6 +511,44 @@ app.delete('/api/desarrollo/eliminar-usuario', (req, res) => {
     db.query("DELETE FROM Usuarios WHERE correo = ?", [correo], (err) => {
         if (err) return res.status(500).json({ error: "Error interno en la base de datos" });
         res.json({ mensaje: `El usuario con correo ${correo} fue eliminado exitosamente.` });
+    });
+});
+
+// ==========================================
+// RUTA: OBTENER OBSERVACIONES DE LA COMUNIDAD
+// ==========================================
+app.get('/api/observaciones/comunidad', (req, res) => {
+    /* Hacemos un JOIN entre Observaciones y Usuarios para obtener 
+       la foto del ajolote, pero también saber quién la tomó y su avatar.
+       NOTA: Verifica que los nombres de las columnas coincidan con tu base de datos real.
+    */
+    const sql = `
+        SELECT 
+            o.id_observacion,
+            o.latitud AS lat,
+            o.longitud AS lng,
+            o.especie_nombre AS nombreComun,
+            -- Si tienes una columna de nombre científico, ponla aquí. Si no, quita esta línea:
+            o.especie_cientifico AS nombreCientifico,
+            u.nombre AS usuario,
+            u.avatar AS avatar,
+            o.observacion_foto AS imagen,
+            o.estatus_validacion AS estatus,
+            o.fecha_avistamiento AS fecha
+        FROM Observaciones o
+        JOIN Usuarios u ON o.id_usuario = u.id_usuario
+        ORDER BY o.fecha_avistamiento DESC
+        LIMIT 100; -- Traemos los 100 más recientes para no saturar el mapa
+    `;
+
+    db.query(sql, (err, resultados) => {
+        if (err) {
+            console.error("Error al consultar la comunidad en TiDB:", err);
+            return res.status(500).json({ error: "Error al cargar las observaciones" });
+        }
+        
+        // Si todo sale bien, enviamos el arreglo de datos al Frontend
+        res.json(resultados);
     });
 });
 

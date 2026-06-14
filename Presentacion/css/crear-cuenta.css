@@ -148,12 +148,6 @@ body {
         font-size: 16px; 
     }
 }
-
-/* ========================================= */
-/* ESTILOS PARA LOS INPUTS CON ICONOS Y EL OJITO */
-/* ========================================= */
-
-/* Contenedor principal relativo para poder ubicar los iconos adentro */
 .input-with-icon {
     position: relative;
     margin-bottom: 18px;

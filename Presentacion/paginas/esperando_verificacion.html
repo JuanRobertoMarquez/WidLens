@@ -10,7 +10,7 @@
 </head>
 <body>
     <a href="../index.html" class="branding-logo">
-        🌿 WildLens
+        WildLens
     </a>
     
     <div class="reset-container" style="text-align: center;">
@@ -26,9 +26,14 @@
         </div>
 
         <div class="button-group" style="flex-direction: column; gap: 10px;">
-            <button type="button" class="btn btn-submit" onclick="window.location.href='login.html'">Ya verifiqué mi cuenta</button>
-            <button type="button" class="btn btn-cancel" onclick="alert('Función de reenvío en construcción.')">No recibí el correo</button>
+        <button type="button" id="btn-abrir-correo" class="btn-primary">
+            Abrir mi correo electrónico ↗
+        </button>
+        <button type="button" class="btn btn-cancel" onclick="alert('Función de reenvío en construcción.')">No recibí el correo</button>
         </div>
     </div>
+
+    
+        <script src="../js/src/presentacion/esperando_verificasion.js"></script>
 </body>
 </html>
