@@ -9,8 +9,18 @@ const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+
 const app = express();
-app.use(cors()); 
+app.use(cors({
+    origin: [
+        'http://127.0.0.1:5500',      // Para cuando haces pruebas locales en tu PC
+        'http://localhost:5500',      // Localhost alternativo
+        'http://wildlens.free.nf',    // TU DOMINIO OFICIAL EN PRODUCCIÓN (HTTP)
+        'https://wildlens.free.nf'    // TU DOMINIO OFICIAL EN PRODUCCIÓN (HTTPS)
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Permisos de acciones
+    credentials: true
+}));
 app.use(express.json()); 
 
 // --- 1. CONFIGURACIÓN DE CLOUDINARY ---
@@ -332,7 +342,7 @@ app.post('/api/recuperar-password', async (req, res) => {
                                     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08);">
                                         
                                         <div style="background-color: #2B7055; padding: 30px 20px; text-align: center;">
-                                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">🌿 WildLens</h1>
+                                            <h1 style="color: #ffffff; margin: 0; font-size: 28px; letter-spacing: 1px;">WildLens</h1>
                                         </div>
                                         
                                         <div style="padding: 40px 30px; text-align: center; color: #444444;">

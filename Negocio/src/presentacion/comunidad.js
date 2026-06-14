@@ -221,7 +221,9 @@ function verificarSesion() {
     }
 }
 
+// ==========================================
 // CARGAR ESTADÍSTICAS Y RANKING DINÁMICO
+// ==========================================
 async function cargarEstadisticasYPodio() {
     try {
         const response = await fetch('https://widlens.onrender.com/api/comunidad/stats-top');
@@ -287,8 +289,71 @@ async function cargarEstadisticasYPodio() {
 
         podioContainer.innerHTML = podioHTML;
 
+        // 3. ACTIVAR FÍSICAS DE CONFETI PARA EL 2DO Y 3ER LUGAR
+        const silverCard = document.querySelector('.guardian-card.silver');
+        const bronzeCard = document.querySelector('.guardian-card.bronze');
+
+        // Función que calcula la posición de la tarjeta y dispara el cañón
+        const lanzarConfeti = (elemento, coloresBase) => {
+            const rect = elemento.getBoundingClientRect();
+            // Convertimos la posición de píxeles a porcentajes (requerido por la librería)
+            const x = (rect.left + (rect.width / 2)) / window.innerWidth;
+            const y = (rect.top + (rect.height / 2)) / window.innerHeight;
+
+            confetti({
+                particleCount: 150,      // Cantidad de papelitos
+                spread: 100,             // Amplitud de la explosión
+                startVelocity: 30,       // Velocidad inicial
+                origin: { x, y },        // Desde dónde sale
+                colors: coloresBase,     // Colores temáticos
+                zIndex: 9999,
+                ticks: 200               // Cuánto tardan en desaparecer
+            });
+        };
+
+        // Escuchadores de eventos para disparar al pasar el mouse
+        if (silverCard) {
+            silverCard.addEventListener('mouseenter', () => {
+                // Confeti plateado y blanco
+                lanzarConfeti(silverCard, ['#C0C0C0', '#E2E8F0', '#ffffff', '#94A3B8']);
+            });
+        }
+        
+        if (bronzeCard) {
+            bronzeCard.addEventListener('mouseenter', () => {
+                // Confeti bronce y naranja (colores de tu botón)
+                lanzarConfeti(bronzeCard, ['#CD7F32', '#FDBA74', '#E58933', '#ffffff']);
+            });
+        }
+
     } catch (error) {
         console.error("Error cargando estadísticas y top:", error);
+    }
+}
+
+// Función extra para hacer que los números suban de 0 al total con una animación
+function animarContador(id, objetivo) {
+    const elemento = document.getElementById(id);
+    if (!elemento) return; // Validación de seguridad por si el ID no existe
+    
+    let inicio = 0;
+    const duracion = 1500; // 1.5 segundos
+    const incremento = objetivo / (duracion / 16); // Asumiendo 60fps
+
+    function actualizar() {
+        inicio += incremento;
+        if (inicio < objetivo) {
+            elemento.innerText = Math.ceil(inicio);
+            requestAnimationFrame(actualizar);
+        } else {
+            elemento.innerText = objetivo;
+        }
+    }
+    
+    if (objetivo > 0) {
+        actualizar();
+    } else {
+        elemento.innerText = "0";
     }
 }
 

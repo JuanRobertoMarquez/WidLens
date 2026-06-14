@@ -297,18 +297,18 @@
 }
 
 .guardian-card.gold {
-    height: 200px;
+    height: 220px; /* Un poco más alto para respirar */
     border-top: 4px solid #FDE047;
     z-index: 3;
 }
 
 .guardian-card.silver {
-    height: 170px;
+    height: 190px; /* Ajustado */
     border-top: 4px solid #E2E8F0;
 }
 
 .guardian-card.bronze {
-    height: 150px;
+    height: 175px; /* Altura suficiente para que quepa todo el texto */
     border-top: 4px solid #FDBA74;
 }
 
@@ -350,82 +350,120 @@
     .podium-container {
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
     }
+    
     .guardian-card {
         width: 100%;
         max-width: 300px;
-        height: auto !important;
+        /* Al poner height auto, obligamos a la tarjeta a crecer si el texto es muy largo */
+        height: auto !important; 
+        min-height: 160px; 
         border-radius: 12px;
         border-bottom: 1px solid #E2E8F0;
     }
+
     .medal {
         top: 10px;
         left: 20px;
     }
+
+    /* MAGIA UX: ORDEN LÓGICO EN MÓVILES*/
+    .guardian-card.gold {
+        order: 1; /* Pasa a ser el primero arriba */
+    }
+    
+    .guardian-card.silver {
+        order: 2; /* Pasa al medio */
+    }
+    
+    .guardian-card.bronze {
+        order: 3; /* Se queda hasta abajo */
+    }
 }
 
-
-/* =========================================
-   ANIMACIONES CAPRICHOSAS DEL PODIO
-========================================= */
+/* ANIMACIONES EXPLOSIVAS Y PROFESIONALES */
 .guardian-card {
-    transition: all 0.3s ease;
-    overflow: hidden; /* Para que la animación no se salga de la tarjeta */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Movimiento más natural */
+    position: relative;
+    overflow: hidden;
 }
 
-/* Ocultar contenido suavemente al pasar el mouse */
+/* Oscurecemos el fondo suavemente para resaltar la animación */
 .guardian-card:hover .podium-avatar,
 .guardian-card:hover .guardian-name,
-.guardian-card:hover .guardian-score {
-    opacity: 0.15;
-    transform: scale(0.95);
+.guardian-card:hover .guardian-score,
+.guardian-card:hover .medal {
+    opacity: 0.1;
+    transform: scale(0.90);
     transition: all 0.4s ease;
 }
 
-/* 1er Lugar: Trofeo Ajolote */
-.guardian-card.gold::after {
-    content: '🏆🦎';
+/* -----------------------------------------
+   MAGIA DEL 1ER LUGAR (Rayos de luz y Trofeo)
+----------------------------------------- */
+@keyframes spinRays {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes popTrophy {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; filter: drop-shadow(0 0 25px rgba(253, 224, 71, 0.8)); }
+}
+
+/* El fondo de rayos de luz giratorios */
+.guardian-card.gold::before {
+    content: '';
     position: absolute;
-    top: 70%;
+    top: 50%; 
     left: 50%;
+    width: 350px; 
+    height: 350px;
+    background: repeating-conic-gradient(
+        from 0deg, 
+        rgba(253, 224, 71, 0.4) 0deg 15deg, 
+        transparent 15deg 30deg
+    );
+    border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 55px;
     opacity: 0;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Efecto rebote */
+    transition: opacity 0.3s ease;
     pointer-events: none;
-    text-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+/* La imagen del Trofeo (Sustituye la URL por tu Ajolote en PNG sin fondo si tienes uno) */
+.guardian-card.gold::after {
+    content: '';
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    width: 110px; 
+    height: 110px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/3112/3112946.png'); /* Imagen de trofeo en alta calidad */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 11;
+    pointer-events: none;
+}
+
+/* Efectos al pasar el mouse por el 1er lugar */
+.guardian-card.gold:hover {
+    background-color: #2b2b2b; /* Fondo oscuro para que resalte el oro */
+    border-color: #FDE047;
+}
+
+.guardian-card.gold:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    animation: spinRays 8s linear infinite; /* La luz gira infinitamente */
 }
 
 .guardian-card.gold:hover::after {
-    top: 55%;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-}
-
-/* 2do y 3er Lugar: Confeti */
-.guardian-card.silver::after,
-.guardian-card.bronze::after {
-    content: '🎊🎉🎊';
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);
-    font-size: 40px;
-    opacity: 0;
-    transition: all 0.4s ease;
-    pointer-events: none;
-}
-
-.guardian-card.silver:hover::after,
-.guardian-card.bronze:hover::after {
-    top: 55%;
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    animation: agitarConfeti 0.6s ease-in-out infinite alternate;
-}
-
-@keyframes agitarConfeti {
-    from { transform: translate(-50%, -50%) rotate(-10deg) scale(1); }
-    to { transform: translate(-50%, -50%) rotate(10deg) scale(1.1); }
+    animation: popTrophy 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; /* El trofeo salta */
 }

@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -57,6 +59,11 @@
 
     <main class="comunidad-main">
         <!-- Encabezado de la página -->
+        <section class="comunidad-header">
+            <h1>Comunidad de Observadores WildLens</h1>
+            <p>Explora los avistamientos biológicos recientes, mapas de distribución y contribuciones de la red BioNode.</p>
+        </section>
+
         <section class="comunidad-stats-section">
             <div class="stat-box">
                 <span class="stat-number" id="val-observaciones">0</span>
@@ -79,36 +86,6 @@
             </div>
             
             <div class="podium-container" id="contenedor-podio"></div>
-        </section>
-
-        <section class="top-guardianes-section">
-            <div class="section-title-container">
-                <h2>Top Guardianes del Mes</h2>
-                <div class="title-underline"></div>
-            </div>
-            
-            <div class="podium-container">
-                <div class="guardian-card silver">
-                    <div class="medal">🥈</div>
-                    <img src="https://ui-avatars.com/api/?name=Areli&background=E2E8F0&color=333" alt="Avatar" class="podium-avatar">
-                    <h4 class="guardian-name">@Areli</h4>
-                    <span class="guardian-score">85 avistamientos</span>
-                </div>
-
-                <div class="guardian-card gold">
-                    <div class="medal">🥇</div>
-                    <img src="https://ui-avatars.com/api/?name=Jesus&background=FDE047&color=333" alt="Avatar" class="podium-avatar">
-                    <h4 class="guardian-name">@Jesus</h4>
-                    <span class="guardian-score">112 avistamientos</span>
-                </div>
-
-                <div class="guardian-card bronze">
-                    <div class="medal">🥉</div>
-                    <img src="https://ui-avatars.com/api/?name=Victoria&background=FDBA74&color=333" alt="Avatar" class="podium-avatar">
-                    <h4 class="guardian-name">@Victoria</h4>
-                    <span class="guardian-score">64 avistamientos</span>
-                </div>
-            </div>
         </section>
 
         <!-- Sección del Mapa Global de la Comunidad -->
