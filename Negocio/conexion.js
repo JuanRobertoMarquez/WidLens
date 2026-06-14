@@ -514,9 +514,7 @@ app.delete('/api/desarrollo/eliminar-usuario', (req, res) => {
     });
 });
 
-// ==========================================
 // RUTA: OBTENER OBSERVACIONES DE LA COMUNIDAD
-// ==========================================
 app.get('/api/observaciones/comunidad', (req, res) => {
     /* Hacemos un JOIN entre Observaciones y Usuarios para obtener 
        la foto del ajolote, pero también saber quién la tomó y su avatar.
@@ -527,12 +525,9 @@ app.get('/api/observaciones/comunidad', (req, res) => {
             o.id_observacion,
             o.latitud AS lat,
             o.longitud AS lng,
-            o.especie_nombre AS nombreComun,
-            -- Si tienes una columna de nombre científico, ponla aquí. Si no, quita esta línea:
-            o.especie_cientifico AS nombreCientifico,
             u.nombre AS usuario,
             u.avatar AS avatar,
-            o.observacion_foto AS imagen,
+            o.foto AS imagen,
             o.estatus_validacion AS estatus,
             o.fecha_avistamiento AS fecha
         FROM Observaciones o
