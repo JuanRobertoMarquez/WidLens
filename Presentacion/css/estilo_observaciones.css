@@ -2,7 +2,7 @@
 body {
     background-color: #f4f4f4;
     margin: 0;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
 }
 
 /* Cabecera blanca con el buscador */
@@ -22,7 +22,7 @@ body {
 }
 
 .titulo-vista {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 32px;
     color: #222;
     margin: 0;
@@ -172,7 +172,7 @@ body {
 }
 
 .obs-titulo {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Lora', sans-serif;
     color: #2B7055;
     margin: 0 0 5px 0;
     font-size: 16px;

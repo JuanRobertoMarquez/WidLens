@@ -132,10 +132,12 @@ app.get('/api/observacion-reciente', (req, res) => {
 
 app.get('/api/carrusel-observaciones', (req, res) => {
     const sql = `
-        SELECT e.nombre_comun AS especie_nombre, o.foto AS observacion_foto, o.estatus_validacion
+        SELECT e.nombre_comun AS especie_nombre, o.foto AS observacion_foto, o.estatus_validacion, o.confianza_ia
         FROM Observaciones o
         JOIN Especies e ON o.id_especie = e.id_especie
-        ORDER BY o.fecha_avistamiento DESC LIMIT 6;
+        WHERE o.confianza_ia >= 90
+        ORDER BY o.confianza_ia DESC 
+        LIMIT 10;
     `;
     db.query(sql, (err, result) => {
         if (err) return res.status(500).json({ error: "Error en la base de datos" });
@@ -185,13 +187,17 @@ app.get('/api/top-guardianes', (req, res) => {
 });
 
 app.post('/api/guardar-observacion', uploadAvistamientos.single('foto'), (req, res) => {
-    const { id_usuario, id_especie, latitud, longitud, fecha_avistamiento } = req.body;
+    // Agregamos confianza_ia a los datos recibidos
+    const { id_usuario, id_especie, latitud, longitud, fecha_avistamiento, confianza_ia } = req.body;
     const rutaFoto = req.file ? req.file.path : null;    
     
     if (!rutaFoto) return res.status(400).json({ error: "No se subió ninguna foto" });
 
-    const sql = "INSERT INTO Observaciones (id_usuario, id_especie, foto, latitud, longitud, fecha_avistamiento) VALUES (?, ?, ?, ?, ?, ?)";
-    db.query(sql, [id_usuario, id_especie, rutaFoto, latitud, longitud, fecha_avistamiento], (err, result) => {
+    // Actualizamos el SQL para insertar las 7 variables
+    const sql = "INSERT INTO Observaciones (id_usuario, id_especie, foto, latitud, longitud, fecha_avistamiento, confianza_ia) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    // Le pasamos la confianza_ia al final
+    db.query(sql, [id_usuario, id_especie, rutaFoto, latitud, longitud, fecha_avistamiento, confianza_ia || 0], (err, result) => {
         if (err) return res.status(500).json({ error: "Error interno del servidor" });
         res.status(200).json({ mensaje: "¡Observación guardada!", ruta_imagen: rutaFoto });
     });
@@ -253,7 +259,7 @@ app.post('/api/registro', async (req, res) => {
                                     <h2 style="color: #2B7055; margin-top: 0; font-size: 26px;">¡Bienvenido, ${nombre}!</h2>
                                     
                                     <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 20px;">
-                                        Estamos muy emocionados de que te unas a nuestra red de guardianes. Juntos, haremos la diferencia en la protección y estudio de la biodiversidad.
+                                        Estamos muy emocionados de que te unas a nuestra red de Observadores. Juntos, haremos la diferencia en la protección y estudio de la biodiversidad.
                                     </p>
                                     
                                     <p style="font-size: 16px; line-height: 1.6; color: #555555; margin-bottom: 40px;">

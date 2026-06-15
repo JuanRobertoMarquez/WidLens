@@ -1,23 +1,43 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // --- 0. VERIFICAR SESIÓN Y ACTUALIZAR NAVBAR ---
-    const usuarioString = localStorage.getItem('usuarioWildLens');
-    if (usuarioString) {
-        const usuarioLogueado = JSON.parse(usuarioString);
-        
-        const menuVisitante = document.getElementById('menu-visitante');
-        const menuUsuario = document.getElementById('menu-usuario');
-        const navNombre = document.getElementById('nav-nombre-usuario');
-        const navAvatar = document.getElementById('nav-avatar');
+    // --- 0. VERIFICAR SESIÓN BLINDADA ---
+    const menuVisitante = document.getElementById('menu-visitante');
+    const menuUsuario = document.getElementById('menu-usuario');
+    const navNombre = document.getElementById('nav-nombre-usuario');
+    const navAvatar = document.getElementById('nav-avatar');
 
-        if (menuVisitante) menuVisitante.style.display = 'none';
-        if (menuUsuario) menuUsuario.style.display = 'flex';
-        if (navNombre) navNombre.innerText = usuarioLogueado.nombre || "Usuario";
-        if (navAvatar && usuarioLogueado.avatar) {
-            navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
-                ? usuarioLogueado.avatar 
-                : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+    const usuarioString = localStorage.getItem('usuarioWildLens');
+
+    const forzarModoVisitante = () => {
+        localStorage.removeItem('usuarioWildLens'); 
+        if (menuVisitante) menuVisitante.style.display = 'flex'; 
+        if (menuUsuario) menuUsuario.style.display = 'none';
+    };
+
+    if (usuarioString && usuarioString !== "undefined" && usuarioString !== "null") {
+        try {
+            const usuarioLogueado = JSON.parse(usuarioString);
+            
+            if (!usuarioLogueado.id_usuario && !usuarioLogueado.correo) {
+                forzarModoVisitante();
+            } else {
+                if (menuVisitante) menuVisitante.style.display = 'none';
+                if (menuUsuario) menuUsuario.style.display = 'flex';
+                
+                if (navNombre) navNombre.innerText = usuarioLogueado.nombre || "Usuario";
+                
+                if (navAvatar && usuarioLogueado.avatar) {
+                    navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
+                        ? usuarioLogueado.avatar 
+                        : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+                }
+            }
+        } catch (error) {
+            console.warn("Datos de sesión corruptos en explorador. Limpiando.");
+            forzarModoVisitante();
         }
+    } else {
+        forzarModoVisitante();
     }
     // ----------------------------------------------
 

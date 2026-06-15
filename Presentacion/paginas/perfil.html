@@ -20,7 +20,7 @@
                 </div>
                 <nav class="nav-links">
                     <a href="../index.html">Home</a>
-                    <a href="#">Comunidad ⌵</a>
+                    <a href="comunidad.html">Comunidad ⌵</a>
                     <a href="explorador.html">Explorar ⌵</a>
                 </nav>
             </div>
@@ -40,9 +40,9 @@
                         <div class="dropdown-content">
                             <a href="perfil.html">Mi Perfil</a>
                             <a href="mis_observaciones.html">Mis Observaciones</a>
-                            <a href="#">Configuración</a>
+                            <a href="configuracion.html">Configuración</a>
                             <hr>
-                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
+                            <a href="login.html" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
                         </div>
                     </div>
                 </div>
@@ -51,42 +51,45 @@
     </header>
 
     <div class="perfil-wrapper-lite">
-        
-        <div class="perfil-header-lite">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="avatar-lite" id="avatar-perfil">
-            <div class="perfil-info-lite">
-                <h1 id="ui-nombre">Cargando...</h1>
-                <p id="ui-correo" class="correo-lite">Cargando...</p>
-                <a href="Editar_perfil.html" class="btn-editar-lite">Editar mi perfil</a>
-            </div>
-        </div>
-
-        <div class="stats-row-lite">
-            <div class="stat-box-lite">
-                <div class="stat-icon-lite">📷</div>
-                <div class="stat-text-lite">
-                    <span class="stat-num-lite">0</span>
-                    <span class="stat-label-lite">Fotos subidas</span>
-                </div>
-            </div>
-            <div class="stat-box-lite">
-                <div class="stat-icon-lite">🐾</div>
-                <div class="stat-text-lite">
-                    <span class="stat-num-lite" id="ui-total">0</span> 
-                    <span class="stat-label-lite">Animales distintos</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="observaciones-section-lite">
-            <h3 class="seccion-titulo-lite">Mi diario de descubrimientos</h3>
             
-            <div class="lista-observaciones-lite" id="lista-observaciones">
-                <p style="color: #888; font-size: 15px; text-align: center; padding: 30px 0;">Cargando tus aventuras...</p>
+            <div class="perfil-header-lite">
+                <div class="profile-cover" style="background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=1200');"></div>
+                
+                <div class="profile-content">
+                    <div class="avatar-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar" class="avatar-lite" id="avatar-perfil">
+                    </div>
+                    <h1 id="ui-nombre">Cargando...</h1>
+                    <p id="ui-correo" class="correo-lite">Cargando...</p>
+                    <a href="Editar_perfil.html" class="btn-editar-lite">✏️ Editar mi perfil</a>
+                </div>
             </div>
-        </div>
 
-    </div>
+            <div class="stats-row-lite">
+                <div class="stat-box-lite">
+                    <div class="stat-icon-lite" style="color: #2B7055; background: #e8f5e9;">📷</div>
+                    <div class="stat-text-lite">
+                        <span class="stat-num-lite">0</span>
+                        <span class="stat-label-lite">Fotos subidas</span>
+                    </div>
+                </div>
+                <div class="stat-box-lite">
+                    <div class="stat-icon-lite" style="color: #E58933; background: #fff3e0;">🐾</div>
+                    <div class="stat-text-lite">
+                        <span class="stat-num-lite" id="ui-total">0</span> 
+                        <span class="stat-label-lite">Animales distintos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="observaciones-section-lite">
+                <h3 class="seccion-titulo-lite">Mi diario de descubrimientos</h3>
+                <div class="lista-observaciones-lite" id="lista-observaciones">
+                    <p style="color: #888; font-size: 15px; text-align: center; padding: 40px 0;">Cargando tus aventuras...</p>
+                </div>
+            </div>
+
+        </div>
 
     <script src="../js/src/presentacion/perfil.js"></script>
     

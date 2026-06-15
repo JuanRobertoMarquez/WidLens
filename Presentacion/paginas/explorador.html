@@ -2,13 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explorar Avistamientos - WildLens</title>
     <link rel="shortcut icon" href="../images/mini-icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="../css/estilo_explorador.css">
     <link rel="stylesheet" href="../css/estilo_index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/estilo_explorador.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 </head>
 <body>
 
@@ -29,13 +31,13 @@
             </div>
 
             <div class="nav-right">
-                <div id="menu-visitante" style="display: none;">
+                <div id="menu-visitante" ">
                     <a href="./login.html" class="btn-acceder">Acceder</a> 
                     <a href="#"> o </a>
                     <a href="./crear-cuenta.html" class="btn-registro">Crear una cuenta</a>       
                 </div>
 
-                <div id="menu-usuario" class="user-dropdown" style="display: flex;">
+                <div id="menu-usuario" class="user-dropdown"">
                     <a href="./subir_fotos.html" class="btn-subir-nav">Cargar observación</a>
                     <div class="dropdown-container">
                         <button class="dropbtn">
@@ -47,8 +49,11 @@
                             <a href="./mis_observaciones.html">Mis Observaciones</a>
                             <a href="./configuracion.html">Configuración</a>
                             <hr>
-                            <a href="#" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
-                        </div>
+                            <a href="login.html" onclick="cerrarSesionGlobal(); return false;" id="btn-cerrar-sesion">
+                                Cerrar sesión
+                            </a>                           
+                             <hr>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -89,5 +94,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="../js/src/presentacion/MapaExplorador.js"></script>
+    <script src="../js/src/presentacion/navbar.js"></script>
+
 </body>
 </html>

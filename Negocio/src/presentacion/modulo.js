@@ -230,7 +230,7 @@ async function cargarHistoriaReciente() {
     }
 }
 
-// 6. FUNCIÓN: CARRUSEL DINÁMICO (TARJETAS)
+// 6. FUNCIÓN: CARRUSEL DINÁMICO (Top 10 IA > 90%)
 async function cargarCarruselDinamico() {
     try {
         const respuesta = await fetch('https://widlens.onrender.com/api/carrusel-observaciones');
@@ -247,24 +247,29 @@ async function cargarCarruselDinamico() {
                     rutaFoto = 'https://widlens.onrender.com' + rutaFoto;
                 }
 
-                let textoEstatus = obs.estatus_validacion === 'Validado' ? '✅ Verificado' : '📍 En revisión IA';
+                // Formateamos el porcentaje para que se vea limpio
+                let porcentajeIA = obs.confianza_ia ? parseFloat(obs.confianza_ia).toFixed(1) + '%' : '90.0%';
 
                 const tarjetaHTML = `
-                    <div class="card">
-                        <img src="${rutaFoto}" alt="${obs.especie_nombre}" style="width: 100%; height: 200px; object-fit: cover;">
-                        <div class="card-info">
-                            <h3>${obs.especie_nombre}</h3>
-                            <p class="ai-status"><span>${textoEstatus}</span></p>
+                    <div class="card" style="position: relative;">
+                        <div style="position: absolute; top: 10px; right: 10px; background: #FDE047; color: #1a1a1a; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                            🤖 IA: ${porcentajeIA}
+                        </div>
+                        
+                        <img src="${rutaFoto}" alt="${obs.especie_nombre}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px 12px 0 0;">
+                        <div class="card-info" style="padding: 15px; text-align: center;">
+                            <h3 style="margin: 0 0 5px 0; font-size: 16px; color: #2B7055;">${obs.especie_nombre}</h3>
+                            <p style="margin: 0; font-size: 12px; color: #666;">Top Precisión WildLens</p>
                         </div>
                     </div>
                 `;
                 trackCarrusel.innerHTML += tarjetaHTML;
             });
         } else {
-            trackCarrusel.innerHTML = '<p style="padding: 20px;">Aún no hay observaciones en la comunidad.</p>';
+            trackCarrusel.innerHTML = '<p style="padding: 20px; width: 100%; text-align: center; color: #666;">Aún no hay avistamientos con más del 90% de precisión IA.</p>';
         }
     } catch (error) {
-        console.error("Error al cargar el carrusel:", error);
+        console.error("Error al cargar el carrusel de alta precisión:", error);
     }
 }
 

@@ -3,27 +3,14 @@ const fileObjects = [null, null, null]; // Guarda los binarios reales para Multe
 let activeSlot = null;                  
 const CLASES_ANIMALES = ["Ajolote"];    // El aporte de Ángel
 
-// Al cargar la pantalla, verificamos si el usuario de verdad inició sesión
+// ==========================================
+// VERIFICACIÓN DE SESIÓN BLINDADA
+// ==========================================
 const usuarioString = localStorage.getItem('usuarioWildLens');
 let idUsuarioLogeado = null;
 
-if (usuarioString) {
-    const usuarioLogueado = JSON.parse(usuarioString);
-    idUsuarioLogeado = usuarioLogueado.id_usuario || usuarioLogueado.id;
-    
-    // --- MAGIA PARA ACTUALIZAR EL NOMBRE Y FOTO EN EL NAVBAR ---
-    const navNombre = document.getElementById('nav-nombre-usuario');
-    const navAvatar = document.getElementById('nav-avatar');
-    
-    if (navNombre) navNombre.innerText = usuarioLogueado.nombre || "Usuario";
-    if (navAvatar && usuarioLogueado.avatar) {
-        navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
-            ? usuarioLogueado.avatar 
-            : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
-    }
-}
-
-if (!idUsuarioLogeado) {
+const forzarModoVisitante = () => {
+    localStorage.removeItem('usuarioWildLens'); 
     Swal.fire({
         title: 'Acceso Denegado',
         text: 'Para registrar un avistamiento, debes iniciar sesión.',
@@ -32,9 +19,37 @@ if (!idUsuarioLogeado) {
     }).then(() => {
         window.location.href = './login.html'; 
     });
+};
+
+if (usuarioString && usuarioString !== "undefined" && usuarioString !== "null") {
+    try {
+        const usuarioLogueado = JSON.parse(usuarioString);
+        
+        if (!usuarioLogueado.id_usuario && !usuarioLogueado.correo) {
+            forzarModoVisitante();
+        } else {
+            idUsuarioLogeado = usuarioLogueado.id_usuario || usuarioLogueado.id;
+            
+            // --- MAGIA PARA ACTUALIZAR EL NOMBRE Y FOTO EN EL NAVBAR ---
+            const navNombre = document.getElementById('nav-nombre-usuario');
+            const navAvatar = document.getElementById('nav-avatar');
+            
+            if (navNombre) navNombre.innerText = usuarioLogueado.nombre || "Usuario";
+            if (navAvatar && usuarioLogueado.avatar) {
+                navAvatar.src = usuarioLogueado.avatar.startsWith('http') 
+                    ? usuarioLogueado.avatar 
+                    : 'https://widlens.onrender.com' + usuarioLogueado.avatar;
+            }
+            
+            // Inyectamos dinámicamente su ID en el formulario
+            document.getElementById('id-usuario').value = idUsuarioLogeado;
+        }
+    } catch (error) {
+        console.warn("Datos de sesión corruptos en Subir Foto. Limpiando.");
+        forzarModoVisitante();
+    }
 } else {
-    // Si inició sesión correctamente, inyectamos dinámicamente su ID en el formulario
-    document.getElementById('id-usuario').value = idUsuarioLogeado;
+    forzarModoVisitante();
 }
 
 // EL CEREBRO DE LA IA (Integración de TensorFlow)
@@ -307,6 +322,7 @@ document.getElementById('longitud').value = -99.0850;
 
 const coordsDisplay = document.getElementById('coords-display');
 
+// CORRECCIÓN PRINCIPAL PARA EVITAR 429 TOO MANY REQUESTS
 marker.on('dragend', function() {
     const position = marker.getLatLng();
     document.getElementById('latitud').value = position.lat;
@@ -381,6 +397,8 @@ if (inputBusqueda) {
                             map.flyTo([lat, lng], 16); marker.setLatLng([lat, lng]);
                             document.getElementById('latitud').value = lat; document.getElementById('longitud').value = lng;
                             inputBusqueda.value = nombreLugar; cerrarBuscador();
+                            // ¡Actualizamos la tarjeta al usar el buscador!
+                            actualizarTarjeta(lat, lng);
                         };
                         listaResultados.appendChild(li);
                     });
@@ -394,15 +412,23 @@ function cerrarBuscador() { if (listaResultados) { listaResultados.classList.add
 map.on('click', cerrarBuscador); map.on('dragstart', cerrarBuscador);
 function toggleMenuMapas() { document.getElementById('menu-mapas').classList.toggle('mostrar'); }
 
+// CORRECCIÓN PRINCIPAL PARA EVITAR BLOQUEO DE OPENSTREETMAP
 async function obtenerDireccion(lat, lng) {
     try {
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+        // Asegúrate de usar un correo real en producción para identificar a WildLens
+        const userEmail = "juanrobertomarquez1@gmail.com"; 
+        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&email=${userEmail}`;
+        
         const res = await fetch(url);
+        if (!res.ok) throw new Error("Error de red");
+        
         const datos = await res.json();
         if (datos && datos.address) {
-            return datos.address.road || datos.address.city || "Área natural";
+            return datos.address.road || datos.address.suburb || datos.address.city || "Área natural";
         }
-    } catch (e) { return "Ubicación sin registrar"; }
+    } catch (e) { 
+        return "Ubicación sin registrar"; 
+    }
 }
 
 async function actualizarTarjeta(lat, lng) {
@@ -413,7 +439,7 @@ async function actualizarTarjeta(lat, lng) {
     }
 }
 
-// POST FINAL A NODE.JS CON FORMDATA
+// POST FINAL A NODE.JS CON FORMDATA (Corregido y con Animación Épica)
 document.getElementById('formulario-registro-maestro').addEventListener('submit', async function(evento) {
     evento.preventDefault(); 
     const btn = document.getElementById('btnFinalizar');
@@ -434,6 +460,7 @@ document.getElementById('formulario-registro-maestro').addEventListener('submit'
     empaqueDatos.append('longitud', document.getElementById('longitud').value);
     empaqueDatos.append('descripcion', document.getElementById('informe-notas').value);
     empaqueDatos.append('fecha_avistamiento', new Date().toISOString().slice(0, 19).replace('T', ' '));
+    empaqueDatos.append('confianza_ia', sessionStorage.getItem('confianza') || 0);
 
     try {
         const respuesta = await fetch('https://widlens.onrender.com/api/guardar-observacion', {
@@ -442,27 +469,89 @@ document.getElementById('formulario-registro-maestro').addEventListener('submit'
         });
 
         const resultado = await respuesta.json();
+
         if (respuesta.ok) {
+            // =======================================================
+            // 1. FUEGOS ARTIFICIALES (CONFETI DE NATURALEZA)
+            // =======================================================
+            const duration = 3.5 * 1000; // 3.5 segundos de explosiones
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10000 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#2B7055', '#c3d59d', '#E58933', '#ffffff'] 
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#2B7055', '#c3d59d', '#E58933', '#ffffff']
+                }));
+            }, 250);
+
+// =======================================================
+            // 2. RECOMPENSA PREMIUM (MODAL TIPO PODIO) (Nivel Épico)
+            // =======================================================
             Swal.fire({
-                title: '¡Registro Exitoso!',
-                text: 'Tu avistamiento se ha guardado en la red WildLens. 🌿',
-                icon: 'success',
-                confirmButtonColor: '#2B7055'
+                background: 'transparent', // Fondo invisible para ver nuestra tarjeta
+                showConfirmButton: true,
+                confirmButtonText: 'Continuar mi Exploración',
+                backdrop: `rgba(23, 63, 47, 0.9)`, // Fondo verde oscuro translúcido
+                allowOutsideClick: false,
+                
+                // INYECTAMOS LA CLASE DEL NUEVO BOTÓN PREMIUM
+                customClass: {
+                    container: 'swal-recompensa-wildlens',
+                    confirmButton: 'wildlens-boton-premio' // <--- ¡AQUÍ ESTÁ LA MAGIA DEL BOTÓN!
+                },
+                
+                html: `
+                    <div class="wildlens-card-recompensa">
+                        
+                        <div class="ajolote-premio-wrapper">
+                            <img src="../images/premio.gif" alt="Ajolote Feliz" class="ajolote-render-img">
+                        </div>
+
+                        <div class="premio-textos-wrapper">
+                            <h1 class="premio-titulo">¡Registro Completado!</h1>
+                            <p class="premio-subtitulo">
+                                Tu avistamiento se ha sincronizado exitosamente.<br>
+                                ¡Gracias por ser un <strong>Guardián de WildLens</strong>!
+                            </p>
+                            <p class="frase-final">
+                                "Cada descubrimiento protege un hábitat."
+                            </p>
+                        </div>
+                        
+                    </div>
+                `
             }).then(() => {
+                // Redirige al inicio solo hasta que el usuario le da clic al botón premium
                 window.location.href = '../index.html'; 
             });
+
         } else {
             Swal.fire('Error al guardar', resultado.error || 'Problema de BD', 'error');
         }
     } catch (error) {
-        Swal.fire('Error de Conexión', 'No se pudo conectar con Node.js. ¿Está encendido tu servidor?', 'error');
+        Swal.fire('Error de Conexión', 'No se pudo conectar con Node.js.', 'error');
     } finally {
         btn.innerText = "Finalizar y Guardar Registro"; btn.disabled = false;
     }
 });
-
-// INTEGRACIÓN CON INATURALIST API
-
 // Diccionario que vincula tus IDs con los Taxon IDs de iNaturalist
 const INAT_TAXONS = {
     "1": 26777, // Ambystoma mexicanum

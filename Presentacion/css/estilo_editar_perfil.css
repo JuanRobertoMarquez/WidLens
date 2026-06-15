@@ -1,10 +1,9 @@
 :root {
-    --verde-primario: #329058;
-    --verde-oscuro: #c3d59d;
-    --verde-claro: #e8f5e9;
-    --fondo: #f8f6f0;
+    --verde-primario: #2B7055;
+    --verde-oscuro: #1e523e;
+    --fondo: #F4F6EA;
     --texto-suave: #666;
-    --animacion-entrada: cubic-bezier(0.23, 1, 0.32, 1);
+    --animacion-entrada: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 body, html {
@@ -19,55 +18,196 @@ body, html {
     display: flex;
     height: 100vh;
     width: 100%;
-    /* Al quitar row-reverse, el panel verde regresa a la izquierda por defecto */
 }
 
 /* PANEL VERDE (Lado Izquierdo) */
 .visual-side {
-    flex: 0.6; 
-    background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-primario) 100%);
+    flex: 0.8; 
+    background: linear-gradient(135deg, var(--verde-primario) 0%, #173f2f 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
-    position: relative;
+    position: relative; /* <-- CRUCIAL: Mantiene los ajolotes atrapados en este panel */
     overflow: hidden; 
-    box-shadow: 10px 0 30px rgba(0,0,0,0.1); /* Sombra hacia la derecha */
-    z-index: 2; /* Asegura que la sombra caiga sobre el formulario */
 }
 
 .brand-logo-big {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 38px; font-weight: 700;
-    letter-spacing: -1px;
+    font-family: 'Lora', serif;
+    font-size: 45px; 
+    font-weight: 700;
     z-index: 10; 
-    text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    text-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
-/* PANEL DEL FORMULARIO (Lado Derecho) */
+/* PANEL DEL FORMULARIO (Lado Derecho Modernizado) */
 .form-side {
-    flex: 1.4;
+    flex: 1.2;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    box-sizing: border-box;
     background-color: var(--fondo);
 }
 
+/* Aquí está la magia: La tarjeta de vidrio/sombra */
 .form-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.06); /* Sombra elegante y profunda */
 }
 
-/* --- LA MAGIA: LLUVIA DE AJOLOTES --- */
-.ajolote-lluvia {
-    position: absolute;
-    top: -100px;
-    opacity: 0.15; 
-    pointer-events: none; 
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    animation: caerNadando linear infinite;
+.form-container h2 {
+    font-family: 'Lora', serif;
+    color: var(--verde-primario);
+    font-size: 32px; 
+    margin-top: 0; margin-bottom: 8px;
+    opacity: 0; transform: translateY(20px);
+    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.1s forwards;
+}
+
+.form-container p {
+    color: var(--texto-suave); 
+    margin-bottom: 35px; 
+    font-size: 15px;
+    opacity: 0; transform: translateY(20px);
+    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.2s forwards;
+}
+
+/* --- AVATAR INTERACTIVO --- */
+.avatar-section {
+    text-align: center; 
+    margin-bottom: 40px;
+    position: relative;
+    opacity: 0; transform: scale(0.8);
+    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.3s forwards;
+}
+
+.avatar-preview {
+    width: 120px; height: 120px;
+    border-radius: 50%; object-fit: cover;
+    border: 4px solid #f0f0f0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.avatar-preview:hover {
+    border-color: var(--verde-primario);
+    filter: brightness(0.9);
+}
+
+.btn-cambiar-foto {
+    background: #ffffff; 
+    color: var(--verde-primario);
+    border: 2px solid var(--verde-primario);
+    padding: 8px 20px; 
+    border-radius: 30px;
+    cursor: pointer; 
+    font-size: 13px; font-weight: 700;
+    margin-top: -15px; 
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.btn-cambiar-foto:hover {
+    background: var(--verde-primario);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* --- INPUTS MODERNOS (Efecto Material) --- */
+.input-group {
+    position: relative; 
+    margin-bottom: 25px;
+    opacity: 0; transform: translateY(20px);
+}
+
+.input-group:nth-child(4) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.4s forwards; }
+.input-group:nth-child(5) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.5s forwards; }
+.input-group:nth-child(6) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.6s forwards; }
+
+.input-group input {
+    width: 100%; 
+    padding: 16px 15px;
+    border: 2px solid #e0e0e0; 
+    border-radius: 12px;
+    background: #fcfcfc;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px; color: #222;
+    box-sizing: border-box; 
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none; 
+    border-color: var(--verde-primario);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(43, 112, 85, 0.1);
+}
+
+.input-group label {
+    position: absolute; 
+    top: 18px; left: 15px;
+    color: #999; font-size: 15px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+/* Cuando el input tiene texto o está seleccionado, la etiqueta sube y se pone un fondito blanco */
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -10px; 
+    left: 10px;
+    font-size: 12px;
+    color: var(--verde-primario);
+    font-weight: 700;
+    background-color: #ffffff;
+    padding: 0 5px;
+}
+
+/* --- BOTONES --- */
+.button-group {
+    display: flex; gap: 15px; margin-top: 40px;
+    opacity: 0; transform: translateY(20px);
+    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.7s forwards;
+}
+
+.button-continuar {
+    flex: 2; padding: 16px;
+    background: var(--verde-primario); color: white;
+    border: none; border-radius: 12px;
+    font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 15px;
+    cursor: pointer; 
+    box-shadow: 0 8px 20px rgba(43, 112, 85, 0.3);
+    transition: all 0.3s ease;
+}
+
+.button-continuar:hover {
+    background: var(--verde-oscuro);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(43, 112, 85, 0.4);
+}
+
+.button-cancelar {
+    flex: 1; padding: 16px;
+    background: #f5f5f5; color: #555;
+    border: none; border-radius: 12px;
+    font-family: 'Open Sans', sans-serif; font-weight: 700; font-size: 15px;
+    cursor: pointer; transition: all 0.3s ease;
+}
+
+.button-cancelar:hover {
+    background: #e0e0e0;
+    color: #222;
+}
+
+@keyframes cascadaEntrada {
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .a1 { left: -5%;  width: 200px; animation-duration: 15s; animation-delay: 0s;    }
@@ -81,120 +221,50 @@ body, html {
 .a9 { left: 50%;  width: 115px;  animation-duration: 21s; animation-delay: -3s;   }
 .a10 { left: 85%; width: 120px; animation-duration: 25s; animation-delay: -16s;  }
 
+/* --- LA MAGIA: LLUVIA DE AJOLOTES (Animación Reactivada) --- */
+.ajolote-lluvia {
+    position: absolute;
+    top: -150px; /* Inician totalmente fuera de la pantalla de forma limpia */
+    display: block;
+    opacity: 0; /* Empezamos en 0 para evitar el parpadeo estático arriba */
+    pointer-events: none; 
+    z-index: 1;
+    
+    /* Filtros para imágenes ByN */
+    filter: invert(1) brightness(1.6) drop-shadow(0 5px 10px rgba(0,0,0,0.4));
+    
+    /* Forzamos que la animación corra de forma fluida e infinita */
+    animation-name: caerNadando;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* (Tus clases .a1, .a2, .a3... de duraciones y retrasos se quedan exactamente como los tienes) */
+
 @keyframes caerNadando {
     0% { 
-        transform: translateY(-100px) rotate(-15deg); 
+        transform: translateY(0px) rotate(-15deg); 
         opacity: 0;
     }
-    10% { opacity: 0.15; }
+    10% { 
+        opacity: 0.45; /* Aparecen suavemente al entrar */
+    }
     50% { 
         transform: translateY(50vh) rotate(15deg); 
     }
-    90% { opacity: 0.15; }
+    90% { 
+        opacity: 0.45; 
+    }
     100% { 
-        transform: translateY(110vh) rotate(-15deg); 
+        /* Usamos la altura total del contenedor interno */
+        transform: translateY(120vh) rotate(-15deg); 
         opacity: 0;
     }
 }
 
-/* --- TÍTULOS Y AVATAR --- */
-.form-container h2 {
-    font-family: 'Montserrat', sans-serif;
-    color: var(--verde-oscuro);
-    font-size: 32px; margin-top: 0; margin-bottom: 5px;
-    opacity: 0; transform: translateY(20px);
-    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.1s forwards;
-}
-
-.form-container p {
-    color: var(--texto-suave); margin-bottom: 40px; font-size: 16px;
-    opacity: 0; transform: translateY(20px);
-    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.2s forwards;
-}
-
-.avatar-section {
-    text-align: center; margin-bottom: 40px;
-    opacity: 0; transform: scale(0.8);
-    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.3s forwards;
-}
-
-.avatar-preview {
-    width: 140px; height: 140px;
-    border-radius: 50%; object-fit: cover;
-    border: 5px solid white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    transition: transform 0.3s var(--animacion-entrada);
-}
-
-.btn-cambiar-foto {
-    background: var(--verde-claro); color: var(--verde-primario);
-    border: 1px solid var(--verde-primario);
-    padding: 8px 25px; border-radius: 20px;
-    cursor: pointer; font-size: 14px; font-weight: 600;
-    margin-top: -20px; position: relative;
-    transition: all 0.3s ease;
-}
-
-/* --- INPUTS --- */
-.input-group {
-    position: relative; margin-bottom: 30px;
-    opacity: 0; transform: translateY(20px);
-}
-/* Retrasos de cascada corregidos para cada input */
-.input-group:nth-child(4) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.4s forwards; } /* Nombre */
-.input-group:nth-child(5) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.5s forwards; } /* Apellido */
-.input-group:nth-child(6) { animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.6s forwards; } /* Correo */
-
-.input-group input {
-    width: 100%; padding: 12px 0;
-    border: none; border-bottom: 2px solid #ddd;
-    background: transparent;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 16px; color: #333;
-    box-sizing: border-box; transition: border-color 0.3s;
-}
-
-.input-group input:focus {
-    outline: none; border-color: var(--verde-primario);
-}
-
-.input-group label {
-    position: absolute; top: 12px; left: 0;
-    color: #999; font-size: 16px;
-    pointer-events: none;
-    transition: all 0.3s var(--animacion-entrada);
-    font-family: 'Montserrat', sans-serif; font-weight: 600;
-}
-
-.input-group input:focus ~ label,
-.input-group input:valid ~ label {
-    top: -15px; font-size: 12px;
-    color: var(--verde-primario);
-}
-
-/* --- BOTONES --- */
-.button-group {
-    display: flex; gap: 20px; margin-top: 50px;
-    opacity: 0; transform: translateY(20px);
-    animation: cascadaEntrada 0.6s var(--animacion-entrada) 0.7s forwards;
-}
-
-.button-continuar {
-    flex: 1.5; padding: 15px;
-    background: var(--verde-primario); color: white;
-    border: none; border-radius: 12px;
-    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 16px;
-    cursor: pointer; transition: all 0.3s var(--animacion-entrada);
-}
-
-.button-cancelar {
-    flex: 1; padding: 15px;
-    background: white; color: var(--texto-suave);
-    border: 2px solid #ddd; border-radius: 12px;
-    font-family: 'Montserrat', sans-serif; font-weight: 600;
-    cursor: pointer; transition: all 0.3s ease;
-}
-
-@keyframes cascadaEntrada {
-    to { opacity: 1; transform: translateY(0) scale(1); }
+@media (max-width: 900px) {
+    .page-wrapper { flex-direction: column; overflow: auto; }
+    .visual-side { flex: none; height: 250px; }
+    .form-side { padding: 20px; }
+    .form-container { padding: 30px; }
 }

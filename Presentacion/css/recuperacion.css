@@ -13,7 +13,7 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     /* Fondo Inmersivo */
     background-image: linear-gradient(rgba(18, 43, 23, 0.75), rgba(18, 43, 23, 0.85)), url('https://cdn.pixabay.com/photo/2025/03/31/06/37/ai-generated-9504113_1280.jpg');
     background-size: cover;
@@ -125,7 +125,7 @@ body {
     border: 1px solid #d1d1d1;
     border-radius: 10px; 
     font-size: 15px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     transition: all 0.3s ease;
     background-color: #fcfcfc;
 }
@@ -152,7 +152,7 @@ body {
     font-size: 15px;
     cursor: pointer;
     font-weight: 600;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     transition: all 0.3s ease;
     flex: 1; 
 }
@@ -195,7 +195,7 @@ body {
     border: none !important;
     font-size: 15px !important;
     font-weight: 600 !important;
-    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Lora', sans-serif !important;
     cursor: pointer !important;
     width: 100% !important;
     margin-bottom: 15px !important;

@@ -300,8 +300,7 @@ inputBusqueda.addEventListener('keyup', function(event) {
 async function obtenerDireccion(lat, lng) {
     try {
         // Usamos la API oficial de OpenStreetMap
-        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-        
+        const resGeo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&email=juanrobertomarquez1@gmail.com`);        
         const respuesta = await fetch(url);
         if (!respuesta.ok) {
             throw new Error('Error al conectar con Nominatim');

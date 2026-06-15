@@ -660,7 +660,7 @@ width: 20px;
     border-radius: 50% !important;
     background-color: #FFFFFF !important;
     color: #2B7055 !important;
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: 'Lora', sans-serif !important;
     font-weight: 700 !important;
     font-size: 16px !important;
     display: flex !important;
@@ -674,7 +674,7 @@ width: 20px;
 /* El texto al lado del número */
 .step.active span {
     color: #FFFFFF !important;
-    font-family: 'Montserrat', sans-serif !important;
+    font-family: 'Lora', sans-serif !important;
     font-weight: 600 !important;
     font-size: 15px !important;
     margin-left: 12px !important;
@@ -700,10 +700,6 @@ width: 20px;
         width: auto !important; /* Reseteamos el ancho forzado del intento anterior */
     }
 }
-
-/* =========================================
-   REPARACIÓN DE Z-INDEX Y SUPERPOSICIONES
-   ========================================= */
 
 /* 1. Forzar que el menú de navegación SIEMPRE gane la batalla del z-index */
 .navbar {
@@ -776,14 +772,146 @@ width: 20px;
 .step.active .step-circle {
     width: 36px !important; height: 36px !important;
     border-radius: 50% !important; background-color: #FFFFFF !important;
-    color: #2B7055 !important; font-family: 'Montserrat', sans-serif !important;
+    color: #2B7055 !important; font-family: 'Lora', sans-serif !important;
     font-weight: 700 !important; font-size: 16px !important;
     display: flex !important; align-items: center !important;
     justify-content: center !important; border: none !important;
 }
 
 .step.active span {
-    color: #FFFFFF !important; font-family: 'Montserrat', sans-serif !important;
+    color: #FFFFFF !important; font-family: 'Lora', sans-serif !important;
     font-weight: 600 !important; font-size: 15px !important;
     margin-left: 12px !important; display: block !important;
+}
+
+/* ==================================================
+   ANIMACIÓN DE RECOMPENSA WILDLENS (Estructura Limpia)
+   ================================================== */
+
+.swal2-container.swal-recompensa-wildlens .swal2-popup {
+    background: transparent !important; 
+    padding: 0;
+}
+
+/* La tarjeta premium (Más alta y espaciosa) */
+.wildlens-card-recompensa {
+    background-color: #F4F6EA;
+    border: 2px solid #FDE047; 
+    border-radius: 28px;
+    /* Arriba: 60px, Lados: 40px, Abajo: 50px (Esto la hace más alta y limpia) */
+    padding: 60px 40px 50px 40px; 
+    text-align: center;
+    box-shadow: 0 25px 65px rgba(0,0,0,0.3); 
+    position: relative;
+    overflow: hidden; /* Corta suavemente si algo se sale */
+}
+
+/* -----------------------------------------
+   EL HALO Y EL GIF
+   ----------------------------------------- */
+@keyframes spinHaloPremio {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.ajolote-premio-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+    /* ESTO SEPARA EL HALO DEL TÍTULO PARA QUE NO SE TOQUEN */
+    margin-bottom: 45px; 
+    z-index: 1; 
+}
+
+/* El fondo de rayos dorados girando */
+.ajolote-premio-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    width: 220px; /* Lo hicimos un poco más pequeño para que no estorbe arriba */
+    height: 220px;
+    background: repeating-conic-gradient(
+        from 0deg, 
+        rgba(253, 224, 71, 0.4) 0deg 15deg, 
+        transparent 15deg 30deg
+    );
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: spinHaloPremio 12s linear infinite; 
+    z-index: 1; 
+}
+
+@keyframes popAjolote {
+    0% { transform: scale(0); opacity: 0; }
+    70% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.ajolote-render-img {
+    width: 120px; /* Adaptado al nuevo tamaño del halo */
+    height: 120px;
+    object-fit: contain;
+    position: relative;
+    z-index: 3; 
+    animation: popAjolote 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    filter: drop-shadow(0 12px 25px rgba(0,0,0,0.25)); 
+}
+
+/* -----------------------------------------
+   TEXTOS Y BOTÓN INTEGRADO
+   ----------------------------------------- */
+.premio-textos-wrapper {
+    position: relative;
+    z-index: 5; 
+}
+
+.premio-titulo {
+    font-family: 'Lora', serif;
+    font-size: 32px; 
+    font-weight: 700;
+    color: #2B7055;
+    margin: 0 0 15px 0;
+}
+
+.premio-subtitulo {
+    font-size: 15px;
+    color: #666;
+    margin: 0 0 25px 0;
+    line-height: 1.6;
+}
+
+.frase-final {
+    display: inline-block;
+    font-size: 13px;
+    color: #2B7055;
+    font-style: italic;
+    background: rgba(43, 112, 85, 0.08); 
+    padding: 10px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px; /* Separación antes del botón */
+}
+
+/* NUESTRO BOTÓN PREMIUM (Ahora sí funcionará perfecto) */
+.wildlens-boton-premio {
+    display: block; /* Para que ocupe su propia línea */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2B7055 0%, #1e523e 100%);
+    border: none;
+    border-radius: 50px; /* Forma de píldora */
+    box-shadow: 0 10px 25px rgba(43, 112, 85, 0.3);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.wildlens-boton-premio:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(43, 112, 85, 0.4);
 }

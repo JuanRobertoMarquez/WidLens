@@ -8,7 +8,7 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     min-height: 100vh; /* Cambiamos a min-height */
     background-color: #ffffff;
     margin: 0;
@@ -129,7 +129,7 @@ h2 {
     border: 1px solid #e0e0e0;
     border-radius: 6px; /* Borde más cuadrado, menos circular */
     font-size: 15px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -179,7 +179,7 @@ h2 {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
 }
 
 .btn-primary:hover {

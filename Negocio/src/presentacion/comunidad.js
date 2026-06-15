@@ -36,25 +36,19 @@ function initMapaComunidad() {
 // ==========================================
 async function obtenerObservacionesReales() {
     try {
-        // Mostramos un mensaje de carga mientras llegan los datos
         const grid = document.getElementById('grid-observaciones');
         grid.innerHTML = '<p style="text-align:center; width:100%; color:#666;">Cargando avistamientos desde el servidor...</p>';
 
-        // Hacemos la petición a tu API. 
-        // IMPORTANTE: Ajusta esta ruta según cómo se llame el endpoint en tu backend
         const response = await fetch('https://widlens.onrender.com/api/observaciones/comunidad'); 
         
         if (!response.ok) throw new Error('Error al conectar con la base de datos');
         
         const datosReales = await response.json();
-        observacionesGlobales = datosReales; // Guardamos en memoria para los filtros
+        observacionesGlobales = datosReales; 
         
-        // Renderizamos las tarjetas y los pines en el mapa
         renderizarObservaciones(observacionesGlobales);
         actualizarPinesMapa(observacionesGlobales);
 
-        // ¡EL TRUCO PARA EL MAPA EN BLANCO!
-        // Le damos un pequeño respiro de 200ms para que recalcule su tamaño ahora que hay datos
         setTimeout(() => {
             map.invalidateSize();
         }, 200);
@@ -79,7 +73,6 @@ function actualizarPinesMapa(datos) {
             const nombreUsuario = obs.usuario || 'Anónimo';
             const idPopupLoc = `pop-${Math.random().toString(36).substr(2, 9)}`;
 
-            // Corregimos la ruta de la foto para que no se rompa
             const rutaFoto = obs.imagen ? (obs.imagen.startsWith('http') ? obs.imagen : `https://widlens.onrender.com${obs.imagen}`) : 'https://via.placeholder.com/150';
 
             const popupContent = `
@@ -96,17 +89,23 @@ function actualizarPinesMapa(datos) {
             marker.bindPopup(popupContent);
             markersGroup.addLayer(marker);
 
-            // MAGIA: Solo traduce coordenadas a Calle cuando el usuario le da clic al pin
+// MAGIA: Solo traduce coordenadas a Calle cuando el usuario le da clic al pin
             marker.on('click', async () => {
                 const spanLoc = document.getElementById(idPopupLoc);
                 if(spanLoc && spanLoc.innerText.includes("Buscando")) {
                     try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${obs.lat}&lon=${obs.lng}`);
+                        // Cambiamos a Photon, mucho más estable y sin bloqueos agresivos
+                        const res = await fetch(`https://photon.komoot.io/reverse?lon=${obs.lng}&lat=${obs.lat}`);
                         const geoDatos = await res.json();
                         
-                        // Extraemos Específicamente la Calle (road) o la Colonia (suburb)
-                        let calleOAvenida = geoDatos.address.road || geoDatos.address.suburb || geoDatos.address.neighbourhood || geoDatos.address.city || "Ubicación silvestre";
-                        spanLoc.innerText = calleOAvenida;
+                        if (geoDatos.features && geoDatos.features.length > 0) {
+                            const props = geoDatos.features[0].properties;
+                            // Photon organiza la info un poco diferente
+                            let calleOAvenida = props.name || props.street || props.district || props.city || "Ubicación silvestre";
+                            spanLoc.innerText = calleOAvenida;
+                        } else {
+                            spanLoc.innerText = "Área natural";
+                        }
                     } catch(e) {
                         spanLoc.innerText = `Lat: ${obs.lat}, Lng: ${obs.lng}`;
                     }
@@ -139,6 +138,8 @@ function renderizarObservaciones(datos) {
 
         const card = document.createElement('div');
         card.className = 'obs-card-com';
+        
+// ELIMINAMOS LAS FECHAS DUPLICADAS Y ACOMODAMOS EL BOTÓN
         card.innerHTML = `
             <div class="obs-img-wrapper">
                 <img src="${urlImagen}" alt="${nombreEspecie}">
@@ -152,29 +153,54 @@ function renderizarObservaciones(datos) {
                 <h3 class="obs-species-title" style="margin-bottom: 12px;">${nombreEspecie}</h3>
                 
                 <div class="obs-footer-meta">
-                    <span>📍 <span id="${idUnicoLoc}">Buscando calle...</span></span>
-                    <span>📅 ${obs.fecha ? new Date(obs.fecha).toLocaleDateString() : 'Fecha desconocida'}</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                        <span id="${idUnicoLoc}" style="color: #666; font-size: 13px;">
+                            📍 Lat: ${obs.lat ? parseFloat(obs.lat).toFixed(4) : 'N/A'}, Lng: ${obs.lng ? parseFloat(obs.lng).toFixed(4) : 'N/A'}
+                        </span>
+                        
+                        ${(obs.lat && obs.lng) ? `<button class="btn-ver-calle" onclick="traducirCalle(${obs.lat}, ${obs.lng}, '${idUnicoLoc}', this)">Ver calle</button>` : ''}
+                    </div>
+                    
+                    <span style="display: block; color: #888; font-size: 12px; margin-top: 5px;">
+                        📅 ${obs.fecha ? new Date(obs.fecha).toLocaleDateString() : 'Fecha desconocida'}
+                    </span>
                 </div>
             </div>
         `;
         grid.appendChild(card);
-
-        // Geocodificación para las Tarjetas (Calles y Avenidas)
-        if (obs.lat && obs.lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${obs.lat}&lon=${obs.lng}`)
-                .then(res => res.json())
-                .then(geoDatos => {
-                    // Mismo filtro: prioriza nombres de calles (road)
-                    let calleOAvenida = geoDatos.address.road || geoDatos.address.suburb || geoDatos.address.neighbourhood || geoDatos.address.city || "Hábitat silvestre";
-                    document.getElementById(idUnicoLoc).innerText = calleOAvenida;
-                })
-                .catch(() => {
-                    document.getElementById(idUnicoLoc).innerText = "Ubicación en mapa";
-                });
-        } else {
-            document.getElementById(idUnicoLoc).innerText = "Ubicación no especificada";
-        }
     });
+}
+
+// TRADUCTOR DE CALLES BAJO DEMANDA (PHOTON API)
+// ==========================================
+async function traducirCalle(lat, lng, idElementoTexto, btnElemento) {
+    const contenedorTexto = document.getElementById(idElementoTexto);
+    
+    contenedorTexto.innerHTML = `<em>Buscando zona... 🔎</em>`;
+    btnElemento.style.display = 'none';
+
+    try {
+        const url = `https://photon.komoot.io/reverse?lon=${lng}&lat=${lat}`;
+        const res = await fetch(url);
+        
+        if (!res.ok) throw new Error("Error de red");
+        
+        const geoDatos = await res.json();
+        
+        if (geoDatos.features && geoDatos.features.length > 0) {
+            const props = geoDatos.features[0].properties;
+            // Si encuentra un nombre de lugar, calle o distrito, lo usa.
+            const calle = props.name || props.street || props.district || props.city || "Reserva Ecológica (Xochimilco)";
+            contenedorTexto.innerHTML = `📍 <strong>${calle}</strong>`;
+        } else {
+            // Si la coordenada está en medio del agua y no hay calles cerca:
+            contenedorTexto.innerHTML = `📍 <strong>Hábitat Natural (Canales)</strong>`;
+        }
+    } catch (error) { 
+        // Si el internet falla, regresamos las coordenadas
+        contenedorTexto.innerHTML = `📍 Lat: ${parseFloat(lat).toFixed(4)}, Lng: ${parseFloat(lng).toFixed(4)}`;
+        btnElemento.style.display = 'inline-block';
+    }
 }
 
 function filtrarDatos() {
@@ -196,7 +222,6 @@ function filtrarDatos() {
     actualizarPinesMapa(datosFiltrados);
 }
 
-// Mantenemos tu función de sesión intacta
 function verificarSesion() {
     const menuVisitante = document.getElementById('menu-visitante');
     const menuUsuario = document.getElementById('menu-usuario');
@@ -231,12 +256,10 @@ async function cargarEstadisticasYPodio() {
         
         const datos = await response.json();
 
-        // 1. Animar los números de las estadísticas (Contador dinámico)
         animarContador('val-observaciones', datos.estadisticas.obs_totales || 0);
         animarContador('val-especies', datos.estadisticas.esp_identificadas || 0);
         animarContador('val-guardianes', datos.estadisticas.guard_activos || 0);
 
-        // 2. Construir el Podio
         const topDatos = datos.topGuardianes;
         const podioContainer = document.getElementById('contenedor-podio');
         podioContainer.innerHTML = '';
@@ -246,12 +269,10 @@ async function cargarEstadisticasYPodio() {
             return;
         }
 
-        // Extraemos a los ganadores (si existen)
         const primero = topDatos[0];
         const segundo = topDatos[1];
         const tercero = topDatos[2];
 
-        // Construimos el HTML en el orden visual correcto: Plata, Oro, Bronce
         let podioHTML = '';
 
         if (segundo) {
@@ -289,39 +310,33 @@ async function cargarEstadisticasYPodio() {
 
         podioContainer.innerHTML = podioHTML;
 
-        // 3. ACTIVAR FÍSICAS DE CONFETI PARA EL 2DO Y 3ER LUGAR
         const silverCard = document.querySelector('.guardian-card.silver');
         const bronzeCard = document.querySelector('.guardian-card.bronze');
 
-        // Función que calcula la posición de la tarjeta y dispara el cañón
         const lanzarConfeti = (elemento, coloresBase) => {
             const rect = elemento.getBoundingClientRect();
-            // Convertimos la posición de píxeles a porcentajes (requerido por la librería)
             const x = (rect.left + (rect.width / 2)) / window.innerWidth;
             const y = (rect.top + (rect.height / 2)) / window.innerHeight;
 
             confetti({
-                particleCount: 150,      // Cantidad de papelitos
-                spread: 100,             // Amplitud de la explosión
-                startVelocity: 30,       // Velocidad inicial
-                origin: { x, y },        // Desde dónde sale
-                colors: coloresBase,     // Colores temáticos
+                particleCount: 150,      
+                spread: 100,             
+                startVelocity: 30,       
+                origin: { x, y },        
+                colors: coloresBase,     
                 zIndex: 9999,
-                ticks: 200               // Cuánto tardan en desaparecer
+                ticks: 200               
             });
         };
 
-        // Escuchadores de eventos para disparar al pasar el mouse
         if (silverCard) {
             silverCard.addEventListener('mouseenter', () => {
-                // Confeti plateado y blanco
                 lanzarConfeti(silverCard, ['#C0C0C0', '#E2E8F0', '#ffffff', '#94A3B8']);
             });
         }
         
         if (bronzeCard) {
             bronzeCard.addEventListener('mouseenter', () => {
-                // Confeti bronce y naranja (colores de tu botón)
                 lanzarConfeti(bronzeCard, ['#CD7F32', '#FDBA74', '#E58933', '#ffffff']);
             });
         }
@@ -334,11 +349,11 @@ async function cargarEstadisticasYPodio() {
 // Función extra para hacer que los números suban de 0 al total con una animación
 function animarContador(id, objetivo) {
     const elemento = document.getElementById(id);
-    if (!elemento) return; // Validación de seguridad por si el ID no existe
+    if (!elemento) return; 
     
     let inicio = 0;
-    const duracion = 1500; // 1.5 segundos
-    const incremento = objetivo / (duracion / 16); // Asumiendo 60fps
+    const duracion = 1500; 
+    const incremento = objetivo / (duracion / 16); 
 
     function actualizar() {
         inicio += incremento;
@@ -355,23 +370,4 @@ function animarContador(id, objetivo) {
     } else {
         elemento.innerText = "0";
     }
-}
-
-// Función extra para hacer que los números suban de 0 al total con una animación
-function animarContador(id, objetivo) {
-    const elemento = document.getElementById(id);
-    let inicio = 0;
-    const duracion = 1500; // 1.5 segundos
-    const incremento = objetivo / (duracion / 16); // Asumiendo 60fps
-
-    function actualizar() {
-        inicio += incremento;
-        if (inicio < objetivo) {
-            elemento.innerText = Math.ceil(inicio);
-            requestAnimationFrame(actualizar);
-        } else {
-            elemento.innerText = objetivo;
-        }
-    }
-    actualizar();
 }

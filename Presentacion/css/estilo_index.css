@@ -966,13 +966,13 @@ body {
 .text-dark-inat {
     color: #333;
     font-size: 14px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
 }
 
 .text-muted-inat {
     color: #777;
     font-size: 12px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
 }
 
 /* Imágenes y Mapa */
@@ -1011,7 +1011,7 @@ body {
 
 .location-text-inat,
 .date-info-inat {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 13px;
     color: #555;
     display: flex;
@@ -1052,7 +1052,7 @@ body {
 }
 
 .inat-stat-item p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px;
     color: #444444;
     line-height: 1.5;
@@ -1100,7 +1100,7 @@ body {
 }
 
 .inat-step-text p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px;
     color: #333333;
     line-height: 1.6;
@@ -1144,7 +1144,7 @@ body {
 }
 
 .why-text p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 16px;
     color: #222222;
     margin: 0;
@@ -1181,7 +1181,7 @@ body {
 }
 
 .newsletter-content p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 16px;
     margin-bottom: 30px;
     line-height: 1.5;
@@ -1209,7 +1209,7 @@ body {
 }
 
 .mission-content p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 15px;
     color: #666;
 }
@@ -1236,7 +1236,7 @@ body {
 }
 
 .mission-content p {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lora', sans-serif;
     font-size: 14px;
     color: #666;
 }
@@ -1485,9 +1485,6 @@ details[open] .faq-icon {
     display: block;
 }
 
-/* ==================================================
-   DISEÑO RESPONSIVO (CELULARES)
-   ================================================== */
 /* ==================================================
    DISEÑO RESPONSIVO (CELULARES)
    ================================================== */
