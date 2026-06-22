@@ -20,20 +20,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         const datos = await respuesta.json();
                 
         if (respuesta.ok) {
-            // 3. Pintar los datos personales
+// 3. Pintar los datos personales
             document.getElementById('ui-nombre').innerText = `${datos.datosPersonales.nombre} ${datos.datosPersonales.apellido}`;
             document.getElementById('ui-correo').innerText = datos.datosPersonales.correo;
+            
             // --- NUEVO: PINTAR LA FOTO DE PERFIL ---
             if (datos.datosPersonales.avatar) {
                 let rutaAvatar = datos.datosPersonales.avatar;
-                // Le agregamos la ruta del servidor local
                 if (!rutaAvatar.startsWith('http')) {
                     rutaAvatar = 'https://widlens.onrender.com' + rutaAvatar;
                 }
                 const imgPerfil = document.getElementById('avatar-perfil');
                 if(imgPerfil) imgPerfil.src = rutaAvatar;
             }
-            document.getElementById('ui-total').innerText = datos.totalObservaciones;
+            document.getElementById('ui-fotos').innerText = datos.totalObservaciones;
+
+            // 2. Animales distintos: Extraemos los nombres y filtramos los repetidos
+            const especiesUnicas = new Set();
+            if (datos.historial && datos.historial.length > 0) {
+                datos.historial.forEach(obs => {
+                    especiesUnicas.add(obs.nombre_comun); // Set ignora automáticamente los duplicados
+                });
+            }
+            // Imprimimos el tamaño del Set (cuántos animales únicos hay)
+            document.getElementById('ui-total').innerText = especiesUnicas.size;
 
             // 4. Pintar la lista de observaciones
             const contenedorLista = document.getElementById('lista-observaciones');

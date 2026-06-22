@@ -1,45 +1,74 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // LÓGICA DEL CARRUSEL DE IMÁGENES (MOVIMIENTO)
+    // ==================================================
+    // LÓGICA DEL CARRUSEL INFINITO (SALÓN DE LA FAMA IA)
+    // ==================================================
     const track = document.getElementById("track");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const carouselWrapper = document.querySelector('.carousel-wrapper'); 
     
-    const scrollAmount = 220; 
     let autoPlayInterval; 
+    let isMoving = false; 
 
     const moveRight = () => {
-        if (!track) return;
-        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
-            track.scrollTo({ left: 0, behavior: "smooth" });
-        } else {
-            track.scrollBy({ left: scrollAmount, behavior: "smooth" });
-        }
+        // Solo avanza si hay más de 1 tarjeta y el candado está abierto
+        if (!track || track.children.length <= 1 || isMoving) return;
+        isMoving = true;
+        
+        const cardWidth = track.firstElementChild.clientWidth + 25; 
+        track.scrollBy({ left: cardWidth, behavior: "smooth" });
+
+        // Usamos setTimeout que es inmune a las pestañas inactivas
+        setTimeout(() => {
+            track.style.scrollBehavior = "auto"; 
+            track.appendChild(track.firstElementChild); 
+            track.scrollLeft -= cardWidth; 
+            
+            // Forzamos al navegador a aplicar el cambio al instante (Reflow)
+            void track.offsetWidth; 
+            
+            track.style.scrollBehavior = "smooth";
+            isMoving = false; 
+        }, 500); // 500ms da el tiempo perfecto para el desplazamiento
     };
 
     const moveLeft = () => {
-        if (!track) return;
-        if (track.scrollLeft === 0) {
-            track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
-        } else {
-            track.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-        }
+        if (!track || track.children.length <= 1 || isMoving) return;
+        isMoving = true;
+
+        const cardWidth = track.firstElementChild.clientWidth + 25;
+
+        track.style.scrollBehavior = "auto";
+        track.prepend(track.lastElementChild);
+        track.scrollLeft += cardWidth; 
+
+        void track.offsetWidth; 
+
+        track.style.scrollBehavior = "smooth";
+        track.scrollBy({ left: -cardWidth, behavior: "smooth" });
+        
+        setTimeout(() => {
+            isMoving = false;
+        }, 500);
     };
 
     if(nextBtn) nextBtn.addEventListener("click", moveRight);
     if(prevBtn) prevBtn.addEventListener("click", moveLeft);
     
-    const iniciarCarrusel = () => { autoPlayInterval = setInterval(moveRight, 2500); };
-    
-    if (track) iniciarCarrusel(); // Solo arranca si el carrusel existe en la página
+    // LA LLAVE MAESTRA: Lo hacemos global para llamarlo cuando la BD responda
+    window.arrancarMotorCarrusel = () => { 
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(moveRight, 3500); 
+    };
 
-    // Pausar al pasar el mouse
+    // Pausar si el usuario pone el mouse encima
     if (carouselWrapper) {
         carouselWrapper.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
-        carouselWrapper.addEventListener('mouseleave', iniciarCarrusel);
+        carouselWrapper.addEventListener('mouseleave', window.arrancarMotorCarrusel);
     }
 
+    // ... (AQUÍ CONTINÚA TU CÓDIGO EXISTENTE DE LAS ESTADÍSTICAS GLOBALES) ...
     // LÓGICA DE LAS ESTADÍSTICAS GLOBALES (Franja Verde)
     const statObservaciones = document.getElementById('stat-observaciones');
     const statEspecies = document.getElementById('stat-especies');
@@ -136,6 +165,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     cargarHistoriaReciente();
     cargarCarruselDinamico();
 });
+
+
 // 5. FUNCIÓN: HISTORIA RECIENTE Y MINI-MAPA
 async function cargarHistoriaReciente() {
     try {
@@ -253,7 +284,7 @@ async function cargarCarruselDinamico() {
                 const tarjetaHTML = `
                     <div class="card" style="position: relative;">
                         <div style="position: absolute; top: 10px; right: 10px; background: #FDE047; color: #1a1a1a; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-                            🤖 IA: ${porcentajeIA}
+                            IA: ${porcentajeIA}
                         </div>
                         
                         <img src="${rutaFoto}" alt="${obs.especie_nombre}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px 12px 0 0;">
@@ -265,6 +296,7 @@ async function cargarCarruselDinamico() {
                 `;
                 trackCarrusel.innerHTML += tarjetaHTML;
             });
+            if (window.arrancarMotorCarrusel) window.arrancarMotorCarrusel();
         } else {
             trackCarrusel.innerHTML = '<p style="padding: 20px; width: 100%; text-align: center; color: #666;">Aún no hay avistamientos con más del 90% de precisión IA.</p>';
         }

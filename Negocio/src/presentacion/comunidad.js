@@ -20,10 +20,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initMapaComunidad() {
-    // Centramos el mapa en México
-    map = L.map('mapa-comunidad').setView([19.4326, -99.1332], 7);
+    // 1. Definimos las "Paredes Invisibles" de Xochimilco (Coordenadas Suroeste y Noreste)
+    const limitesXochimilco = L.latLngBounds(
+        L.latLng(19.1800, -99.1600), // Esquina inferior izquierda (Suroeste)
+        L.latLng(19.3200, -98.9800)  // Esquina superior derecha (Noreste)
+    );
+
+    // 2. Inicializamos el mapa con los bloqueos activados
+    map = L.map('mapa-comunidad', {
+        center: [19.2550, -99.0800], // Centrado exactamente en la zona de canales
+        zoom: 13,                    // Zoom inicial más cerca del agua
+        minZoom: 12,                 // Tope para que no puedan alejarse y ver toda la CDMX
+        maxBounds: limitesXochimilco,// Activamos la caja o pared invisible
+        maxBoundsViscosity: 1.0      // 1.0 hace que la pared sea dura y no rebote
+    });
     
-    // Capa de OpenStreetMap (Asegúrate de que use https:// para evitar bloqueos en tu hosting free.nf)
+    // Capa de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap de la comunidad WildLens'
     }).addTo(map);

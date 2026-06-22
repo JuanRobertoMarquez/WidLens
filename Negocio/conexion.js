@@ -594,6 +594,22 @@ app.get('/api/comunidad/stats-top', (req, res) => {
     });
 });
 
+// --- RUTA PARA ELIMINAR UNA OBSERVACIÓN ---
+app.delete('/api/eliminar-observacion/:id', (req, res) => {
+    const idObservacion = req.params.id;
+    const sql = "DELETE FROM Observaciones WHERE id_observacion = ?";
+    
+    db.query(sql, [idObservacion], (err, result) => {
+        if (err) return res.status(500).json({ error: "Error interno al intentar eliminar la observación." });
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "No se encontró la observación." });
+        }
+        
+        res.status(200).json({ mensaje: "Observación eliminada con éxito de BioNode." });
+    });
+});
+
 const PUERTO = process.env.PORT || 3000;
 app.listen(PUERTO, () => {
     console.log(`🚀 Servidor de WildLens corriendo en el puerto ${PUERTO}`);

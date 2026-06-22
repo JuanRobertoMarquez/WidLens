@@ -45,7 +45,6 @@
                         <div class="dropdown-content">
                             <a href="./paginas/perfil.html">Mi Perfil</a>
                             <a href="./paginas/mis_observaciones.html">Mis Observaciones</a>
-                            <a href="./paginas/configuracion.html">Configuración</a>
                             <hr>
                             <a href="./paginas/login.html" id="btn-cerrar-sesion" style="color: #d9534f;">Cerrar sesión</a>
                         </div>
@@ -302,15 +301,24 @@
         </section>           
         </main>
 
-        <section class="top-contributors">
-            <div class="contributors-header">
-                <h2>Top Observadores del Mes</h2>
-                <p>Conoce a los miembros más activos de nuestra comunidad BioNode.</p>
-            </div>
-            
-            <div class="contributors-cards" id="contenedor-top-guardianes">
-                <p style="color: #666; width: 100%; text-align: center;">Cargando los datos de la red...</p>
-            </div>
+        <section class="top-ia-section">
+                    <div class="ia-header">
+                        <h2 style="font-family: 'Lora', serif; color: var(--dark-green, #2B7055); margin-bottom: 20px;">
+                        Detecciones más precisas de nuestra red neuronal.
+                        </h2>
+                    </div>
+                    
+                    <div class="carousel-wrapper">
+                        <button id="prevBtn" class="carousel-btn">❮</button>
+                        
+                        <div class="carousel-container">
+                            <div class="carousel-track" id="track">
+                                <p style="color: #666; width: 100%; text-align: center;">Cargando registros de alta precisión...</p>
+                            </div>
+                        </div>
+
+                        <button id="nextBtn" class="carousel-btn">❯</button>
+                    </div>
         </section>
 
         <section class="inat-newsletter-section">

@@ -915,3 +915,274 @@ width: 20px;
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 15px 35px rgba(43, 112, 85, 0.4);
 }
+
+/* ==================================================
+   CONTROLES FLOTANTES DEL MAPA (PASO 2 CORREGIDO)
+   ================================================== */
+.mapa-tarjeta-flotante {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    z-index: 1000; /* Vital para que flote sobre el mapa */
+    width: 90%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    text-align: center;
+}
+
+/* El truco para que el botón no aplaste el título */
+.mapa-tarjeta-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 35px; /* Espacio para que respire el botón */
+}
+
+/* Botón de regresar anclado estrictamente a la izquierda */
+.btn-regresar-mapa {
+    position: absolute;
+    left: 0;
+    background: #F4F6EA;
+    border: 1px solid #C3D59D;
+    color: #2B7055;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-regresar-mapa:hover {
+    background: #2B7055;
+    color: #ffffff;
+}
+
+.mapa-tarjeta-titulo {
+    margin: 0;
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2B7055;
+}
+
+/* Fondo gris sutil para resaltar las coordenadas */
+.mapa-tarjeta-subtitulo {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #555555;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* El botón verde principal de abajo */
+.btn-continuar-mapa {
+    background: #2B7055;
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 50px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-continuar-mapa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(43, 112, 85, 0.3);
+    background: #1e523e;
+}
+
+/* ==================================================
+   BUSCADOR DEL MAPA (Reubicado y Modernizado)
+   ================================================== */
+.buscador-custom {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    left: auto !important; /* Anula cualquier centrado anterior */
+    transform: none !important;
+    z-index: 1000 !important;
+    width: 300px !important; 
+}
+
+/* Diseño de píldora flotante */
+.buscador-input-container {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 50px; 
+    padding: 10px 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+/* Efecto al darle clic para escribir */
+.buscador-input-container:focus-within {
+    box-shadow: 0 6px 20px rgba(43, 112, 85, 0.3);
+    border-color: #2B7055;
+}
+
+.lupa-icon {
+    font-size: 16px;
+    margin-right: 12px;
+    color: #666;
+}
+
+#input-busqueda {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #333;
+    background: transparent;
+}
+
+/* Caja de resultados desplegables */
+#lista-resultados {
+    list-style: none;
+    margin: 10px 0 0 0;
+    padding: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    width: 100%;
+}
+
+#lista-resultados.oculto {
+    display: none !important;
+}
+
+#lista-resultados li {
+    padding: 12px 15px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    color: #444;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#lista-resultados li:last-child {
+    border-bottom: none;
+}
+
+#lista-resultados li:hover {
+    background: #F4F6EA;
+    color: #2B7055;
+}
+
+/* Adaptación perfecta para celulares */
+@media (max-width: 768px) {
+    .buscador-custom {
+        top: 15px !important;
+        right: auto !important;
+        left: 50% !important; /* Lo centramos en la parte superior en celulares */
+        transform: translateX(-50%) !important;
+        width: 90% !important; 
+        max-width: 350px !important;
+    }
+}
+
+/* ==================================================
+   CONTROLES LATERALES DEL MAPA (Botones y Coordenadas)
+   ================================================== */
+
+/* 1. Ocultar la barra gris duplicada (¡Ya tenemos las coordenadas en la tarjeta blanca!) */
+.coords-vivo {
+    display: none !important; 
+}
+
+/* 2. Reubicación de los botones a la derecha */
+.btn-ubicacion,
+.map-layer-menu {
+    position: absolute !important;
+    right: 20px !important;
+    left: auto !important; /* Anula posiciones viejas */
+    bottom: auto !important; /* Anula posiciones viejas */
+    z-index: 999 !important;
+}
+
+/* El botón de capas va debajo de la lupa (que está en top: 20px) */
+.map-layer-menu {
+    top: 80px !important; 
+}
+
+/* El botón de ubicación va debajo del de capas */
+.btn-ubicacion {
+    top: 140px !important; 
+    width: 45px !important;
+    height: 45px !important;
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    padding: 0 !important;
+}
+
+.btn-ubicacion:hover {
+    background: #F4F6EA !important;
+    transform: scale(1.05) !important;
+}
+
+.btn-layer-toggle {
+    width: 45px !important;
+    height: 45px !important;
+    background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Ajuste para que el menú de Calles/Satélite salga hacia la izquierda y no se salga de la pantalla */
+.map-options-container {
+    position: absolute !important;
+    right: 55px !important; 
+    top: 0 !important;
+    left: auto !important;
+}
+
+/* Ajustes finos para celulares */
+@media (max-width: 768px) {
+    .btn-ubicacion,
+    .map-layer-menu {
+        right: 15px !important; /* Más pegados al borde en pantallas pequeñas */
+    }
+    
+    .map-layer-menu {
+        top: 75px !important; /* Espacio para la lupa centrada */
+    }
+    
+    .btn-ubicacion {
+        top: 135px !important; 
+    }
+}
